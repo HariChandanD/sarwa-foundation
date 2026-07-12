@@ -86,7 +86,8 @@ export default function ContactPage() {
     const formData = new FormData(e.currentTarget);
 
     // Combine first and last name
-    const name = `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
+    const name =
+      `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
     const department = formData.get('department') as string;
@@ -94,9 +95,7 @@ export default function ContactPage() {
     const message = formData.get('message') as string;
 
     // Combine department and subject for the subject field
-    const subject = department
-      ? `[${department}] ${subjectText}`
-      : subjectText;
+    const subject = department ? `[${department}] ${subjectText}` : subjectText;
 
     try {
       // Check if Supabase is configured

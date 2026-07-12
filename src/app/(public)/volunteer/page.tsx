@@ -3,7 +3,15 @@
 import { useState, FormEvent } from 'react';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { Container } from '@/components/layout/Container';
-import { Heart, Users, Calendar, Clock, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import {
+  Heart,
+  Users,
+  Calendar,
+  Clock,
+  CheckCircle,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -74,9 +82,10 @@ export default function VolunteerPage() {
     setSubmitStatus({ type: null, message: '' });
 
     const formData = new FormData(e.currentTarget);
-    
+
     // Combine first and last name
-    const fullName = `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
+    const fullName =
+      `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
     const city = formData.get('city') as string;
@@ -261,7 +270,10 @@ export default function VolunteerPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl bg-gray-50 p-8">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6 rounded-2xl bg-gray-50 p-8"
+            >
               {/* Success/Error Messages */}
               {submitStatus.type && (
                 <div

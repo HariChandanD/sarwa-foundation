@@ -1,4 +1,7 @@
-import { Metadata } from 'next';
+'use client';
+
+import { useState, FormEvent } from 'react';
+import Image from 'next/image';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { Container } from '@/components/layout/Container';
 import {
@@ -7,27 +10,16 @@ import {
   TrendingUp,
   Users,
   Check,
-  CreditCard,
-  Smartphone,
-  Building,
+  Copy,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-
-export const metadata: Metadata = {
-  title: 'Donate - Sarwa Foundation',
-  description:
-    "Support Sarwa Foundation's mission to rescue and rehabilitate animals. Your donation directly impacts lives. 100% transparent and tax-deductible.",
-};
-
-const donationAmounts = [
-  { amount: 500, impact: 'Feeds 5 animals for a day' },
-  { amount: 1000, impact: 'Provides basic medical care' },
-  { amount: 2500, impact: 'Covers emergency surgery' },
-  { amount: 5000, impact: 'Supports a rescue operation' },
-  { amount: 10000, impact: 'Sponsors an animal for a month' },
-  { amount: 25000, impact: 'Funds a sterilization camp' },
-];
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 const impactAreas = [
   {
@@ -57,6 +49,83 @@ const impactAreas = [
 ];
 
 export default function DonatePage() {
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
+
+  const paymentDetails = {
+    bankName: 'IDFC FIRST Bank',
+    upiId: 'sarwasociety@idfcbank',
+    accountNumber: '55448899000',
+    ifsc: 'IDFB0081109',
+  };
+
+  const copyToClipboard = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    const formData = new FormData(e.currentTarget);
+
+    const donorName = formData.get('donorName') as string;
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+    const amount = parseFloat(formData.get('amount') as string);
+    const paymentMode = formData.get('paymentMode') as string;
+    const notes = formData.get('notes') as string;
+
+    try {
+      // Check if Supabase is configured
+      if (!isSupabaseConfigured()) {
+        throw new Error(
+          'Database connection not configured. Please contact the administrator.'
+        );
+      }
+
+      const { error } = await supabase.from('donations').insert({
+        donor_name: donorName,
+        email,
+        phone: phone || null,
+        amount,
+        payment_mode: paymentMode,
+        notes: notes || null,
+      });
+
+      if (error) throw error;
+
+      setSubmitStatus({
+        type: 'success',
+        message:
+          'Thank you for your generous donation! We have received your confirmation and will send you a receipt via email shortly.',
+      });
+
+      // Reset form
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      console.error('Error submitting donation confirmation:', error);
+      setSubmitStatus({
+        type: 'error',
+        message:
+          'There was an error submitting your donation confirmation. Please try again or contact us directly.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -68,134 +137,278 @@ export default function DonatePage() {
         secondaryCTA={{ text: 'Become Monthly Donor', href: '#monthly' }}
       />
 
-      {/* Donation Form Section */}
+      {/* Donation Section with QR Code */}
       <section id="donate-form" className="bg-white py-20">
         <Container>
           <div className="mx-auto max-w-5xl">
             <div className="mb-12 text-center">
               <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-                Choose Your Contribution
+                Donate Today
               </h2>
               <p className="text-lg text-gray-600">
-                Select an amount or enter a custom donation. Every rupee makes a
-                difference.
+                Help us continue rescuing and caring for animals. Every
+                contribution makes a difference.
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-2">
-              {/* Donation Amounts */}
-              <div>
+            {/* QR Code and Payment Details */}
+            <div className="mb-16 grid gap-8 md:grid-cols-2">
+              {/* QR Code */}
+              <div className="flex items-center justify-center rounded-2xl bg-gray-50 p-8">
+                <div className="text-center">
+                  <h3 className="mb-6 text-2xl font-bold text-gray-900">
+                    Scan & Donate
+                  </h3>
+                  <div className="mb-6 inline-block rounded-xl bg-white p-4 shadow-lg">
+                    <Image
+                      src="/qr-code.jpg"
+                      alt="Scan to donate via UPI"
+                      width={300}
+                      height={300}
+                      className="rounded-lg"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Scan using any UPI app to donate
+                  </p>
+                </div>
+              </div>
+
+              {/* Payment Details */}
+              <div className="rounded-2xl bg-gray-50 p-8">
                 <h3 className="mb-6 text-xl font-semibold text-gray-900">
-                  One-Time Donation
+                  Payment Details
                 </h3>
-                <div className="mb-6 grid grid-cols-2 gap-4">
-                  {donationAmounts.map((item, index) => (
-                    <button
-                      key={index}
-                      className="group rounded-xl border-2 border-gray-200 p-4 text-left transition-all hover:border-primary hover:bg-primary/5"
-                    >
-                      <div className="mb-1 text-2xl font-bold text-gray-900">
-                        ₹{item.amount.toLocaleString()}
+                <div className="space-y-6">
+                  {/* Bank Name */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Bank Name
+                    </label>
+                    <div className="rounded-lg bg-white p-4 font-medium text-gray-900">
+                      {paymentDetails.bankName}
+                    </div>
+                  </div>
+
+                  {/* UPI ID */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      UPI ID
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="flex-1 rounded-lg bg-white p-4 font-mono text-sm text-gray-900">
+                        {paymentDetails.upiId}
                       </div>
-                      <div className="text-sm text-gray-600 transition-colors group-hover:text-primary">
-                        {item.impact}
+                      <Button
+                        onClick={() =>
+                          copyToClipboard(paymentDetails.upiId, 'upi')
+                        }
+                        variant="outline"
+                        className="px-4"
+                      >
+                        {copiedField === 'upi' ? (
+                          <CheckCircle className="h-5 w-5 text-green-600" />
+                        ) : (
+                          <Copy className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </div>
+                    {copiedField === 'upi' && (
+                      <p className="mt-1 text-sm text-green-600">Copied!</p>
+                    )}
+                  </div>
+
+                  {/* Account Number */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Account Number
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="flex-1 rounded-lg bg-white p-4 font-mono text-sm text-gray-900">
+                        {paymentDetails.accountNumber}
                       </div>
-                    </button>
-                  ))}
+                      <Button
+                        onClick={() =>
+                          copyToClipboard(
+                            paymentDetails.accountNumber,
+                            'account'
+                          )
+                        }
+                        variant="outline"
+                        className="px-4"
+                      >
+                        {copiedField === 'account' ? (
+                          <CheckCircle className="h-5 w-5 text-green-600" />
+                        ) : (
+                          <Copy className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </div>
+                    {copiedField === 'account' && (
+                      <p className="mt-1 text-sm text-green-600">Copied!</p>
+                    )}
+                  </div>
+
+                  {/* IFSC Code */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      IFSC Code
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="flex-1 rounded-lg bg-white p-4 font-mono text-sm text-gray-900">
+                        {paymentDetails.ifsc}
+                      </div>
+                      <Button
+                        onClick={() =>
+                          copyToClipboard(paymentDetails.ifsc, 'ifsc')
+                        }
+                        variant="outline"
+                        className="px-4"
+                      >
+                        {copiedField === 'ifsc' ? (
+                          <CheckCircle className="h-5 w-5 text-green-600" />
+                        ) : (
+                          <Copy className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </div>
+                    {copiedField === 'ifsc' && (
+                      <p className="mt-1 text-sm text-green-600">Copied!</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Donation Confirmation Form */}
+            <div className="mx-auto max-w-3xl">
+              <div className="mb-8 rounded-2xl bg-primary/10 p-6 text-center">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  I Have Completed My Donation
+                </h3>
+                <p className="mt-2 text-gray-600">
+                  Please fill out this form after making your donation so we can
+                  send you a receipt and thank you note.
+                </p>
+              </div>
+
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-6 rounded-2xl bg-gray-50 p-8"
+              >
+                {/* Success/Error Messages */}
+                {submitStatus.type && (
+                  <div
+                    className={`flex items-start gap-3 rounded-lg p-4 ${
+                      submitStatus.type === 'success'
+                        ? 'bg-green-50 text-green-800'
+                        : 'bg-red-50 text-red-800'
+                    }`}
+                  >
+                    {submitStatus.type === 'success' ? (
+                      <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                    )}
+                    <p className="text-sm">{submitStatus.message}</p>
+                  </div>
+                )}
+
+                <div>
+                  <Label htmlFor="donorName">Donor Name *</Label>
+                  <Input
+                    id="donorName"
+                    name="donorName"
+                    placeholder="Your full name"
+                    required
+                    disabled={isSubmitting}
+                  />
                 </div>
 
-                {/* Custom Amount */}
-                <div className="mb-6">
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Or Enter Custom Amount
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-gray-500">
-                      ₹
-                    </span>
-                    <input
-                      type="number"
-                      placeholder="Enter amount"
-                      className="w-full rounded-xl border-2 border-gray-200 py-3 pl-10 pr-4 text-lg focus:border-primary focus:outline-none"
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="+91 98765 43210"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
 
-                {/* Payment Methods */}
-                <div className="mb-6">
-                  <label className="mb-3 block text-sm font-medium text-gray-700">
-                    Payment Method
-                  </label>
-                  <div className="grid grid-cols-3 gap-3">
-                    <button className="flex flex-col items-center gap-2 rounded-xl border-2 border-primary bg-primary/5 p-4">
-                      <CreditCard className="h-6 w-6 text-primary" />
-                      <span className="text-sm font-medium">Card</span>
-                    </button>
-                    <button className="flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 transition-all hover:border-primary hover:bg-primary/5">
-                      <Smartphone className="h-6 w-6 text-gray-600" />
-                      <span className="text-sm font-medium">UPI</span>
-                    </button>
-                    <button className="flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 transition-all hover:border-primary hover:bg-primary/5">
-                      <Building className="h-6 w-6 text-gray-600" />
-                      <span className="text-sm font-medium">Bank</span>
-                    </button>
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div>
+                    <Label htmlFor="amount">Amount (₹) *</Label>
+                    <Input
+                      id="amount"
+                      name="amount"
+                      type="number"
+                      placeholder="1000"
+                      min="1"
+                      step="0.01"
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="paymentMode">Payment Mode *</Label>
+                    <select
+                      id="paymentMode"
+                      name="paymentMode"
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
+                      required
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select payment mode</option>
+                      <option value="UPI">UPI</option>
+                      <option value="Bank Transfer">Bank Transfer</option>
+                      <option value="Cash">Cash</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                 </div>
 
-                <Button className="w-full bg-primary py-6 text-lg hover:bg-primary/90">
-                  <Heart className="mr-2 h-5 w-5" />
-                  Proceed to Payment
-                </Button>
-              </div>
-
-              {/* Monthly Donation */}
-              <div
-                id="monthly"
-                className="rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 p-8"
-              >
-                <Badge className="mb-4 bg-primary text-white">
-                  Recommended
-                </Badge>
-                <h3 className="mb-4 text-2xl font-bold text-gray-900">
-                  Become a Monthly Donor
-                </h3>
-                <p className="mb-6 text-gray-600">
-                  Join our community of regular supporters and make a sustained
-                  impact on animal welfare.
-                </p>
-
-                <div className="mb-6 space-y-4">
-                  {[
-                    'Predictable support for ongoing care',
-                    'Exclusive updates and impact reports',
-                    'Priority volunteer opportunities',
-                    'Annual appreciation event invite',
-                    'Tax benefits on total annual donation',
-                  ].map((benefit, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                      <span className="text-gray-700">{benefit}</span>
-                    </div>
-                  ))}
+                <div>
+                  <Label htmlFor="notes">Message (Optional)</Label>
+                  <Textarea
+                    id="notes"
+                    name="notes"
+                    placeholder="Any message or notes about your donation..."
+                    rows={4}
+                    disabled={isSubmitting}
+                  />
                 </div>
 
-                <div className="mb-6 grid grid-cols-2 gap-3">
-                  {[500, 1000, 2500, 5000].map((amount) => (
-                    <button
-                      key={amount}
-                      className="rounded-xl border-2 border-gray-200 bg-white p-3 transition-all hover:border-primary hover:bg-primary/5"
-                    >
-                      <div className="text-xl font-bold text-gray-900">
-                        ₹{amount}/mo
-                      </div>
-                    </button>
-                  ))}
-                </div>
-
-                <Button className="w-full bg-primary hover:bg-primary/90">
-                  Start Monthly Donation
+                <Button
+                  type="submit"
+                  className="w-full bg-primary py-6 text-lg hover:bg-primary/90"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Heart className="mr-2 h-5 w-5" />
+                      Submit Donation Confirmation
+                    </>
+                  )}
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </Container>
