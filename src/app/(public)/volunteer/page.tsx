@@ -1,17 +1,14 @@
-import { Metadata } from 'next';
+'use client';
+
+import { useState, FormEvent } from 'react';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { Container } from '@/components/layout/Container';
-import { Heart, Users, Calendar, Clock, CheckCircle } from 'lucide-react';
+import { Heart, Users, Calendar, Clock, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
-export const metadata: Metadata = {
-  title: 'Volunteer - Sarwa Foundation',
-  description:
-    "Join Sarwa Foundation's volunteer community and make a hands-on difference in animal welfare. Various opportunities available for all skill levels.",
-};
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 const volunteerRoles = [
   {
@@ -65,6 +62,71 @@ const volunteerRoles = [
 ];
 
 export default function VolunteerPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    const formData = new FormData(e.currentTarget);
+    
+    // Combine first and last name
+    const fullName = `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+    const city = formData.get('city') as string;
+    const role = formData.get('role') as string;
+    const availability = formData.get('availability') as string;
+    const experience = formData.get('experience') as string;
+    const motivation = formData.get('motivation') as string;
+
+    // Combine interests
+    const interests = `${role}${experience ? ` | Experience: ${experience}` : ''}${motivation ? ` | Motivation: ${motivation}` : ''}`;
+
+    try {
+      // Check if Supabase is configured
+      if (!isSupabaseConfigured()) {
+        throw new Error(
+          'Database connection not configured. Please contact the administrator.'
+        );
+      }
+
+      const { error } = await supabase.from('volunteers').insert({
+        full_name: fullName,
+        email,
+        phone,
+        city,
+        interests,
+        availability,
+      });
+
+      if (error) throw error;
+
+      setSubmitStatus({
+        type: 'success',
+        message:
+          'Thank you for your application! We will review it and get back to you within 48 hours.',
+      });
+
+      // Reset form
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      console.error('Error submitting volunteer application:', error);
+      setSubmitStatus({
+        type: 'error',
+        message:
+          'There was an error submitting your application. Please try again or contact us directly.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -199,16 +261,46 @@ export default function VolunteerPage() {
               </p>
             </div>
 
-            <form className="space-y-6 rounded-2xl bg-gray-50 p-8">
+            <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl bg-gray-50 p-8">
+              {/* Success/Error Messages */}
+              {submitStatus.type && (
+                <div
+                  className={`flex items-start gap-3 rounded-lg p-4 ${
+                    submitStatus.type === 'success'
+                      ? 'bg-green-50 text-green-800'
+                      : 'bg-red-50 text-red-800'
+                  }`}
+                >
+                  {submitStatus.type === 'success' ? (
+                    <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                  )}
+                  <p className="text-sm">{submitStatus.message}</p>
+                </div>
+              )}
+
               {/* Personal Information */}
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <Label htmlFor="firstName">First Name *</Label>
-                  <Input id="firstName" placeholder="John" required />
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    placeholder="John"
+                    required
+                    disabled={isSubmitting}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="lastName">Last Name *</Label>
-                  <Input id="lastName" placeholder="Doe" required />
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Doe"
+                    required
+                    disabled={isSubmitting}
+                  />
                 </div>
               </div>
 
@@ -217,25 +309,35 @@ export default function VolunteerPage() {
                   <Label htmlFor="email">Email *</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="john@example.com"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div>
                   <Label htmlFor="phone">Phone Number *</Label>
                   <Input
                     id="phone"
+                    name="phone"
                     type="tel"
                     placeholder="+91 98765 43210"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
 
               <div>
                 <Label htmlFor="city">City *</Label>
-                <Input id="city" placeholder="Mumbai" required />
+                <Input
+                  id="city"
+                  name="city"
+                  placeholder="Mumbai"
+                  required
+                  disabled={isSubmitting}
+                />
               </div>
 
               {/* Volunteer Preferences */}
@@ -243,8 +345,10 @@ export default function VolunteerPage() {
                 <Label htmlFor="role">Preferred Volunteer Role *</Label>
                 <select
                   id="role"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary"
+                  name="role"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Select a role</option>
                   {volunteerRoles.map((role, index) => (
@@ -259,8 +363,10 @@ export default function VolunteerPage() {
                 <Label htmlFor="availability">Availability *</Label>
                 <select
                   id="availability"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary"
+                  name="availability"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Select availability</option>
                   <option value="weekdays">Weekdays</option>
@@ -276,8 +382,10 @@ export default function VolunteerPage() {
                 </Label>
                 <Textarea
                   id="experience"
+                  name="experience"
                   placeholder="Tell us about any previous experience you have with animals or volunteering..."
                   rows={4}
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -287,14 +395,23 @@ export default function VolunteerPage() {
                 </Label>
                 <Textarea
                   id="motivation"
+                  name="motivation"
                   placeholder="Share your motivation and what you hope to contribute..."
                   rows={4}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
               <div className="flex items-start gap-3">
-                <input type="checkbox" id="terms" className="mt-1" required />
+                <input
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  className="mt-1"
+                  required
+                  disabled={isSubmitting}
+                />
                 <Label htmlFor="terms" className="text-sm text-gray-600">
                   I agree to undergo a background check and commit to the
                   volunteer guidelines and code of conduct.
@@ -304,9 +421,19 @@ export default function VolunteerPage() {
               <Button
                 type="submit"
                 className="w-full bg-primary py-6 text-lg hover:bg-primary/90"
+                disabled={isSubmitting}
               >
-                <Heart className="mr-2 h-5 w-5" />
-                Submit Application
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Heart className="mr-2 h-5 w-5" />
+                    Submit Application
+                  </>
+                )}
               </Button>
             </form>
           </div>
