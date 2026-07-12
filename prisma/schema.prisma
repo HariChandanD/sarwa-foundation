@@ -1,0 +1,555 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MANAGEMENT & AUTHENTICATION
+// ============================================
+
+enum UserRole {
+  USER
+  VOLUNTEER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  password      String?
+  phone         String?
+  role          UserRole  @default(USER)
+  status        UserStatus @default(PENDING_VERIFICATION)
+  
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  donations     Donation[]
+  volunteer     Volunteer?
+  blogPosts     BlogPost[]
+  comments      Comment[]
+  contactSubmissions ContactSubmission[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================
+// DONATIONS & DONORS
+// ============================================
+
+enum DonationType {
+  ONE_TIME
+  MONTHLY
+  YEARLY
+}
+
+enum DonationStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  RAZORPAY
+  BANK_TRANSFER
+  CASH
+  CHEQUE
+}
+
+model Donation {
+  id              String          @id @default(cuid())
+  amount          Float
+  currency        String          @default("INR")
+  type            DonationType    @default(ONE_TIME)
+  status          DonationStatus  @default(PENDING)
+  paymentMethod   PaymentMethod   @default(RAZORPAY)
+  
+  // Donor Information
+  userId          String?
+  user            User?           @relation(fields: [userId], references: [id])
+  donorName       String
+  donorEmail      String
+  donorPhone      String?
+  donorAddress    String?
+  isAnonymous     Boolean         @default(false)
+  
+  // Payment Details
+  razorpayOrderId    String?      @unique
+  razorpayPaymentId  String?      @unique
+  razorpaySignature  String?
+  transactionId      String?
+  
+  // Campaign Association
+  campaignId      String?
+  campaign        Campaign?       @relation(fields: [campaignId], references: [id])
+  
+  // Tax Receipt
+  receiptNumber   String?         @unique
+  receiptIssued   Boolean         @default(false)
+  receiptIssuedAt DateTime?
+  
+  // Metadata
+  message         String?         @db.Text
+  dedicatedTo     String?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([campaignId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ============================================
+// CAMPAIGNS
+// ============================================
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+model Campaign {
+  id              String          @id @default(cuid())
+  title           String
+  slug            String          @unique
+  description     String          @db.Text
+  shortDescription String?
+  
+  // Financial Goals
+  goalAmount      Float
+  raisedAmount    Float           @default(0)
+  currency        String          @default("INR")
+  
+  // Campaign Details
+  status          CampaignStatus  @default(DRAFT)
+  startDate       DateTime
+  endDate         DateTime?
+  
+  // Media
+  featuredImage   String?
+  images          String[]
+  videoUrl        String?
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Relations
+  donations       Donation[]
+  animals         Animal[]
+  
+  // Tracking
+  viewCount       Int             @default(0)
+  shareCount      Int             @default(0)
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  publishedAt     DateTime?
+
+  @@index([slug])
+  @@index([status])
+  @@index([startDate])
+}
+
+// ============================================
+// ANIMALS & RESCUE CASES
+// ============================================
+
+enum AnimalType {
+  DOG
+  CAT
+  COW
+  BIRD
+  WILDLIFE
+  OTHER
+}
+
+enum AnimalStatus {
+  RESCUED
+  IN_TREATMENT
+  RECOVERING
+  ADOPTED
+  RELEASED
+  DECEASED
+}
+
+enum AnimalGender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+model Animal {
+  id              String          @id @default(cuid())
+  name            String?
+  type            AnimalType
+  breed           String?
+  age             String?
+  gender          AnimalGender    @default(UNKNOWN)
+  
+  // Status & Location
+  status          AnimalStatus    @default(RESCUED)
+  location        String?
+  rescueDate      DateTime
+  
+  // Medical Information
+  medicalHistory  String?         @db.Text
+  currentCondition String?        @db.Text
+  vaccinated      Boolean         @default(false)
+  neutered        Boolean         @default(false)
+  
+  // Media
+  images          String[]
+  featuredImage   String?
+  
+  // Story
+  rescueStory     String?         @db.Text
+  
+  // Campaign Association
+  campaignId      String?
+  campaign        Campaign?       @relation(fields: [campaignId], references: [id])
+  
+  // Adoption
+  adoptionStatus  String?
+  adoptedBy       String?
+  adoptionDate    DateTime?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([rescueDate])
+}
+
+// ============================================
+// VOLUNTEERS
+// ============================================
+
+enum VolunteerStatus {
+  PENDING
+  APPROVED
+  ACTIVE
+  INACTIVE
+  REJECTED
+}
+
+model Volunteer {
+  id              String          @id @default(cuid())
+  userId          String          @unique
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Personal Information
+  fullName        String
+  phone           String
+  address         String?
+  city            String
+  state           String
+  pincode         String
+  
+  // Professional Information
+  occupation      String?
+  organization    String?
+  
+  // Volunteer Details
+  skills          String[]
+  interests       String[]
+  availability    String?
+  experience      String?         @db.Text
+  
+  // Status
+  status          VolunteerStatus @default(PENDING)
+  approvedAt      DateTime?
+  approvedBy      String?
+  
+  // Emergency Contact
+  emergencyContactName  String?
+  emergencyContactPhone String?
+  
+  // Documents
+  idProof         String?
+  photo           String?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([city])
+}
+
+// ============================================
+// BLOG & CONTENT
+// ============================================
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model BlogPost {
+  id              String          @id @default(cuid())
+  title           String
+  slug            String          @unique
+  excerpt         String?
+  content         String          @db.Text
+  
+  // Author
+  authorId        String
+  author          User            @relation(fields: [authorId], references: [id])
+  
+  // Media
+  featuredImage   String?
+  images          String[]
+  
+  // Status
+  status          PostStatus      @default(DRAFT)
+  publishedAt     DateTime?
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Categories & Tags
+  categories      Category[]
+  tags            Tag[]
+  
+  // Engagement
+  viewCount       Int             @default(0)
+  comments        Comment[]
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([slug])
+  @@index([authorId])
+  @@index([status])
+  @@index([publishedAt])
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  slug        String      @unique
+  description String?
+  posts       BlogPost[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([slug])
+}
+
+model Tag {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  slug        String      @unique
+  posts       BlogPost[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([slug])
+}
+
+model Comment {
+  id          String      @id @default(cuid())
+  content     String      @db.Text
+  
+  // Author
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Post
+  postId      String
+  post        BlogPost    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Moderation
+  approved    Boolean     @default(false)
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([postId])
+  @@index([userId])
+}
+
+// ============================================
+// CONTACT & SUBMISSIONS
+// ============================================
+
+enum SubmissionStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model ContactSubmission {
+  id          String            @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  subject     String
+  message     String            @db.Text
+  
+  // User Association (if logged in)
+  userId      String?
+  user        User?             @relation(fields: [userId], references: [id])
+  
+  // Status
+  status      SubmissionStatus  @default(NEW)
+  response    String?           @db.Text
+  respondedAt DateTime?
+  respondedBy String?
+  
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ============================================
+// MEDIA LIBRARY
+// ============================================
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  OTHER
+}
+
+model Media {
+  id          String      @id @default(cuid())
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int
+  type        MediaType
+  url         String
+  thumbnailUrl String?
+  
+  // Metadata
+  alt         String?
+  caption     String?
+  
+  // Organization
+  folder      String?
+  tags        String[]
+  
+  // Upload Info
+  uploadedBy  String?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([type])
+  @@index([folder])
+}
+
+// ============================================
+// SITE SETTINGS & PAGES
+// ============================================
+
+model Page {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  content     String      @db.Text
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Status
+  published   Boolean     @default(false)
+  publishedAt DateTime?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([slug])
+}
+
+model SiteSetting {
+  id          String      @id @default(cuid())
+  key         String      @unique
+  value       String      @db.Text
+  type        String      @default("string")
+  description String?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([key])
+}
