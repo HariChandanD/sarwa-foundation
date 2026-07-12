@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { Container } from "@/components/layout/Container";
-import { Calendar, User, Clock, ArrowRight, Tag } from "lucide-react";
+import { Calendar, User, Clock, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
