@@ -1,47 +1,57 @@
-import { Metadata } from "next";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { Container } from "@/components/layout/Container";
-import { Heart, Shield, TrendingUp, Users, Check, CreditCard, Smartphone, Building } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Metadata } from 'next';
+import { HeroSection } from '@/components/sections/HeroSection';
+import { Container } from '@/components/layout/Container';
+import {
+  Heart,
+  Shield,
+  TrendingUp,
+  Users,
+  Check,
+  CreditCard,
+  Smartphone,
+  Building,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: "Donate - Sarwa Foundation",
-  description: "Support Sarwa Foundation's mission to rescue and rehabilitate animals. Your donation directly impacts lives. 100% transparent and tax-deductible.",
+  title: 'Donate - Sarwa Foundation',
+  description:
+    "Support Sarwa Foundation's mission to rescue and rehabilitate animals. Your donation directly impacts lives. 100% transparent and tax-deductible.",
 };
 
 const donationAmounts = [
-  { amount: 500, impact: "Feeds 5 animals for a day" },
-  { amount: 1000, impact: "Provides basic medical care" },
-  { amount: 2500, impact: "Covers emergency surgery" },
-  { amount: 5000, impact: "Supports a rescue operation" },
-  { amount: 10000, impact: "Sponsors an animal for a month" },
-  { amount: 25000, impact: "Funds a sterilization camp" },
+  { amount: 500, impact: 'Feeds 5 animals for a day' },
+  { amount: 1000, impact: 'Provides basic medical care' },
+  { amount: 2500, impact: 'Covers emergency surgery' },
+  { amount: 5000, impact: 'Supports a rescue operation' },
+  { amount: 10000, impact: 'Sponsors an animal for a month' },
+  { amount: 25000, impact: 'Funds a sterilization camp' },
 ];
 
 const impactAreas = [
   {
     icon: Heart,
-    title: "Emergency Rescue",
-    description: "Immediate response to animals in distress",
+    title: 'Emergency Rescue',
+    description: 'Immediate response to animals in distress',
     percentage: 30,
   },
   {
     icon: Shield,
-    title: "Medical Care",
-    description: "Surgeries, treatments, and rehabilitation",
+    title: 'Medical Care',
+    description: 'Surgeries, treatments, and rehabilitation',
     percentage: 35,
   },
   {
     icon: Users,
-    title: "Shelter & Food",
-    description: "Safe housing and nutritious meals",
+    title: 'Shelter & Food',
+    description: 'Safe housing and nutritious meals',
     percentage: 25,
   },
   {
     icon: TrendingUp,
-    title: "Programs & Outreach",
-    description: "Education and community initiatives",
+    title: 'Programs & Outreach',
+    description: 'Education and community initiatives',
     percentage: 10,
   },
 ];
@@ -54,37 +64,40 @@ export default function DonatePage() {
         variant="about"
         title="Your Donation Saves Lives"
         subtitle="Every contribution helps us rescue, rehabilitate, and rehome animals in need. Join thousands of compassionate supporters making a real difference."
-        primaryCTA={{ text: "Donate Now", href: "#donate-form" }}
-        secondaryCTA={{ text: "Become Monthly Donor", href: "#monthly" }}
+        primaryCTA={{ text: 'Donate Now', href: '#donate-form' }}
+        secondaryCTA={{ text: 'Become Monthly Donor', href: '#monthly' }}
       />
 
       {/* Donation Form Section */}
-      <section id="donate-form" className="py-20 bg-white">
+      <section id="donate-form" className="bg-white py-20">
         <Container>
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-12 text-center">
+              <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
                 Choose Your Contribution
               </h2>
               <p className="text-lg text-gray-600">
-                Select an amount or enter a custom donation. Every rupee makes a difference.
+                Select an amount or enter a custom donation. Every rupee makes a
+                difference.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid gap-8 md:grid-cols-2">
               {/* Donation Amounts */}
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-6">One-Time Donation</h3>
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <h3 className="mb-6 text-xl font-semibold text-gray-900">
+                  One-Time Donation
+                </h3>
+                <div className="mb-6 grid grid-cols-2 gap-4">
                   {donationAmounts.map((item, index) => (
                     <button
                       key={index}
-                      className="p-4 border-2 border-gray-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left group"
+                      className="group rounded-xl border-2 border-gray-200 p-4 text-left transition-all hover:border-primary hover:bg-primary/5"
                     >
-                      <div className="text-2xl font-bold text-gray-900 mb-1">
+                      <div className="mb-1 text-2xl font-bold text-gray-900">
                         ₹{item.amount.toLocaleString()}
                       </div>
-                      <div className="text-sm text-gray-600 group-hover:text-primary transition-colors">
+                      <div className="text-sm text-gray-600 transition-colors group-hover:text-primary">
                         {item.impact}
                       </div>
                     </button>
@@ -93,78 +106,84 @@ export default function DonatePage() {
 
                 {/* Custom Amount */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
                     Or Enter Custom Amount
                   </label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-gray-500">
                       ₹
                     </span>
                     <input
                       type="number"
                       placeholder="Enter amount"
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none text-lg"
+                      className="w-full rounded-xl border-2 border-gray-200 py-3 pl-10 pr-4 text-lg focus:border-primary focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {/* Payment Methods */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                  <label className="mb-3 block text-sm font-medium text-gray-700">
                     Payment Method
                   </label>
                   <div className="grid grid-cols-3 gap-3">
-                    <button className="p-4 border-2 border-primary bg-primary/5 rounded-xl flex flex-col items-center gap-2">
+                    <button className="flex flex-col items-center gap-2 rounded-xl border-2 border-primary bg-primary/5 p-4">
                       <CreditCard className="h-6 w-6 text-primary" />
                       <span className="text-sm font-medium">Card</span>
                     </button>
-                    <button className="p-4 border-2 border-gray-200 rounded-xl flex flex-col items-center gap-2 hover:border-primary hover:bg-primary/5 transition-all">
+                    <button className="flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 transition-all hover:border-primary hover:bg-primary/5">
                       <Smartphone className="h-6 w-6 text-gray-600" />
                       <span className="text-sm font-medium">UPI</span>
                     </button>
-                    <button className="p-4 border-2 border-gray-200 rounded-xl flex flex-col items-center gap-2 hover:border-primary hover:bg-primary/5 transition-all">
+                    <button className="flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 transition-all hover:border-primary hover:bg-primary/5">
                       <Building className="h-6 w-6 text-gray-600" />
                       <span className="text-sm font-medium">Bank</span>
                     </button>
                   </div>
                 </div>
 
-                <Button className="w-full bg-primary hover:bg-primary/90 text-lg py-6">
+                <Button className="w-full bg-primary py-6 text-lg hover:bg-primary/90">
                   <Heart className="mr-2 h-5 w-5" />
                   Proceed to Payment
                 </Button>
               </div>
 
               {/* Monthly Donation */}
-              <div id="monthly" className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl p-8">
-                <Badge className="bg-primary text-white mb-4">Recommended</Badge>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <div
+                id="monthly"
+                className="rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 p-8"
+              >
+                <Badge className="mb-4 bg-primary text-white">
+                  Recommended
+                </Badge>
+                <h3 className="mb-4 text-2xl font-bold text-gray-900">
                   Become a Monthly Donor
                 </h3>
-                <p className="text-gray-600 mb-6">
-                  Join our community of regular supporters and make a sustained impact on animal welfare.
+                <p className="mb-6 text-gray-600">
+                  Join our community of regular supporters and make a sustained
+                  impact on animal welfare.
                 </p>
 
-                <div className="space-y-4 mb-6">
+                <div className="mb-6 space-y-4">
                   {[
-                    "Predictable support for ongoing care",
-                    "Exclusive updates and impact reports",
-                    "Priority volunteer opportunities",
-                    "Annual appreciation event invite",
-                    "Tax benefits on total annual donation",
+                    'Predictable support for ongoing care',
+                    'Exclusive updates and impact reports',
+                    'Priority volunteer opportunities',
+                    'Annual appreciation event invite',
+                    'Tax benefits on total annual donation',
                   ].map((benefit, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
                       <span className="text-gray-700">{benefit}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="mb-6 grid grid-cols-2 gap-3">
                   {[500, 1000, 2500, 5000].map((amount) => (
                     <button
                       key={amount}
-                      className="p-3 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all"
+                      className="rounded-xl border-2 border-gray-200 bg-white p-3 transition-all hover:border-primary hover:bg-primary/5"
                     >
                       <div className="text-xl font-bold text-gray-900">
                         ₹{amount}/mo
@@ -183,29 +202,33 @@ export default function DonatePage() {
       </section>
 
       {/* How Funds Are Used */}
-      <section className="py-20 bg-gray-50">
+      <section className="bg-gray-50 py-20">
         <Container>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
               100% Transparent Fund Usage
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Every rupee is accounted for. Here's exactly how your donation makes an impact.
+            <p className="mx-auto max-w-3xl text-lg text-gray-600">
+              Every rupee is accounted for. Here's exactly how your donation
+              makes an impact.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {impactAreas.map((area, index) => {
               const Icon = area.icon;
               return (
-                <div key={index} className="bg-white rounded-xl p-6 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                <div
+                  key={index}
+                  className="rounded-xl bg-white p-6 text-center"
+                >
+                  <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
                     <Icon className="h-8 w-8 text-primary" />
                   </div>
-                  <div className="text-4xl font-bold text-primary mb-2">
+                  <div className="mb-2 text-4xl font-bold text-primary">
                     {area.percentage}%
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900">
                     {area.title}
                   </h3>
                   <p className="text-sm text-gray-600">{area.description}</p>
@@ -214,17 +237,22 @@ export default function DonatePage() {
             })}
           </div>
 
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-8 max-w-3xl mx-auto">
+          <div className="mx-auto max-w-3xl rounded-xl border-2 border-blue-200 bg-blue-50 p-8">
             <div className="flex items-start gap-4">
-              <Shield className="h-8 w-8 text-blue-600 flex-shrink-0" />
+              <Shield className="h-8 w-8 flex-shrink-0 text-blue-600" />
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="mb-2 text-xl font-semibold text-gray-900">
                   Our Commitment to Transparency
                 </h3>
-                <p className="text-gray-700 mb-4">
-                  We publish detailed financial reports quarterly and maintain complete transparency in all our operations. Your trust is our responsibility.
+                <p className="mb-4 text-gray-700">
+                  We publish detailed financial reports quarterly and maintain
+                  complete transparency in all our operations. Your trust is our
+                  responsibility.
                 </p>
-                <a href="/about/transparency" className="text-primary font-medium hover:underline">
+                <a
+                  href="/about/transparency"
+                  className="font-medium text-primary hover:underline"
+                >
                   View Financial Reports →
                 </a>
               </div>
@@ -234,33 +262,37 @@ export default function DonatePage() {
       </section>
 
       {/* Tax Benefits */}
-      <section className="py-20 bg-white">
+      <section className="bg-white py-20">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="mb-8 text-center text-3xl font-bold text-gray-900 md:text-4xl">
               Tax Benefits
             </h2>
-            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-8">
+            <div className="rounded-xl border-2 border-green-200 bg-green-50 p-8">
               <div className="flex items-start gap-4">
-                <Check className="h-8 w-8 text-green-600 flex-shrink-0" />
+                <Check className="h-8 w-8 flex-shrink-0 text-green-600" />
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
                     80G Tax Exemption Certificate
                   </h3>
-                  <p className="text-gray-700 mb-4">
-                    Sarwa Foundation is registered under Section 80G of the Income Tax Act. Your donations are eligible for tax deductions as per Indian tax laws.
+                  <p className="mb-4 text-gray-700">
+                    Sarwa Foundation is registered under Section 80G of the
+                    Income Tax Act. Your donations are eligible for tax
+                    deductions as per Indian tax laws.
                   </p>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                      <Check className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
                       <span>Instant tax receipt via email</span>
                     </li>
                     <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                      <span>Annual consolidated statement for regular donors</span>
+                      <Check className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                      <span>
+                        Annual consolidated statement for regular donors
+                      </span>
                     </li>
                     <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                      <Check className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
                       <span>PAN-based automatic record keeping</span>
                     </li>
                   </ul>
@@ -272,46 +304,47 @@ export default function DonatePage() {
       </section>
 
       {/* Other Ways to Help */}
-      <section className="py-20 bg-gray-50">
+      <section className="bg-gray-50 py-20">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
               Other Ways to Support
             </h2>
             <p className="text-lg text-gray-600">
-              Can't donate right now? There are many other ways to help our cause.
+              Can't donate right now? There are many other ways to help our
+              cause.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-3">
             {[
               {
-                title: "Volunteer Your Time",
-                description: "Join our team and make a hands-on difference",
-                link: "/volunteer",
-                linkText: "Become a Volunteer",
+                title: 'Volunteer Your Time',
+                description: 'Join our team and make a hands-on difference',
+                link: '/volunteer',
+                linkText: 'Become a Volunteer',
               },
               {
-                title: "Foster an Animal",
-                description: "Provide temporary care while they await adoption",
-                link: "/foster",
-                linkText: "Learn About Fostering",
+                title: 'Foster an Animal',
+                description: 'Provide temporary care while they await adoption',
+                link: '/foster',
+                linkText: 'Learn About Fostering',
               },
               {
-                title: "Spread the Word",
-                description: "Share our mission on social media",
-                link: "#share",
-                linkText: "Share Our Cause",
+                title: 'Spread the Word',
+                description: 'Share our mission on social media',
+                link: '#share',
+                linkText: 'Share Our Cause',
               },
             ].map((item, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+              <div key={index} className="rounded-xl bg-white p-6 text-center">
+                <h3 className="mb-3 text-xl font-semibold text-gray-900">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 mb-4">{item.description}</p>
+                <p className="mb-4 text-gray-600">{item.description}</p>
                 <a
                   href={item.link}
-                  className="text-primary font-medium hover:underline"
+                  className="font-medium text-primary hover:underline"
                 >
                   {item.linkText} →
                 </a>

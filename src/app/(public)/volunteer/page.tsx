@@ -1,59 +1,65 @@
-import { Metadata } from "next";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { Container } from "@/components/layout/Container";
-import { Heart, Users, Calendar, Clock, MapPin, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select";
+import { Metadata } from 'next';
+import { HeroSection } from '@/components/sections/HeroSection';
+import { Container } from '@/components/layout/Container';
+import { Heart, Users, Calendar, Clock, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 export const metadata: Metadata = {
-  title: "Volunteer - Sarwa Foundation",
-  description: "Join Sarwa Foundation's volunteer community and make a hands-on difference in animal welfare. Various opportunities available for all skill levels.",
+  title: 'Volunteer - Sarwa Foundation',
+  description:
+    "Join Sarwa Foundation's volunteer community and make a hands-on difference in animal welfare. Various opportunities available for all skill levels.",
 };
 
 const volunteerRoles = [
   {
-    title: "Animal Care Volunteer",
-    description: "Help with daily care, feeding, grooming, and socializing rescued animals at our shelters.",
-    commitment: "4-8 hours/week",
-    skills: "Love for animals, patience, physical fitness",
+    title: 'Animal Care Volunteer',
+    description:
+      'Help with daily care, feeding, grooming, and socializing rescued animals at our shelters.',
+    commitment: '4-8 hours/week',
+    skills: 'Love for animals, patience, physical fitness',
     icon: Heart,
   },
   {
-    title: "Rescue Team Member",
-    description: "Join our emergency response team to rescue animals in distress across the city.",
-    commitment: "On-call basis",
-    skills: "Quick response, physical fitness, vehicle preferred",
+    title: 'Rescue Team Member',
+    description:
+      'Join our emergency response team to rescue animals in distress across the city.',
+    commitment: 'On-call basis',
+    skills: 'Quick response, physical fitness, vehicle preferred',
     icon: Users,
   },
   {
-    title: "Foster Parent",
-    description: "Provide temporary home care for animals recovering from trauma or awaiting adoption.",
-    commitment: "Flexible duration",
-    skills: "Safe home environment, time commitment",
+    title: 'Foster Parent',
+    description:
+      'Provide temporary home care for animals recovering from trauma or awaiting adoption.',
+    commitment: 'Flexible duration',
+    skills: 'Safe home environment, time commitment',
     icon: Heart,
   },
   {
-    title: "Event Coordinator",
-    description: "Help organize adoption drives, fundraising events, and awareness campaigns.",
-    commitment: "10-15 hours/month",
-    skills: "Organization, communication, creativity",
+    title: 'Event Coordinator',
+    description:
+      'Help organize adoption drives, fundraising events, and awareness campaigns.',
+    commitment: '10-15 hours/month',
+    skills: 'Organization, communication, creativity',
     icon: Calendar,
   },
   {
-    title: "Social Media Volunteer",
-    description: "Create content, manage social media, and help spread awareness about our cause.",
-    commitment: "5-10 hours/week",
-    skills: "Social media, content creation, design",
+    title: 'Social Media Volunteer',
+    description:
+      'Create content, manage social media, and help spread awareness about our cause.',
+    commitment: '5-10 hours/week',
+    skills: 'Social media, content creation, design',
     icon: Users,
   },
   {
-    title: "Administrative Support",
-    description: "Assist with paperwork, data entry, donor management, and office tasks.",
-    commitment: "8-12 hours/week",
-    skills: "Computer skills, attention to detail",
+    title: 'Administrative Support',
+    description:
+      'Assist with paperwork, data entry, donor management, and office tasks.',
+    commitment: '8-12 hours/week',
+    skills: 'Computer skills, attention to detail',
     icon: Clock,
   },
 ];
@@ -66,53 +72,62 @@ export default function VolunteerPage() {
         variant="about"
         title="Volunteer With Us"
         subtitle="Join our community of passionate volunteers making a real difference in the lives of animals. Your time and skills can save lives."
-        primaryCTA={{ text: "Apply Now", href: "#application" }}
-        secondaryCTA={{ text: "Learn More", href: "#roles" }}
+        primaryCTA={{ text: 'Apply Now', href: '#application' }}
+        secondaryCTA={{ text: 'Learn More', href: '#roles' }}
       />
 
       {/* Why Volunteer */}
-      <section className="py-20 bg-white">
+      <section className="bg-white py-20">
         <Container>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
               Why Volunteer With Sarwa Foundation?
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Volunteering is more than just giving your time—it's about being part of a compassionate community and making a tangible impact.
+            <p className="mx-auto max-w-3xl text-lg text-gray-600">
+              Volunteering is more than just giving your time—it's about being
+              part of a compassionate community and making a tangible impact.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-3">
             {[
               {
-                title: "Make Real Impact",
-                description: "See the direct results of your efforts in the lives you help save and transform.",
+                title: 'Make Real Impact',
+                description:
+                  'See the direct results of your efforts in the lives you help save and transform.',
               },
               {
-                title: "Learn & Grow",
-                description: "Gain valuable skills, experience, and knowledge about animal welfare and care.",
+                title: 'Learn & Grow',
+                description:
+                  'Gain valuable skills, experience, and knowledge about animal welfare and care.',
               },
               {
-                title: "Join Community",
-                description: "Connect with like-minded people who share your passion for animal welfare.",
+                title: 'Join Community',
+                description:
+                  'Connect with like-minded people who share your passion for animal welfare.',
               },
               {
-                title: "Flexible Commitment",
-                description: "Choose roles and schedules that fit your availability and lifestyle.",
+                title: 'Flexible Commitment',
+                description:
+                  'Choose roles and schedules that fit your availability and lifestyle.',
               },
               {
-                title: "Professional Development",
-                description: "Build your resume with meaningful volunteer experience and references.",
+                title: 'Professional Development',
+                description:
+                  'Build your resume with meaningful volunteer experience and references.',
               },
               {
-                title: "Personal Fulfillment",
-                description: "Experience the joy and satisfaction of making a difference every day.",
+                title: 'Personal Fulfillment',
+                description:
+                  'Experience the joy and satisfaction of making a difference every day.',
               },
             ].map((benefit, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0" />
-                  <h3 className="text-xl font-semibold text-gray-900">{benefit.title}</h3>
+              <div key={index} className="rounded-xl bg-gray-50 p-6">
+                <div className="mb-3 flex items-center gap-3">
+                  <CheckCircle className="h-6 w-6 flex-shrink-0 text-primary" />
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    {benefit.title}
+                  </h3>
                 </div>
                 <p className="text-gray-600">{benefit.description}</p>
               </div>
@@ -122,39 +137,42 @@ export default function VolunteerPage() {
       </section>
 
       {/* Volunteer Roles */}
-      <section id="roles" className="py-20 bg-gray-50">
+      <section id="roles" className="bg-gray-50 py-20">
         <Container>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
               Volunteer Opportunities
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              We have diverse roles to match your skills, interests, and availability.
+            <p className="mx-auto max-w-3xl text-lg text-gray-600">
+              We have diverse roles to match your skills, interests, and
+              availability.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {volunteerRoles.map((role, index) => {
               const Icon = role.icon;
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{role.title}</h3>
-                  <p className="text-gray-600 mb-4">{role.description}</p>
+                  <h3 className="mb-3 text-xl font-bold text-gray-900">
+                    {role.title}
+                  </h3>
+                  <p className="mb-4 text-gray-600">{role.description}</p>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-start gap-2">
-                      <Clock className="h-4 w-4 text-gray-400 flex-shrink-0 mt-0.5" />
+                      <Clock className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
                       <span className="text-gray-600">
                         <strong>Commitment:</strong> {role.commitment}
                       </span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-gray-400 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
                       <span className="text-gray-600">
                         <strong>Skills:</strong> {role.skills}
                       </span>
@@ -168,21 +186,22 @@ export default function VolunteerPage() {
       </section>
 
       {/* Application Form */}
-      <section id="application" className="py-20 bg-white">
+      <section id="application" className="bg-white py-20">
         <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-12 text-center">
+              <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
                 Volunteer Application
               </h2>
               <p className="text-lg text-gray-600">
-                Fill out the form below and we'll get back to you within 48 hours.
+                Fill out the form below and we'll get back to you within 48
+                hours.
               </p>
             </div>
 
-            <form className="space-y-6 bg-gray-50 rounded-2xl p-8">
+            <form className="space-y-6 rounded-2xl bg-gray-50 p-8">
               {/* Personal Information */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <Label htmlFor="firstName">First Name *</Label>
                   <Input id="firstName" placeholder="John" required />
@@ -193,14 +212,24 @@ export default function VolunteerPage() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <Label htmlFor="email">Email *</Label>
-                  <Input id="email" type="email" placeholder="john@example.com" required />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="john@example.com"
+                    required
+                  />
                 </div>
                 <div>
                   <Label htmlFor="phone">Phone Number *</Label>
-                  <Input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+91 98765 43210"
+                    required
+                  />
                 </div>
               </div>
 
@@ -214,7 +243,7 @@ export default function VolunteerPage() {
                 <Label htmlFor="role">Preferred Volunteer Role *</Label>
                 <select
                   id="role"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Select a role</option>
@@ -230,7 +259,7 @@ export default function VolunteerPage() {
                 <Label htmlFor="availability">Availability *</Label>
                 <select
                   id="availability"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Select availability</option>
@@ -242,7 +271,9 @@ export default function VolunteerPage() {
               </div>
 
               <div>
-                <Label htmlFor="experience">Previous Experience with Animals</Label>
+                <Label htmlFor="experience">
+                  Previous Experience with Animals
+                </Label>
                 <Textarea
                   id="experience"
                   placeholder="Tell us about any previous experience you have with animals or volunteering..."
@@ -251,7 +282,9 @@ export default function VolunteerPage() {
               </div>
 
               <div>
-                <Label htmlFor="motivation">Why do you want to volunteer with us? *</Label>
+                <Label htmlFor="motivation">
+                  Why do you want to volunteer with us? *
+                </Label>
                 <Textarea
                   id="motivation"
                   placeholder="Share your motivation and what you hope to contribute..."
@@ -261,18 +294,17 @@ export default function VolunteerPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  className="mt-1"
-                  required
-                />
+                <input type="checkbox" id="terms" className="mt-1" required />
                 <Label htmlFor="terms" className="text-sm text-gray-600">
-                  I agree to undergo a background check and commit to the volunteer guidelines and code of conduct.
+                  I agree to undergo a background check and commit to the
+                  volunteer guidelines and code of conduct.
                 </Label>
               </div>
 
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-lg py-6">
+              <Button
+                type="submit"
+                className="w-full bg-primary py-6 text-lg hover:bg-primary/90"
+              >
                 <Heart className="mr-2 h-5 w-5" />
                 Submit Application
               </Button>
@@ -282,37 +314,46 @@ export default function VolunteerPage() {
       </section>
 
       {/* Volunteer Testimonials */}
-      <section className="py-20 bg-gray-50">
+      <section className="bg-gray-50 py-20">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
               Hear From Our Volunteers
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-3">
             {[
               {
-                name: "Priya Sharma",
-                role: "Animal Care Volunteer",
-                quote: "Volunteering at Sarwa Foundation has been the most rewarding experience. Seeing animals recover and find homes is priceless.",
+                name: 'Priya Sharma',
+                role: 'Animal Care Volunteer',
+                quote:
+                  'Volunteering at Sarwa Foundation has been the most rewarding experience. Seeing animals recover and find homes is priceless.',
               },
               {
-                name: "Rahul Mehta",
-                role: "Rescue Team Member",
-                quote: "Being part of the rescue team has taught me so much about compassion and quick thinking. Every rescue is a new adventure.",
+                name: 'Rahul Mehta',
+                role: 'Rescue Team Member',
+                quote:
+                  'Being part of the rescue team has taught me so much about compassion and quick thinking. Every rescue is a new adventure.',
               },
               {
-                name: "Anjali Patel",
-                role: "Foster Parent",
-                quote: "Fostering has brought so much joy to my life. Watching animals heal and thrive in a home environment is beautiful.",
+                name: 'Anjali Patel',
+                role: 'Foster Parent',
+                quote:
+                  'Fostering has brought so much joy to my life. Watching animals heal and thrive in a home environment is beautiful.',
               },
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-md">
-                <p className="text-gray-600 mb-4 italic">"{testimonial.quote}"</p>
+              <div key={index} className="rounded-xl bg-white p-6 shadow-md">
+                <p className="mb-4 italic text-gray-600">
+                  "{testimonial.quote}"
+                </p>
                 <div>
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-500">{testimonial.role}</div>
+                  <div className="font-semibold text-gray-900">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {testimonial.role}
+                  </div>
                 </div>
               </div>
             ))}

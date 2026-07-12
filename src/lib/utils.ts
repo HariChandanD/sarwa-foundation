@@ -11,7 +11,10 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Format currency in INR
  */
-export function formatCurrency(amount: number, currency: string = 'INR'): string {
+export function formatCurrency(
+  amount: number,
+  currency: string = 'INR'
+): string {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency,
@@ -23,9 +26,12 @@ export function formatCurrency(amount: number, currency: string = 'INR'): string
 /**
  * Format date to readable string
  */
-export function formatDate(date: Date | string, format: 'short' | 'long' = 'long'): string {
+export function formatDate(
+  date: Date | string,
+  format: 'short' | 'long' = 'long'
+): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   if (format === 'short') {
     return new Intl.DateTimeFormat('en-IN', {
       year: 'numeric',
@@ -33,7 +39,7 @@ export function formatDate(date: Date | string, format: 'short' | 'long' = 'long
       day: 'numeric',
     }).format(dateObj);
   }
-  
+
   return new Intl.DateTimeFormat('en-IN', {
     year: 'numeric',
     month: 'long',
@@ -169,7 +175,8 @@ export function debounce<T extends (...args: any[]) => any>(
  * Generate random ID
  */
 export function generateId(length: number = 10): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   for (let i = 0; i < length; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));

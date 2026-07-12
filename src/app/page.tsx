@@ -1,7 +1,7 @@
-import { HeroSection } from "@/components/sections/HeroSection";
-import { ImpactStatsSection } from "@/components/sections/ImpactStatsSection";
-import { FeaturedCampaignsSection } from "@/components/sections/FeaturedCampaignsSection";
-import { CTASection } from "@/components/sections/CTASection";
+import { HeroSection } from '@/components/sections/HeroSection';
+import { ImpactStatsSection } from '@/components/sections/ImpactStatsSection';
+import { FeaturedCampaignsSection } from '@/components/sections/FeaturedCampaignsSection';
+import { CTASection } from '@/components/sections/CTASection';
 
 export default function HomePage() {
   return (
@@ -10,8 +10,8 @@ export default function HomePage() {
       <HeroSection
         title="Every Life Deserves Love and Care"
         subtitle="Join us in our mission to rescue, rehabilitate, and rehome animals in need"
-        primaryCTA={{ text: "Donate Now", href: "/donate" }}
-        secondaryCTA={{ text: "Learn More", href: "/about" }}
+        primaryCTA={{ text: 'Donate Now', href: '/donate' }}
+        secondaryCTA={{ text: 'Learn More', href: '/about' }}
       />
 
       {/* Impact Stats Section */}

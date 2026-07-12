@@ -126,7 +126,13 @@ export interface AnimalFormData {
   breed?: string;
   age?: string;
   gender: 'MALE' | 'FEMALE' | 'UNKNOWN';
-  status: 'RESCUED' | 'IN_TREATMENT' | 'RECOVERING' | 'ADOPTED' | 'RELEASED' | 'DECEASED';
+  status:
+    | 'RESCUED'
+    | 'IN_TREATMENT'
+    | 'RECOVERING'
+    | 'ADOPTED'
+    | 'RELEASED'
+    | 'DECEASED';
   location?: string;
   rescueDate: Date;
   medicalHistory?: string;

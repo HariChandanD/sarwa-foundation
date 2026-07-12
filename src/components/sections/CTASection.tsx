@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Heart, ArrowRight, Phone, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Container } from "@/components/layout/Container";
-import { cn } from "@/lib/utils";
+import { motion } from 'framer-motion';
+import { Heart, ArrowRight, Phone, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Container } from '@/components/layout/Container';
+import { cn } from '@/lib/utils';
 
 interface CTASectionProps {
-  variant?: "donate" | "volunteer" | "emergency" | "newsletter";
+  variant?: 'donate' | 'volunteer' | 'emergency' | 'newsletter';
   title?: string;
   description?: string;
   primaryCTA?: {
@@ -26,37 +26,61 @@ interface CTASectionProps {
 
 const variantConfig = {
   donate: {
-    title: "Your Support Changes Lives",
-    description: "Every donation helps us rescue, rehabilitate, and rehome animals in need. Join thousands of compassionate supporters making a difference.",
-    primaryCTA: { text: "Donate Now", href: "/donate", icon: Heart },
-    secondaryCTA: { text: "Become a Monthly Donor", href: "/donate?type=recurring", icon: ArrowRight },
-    gradient: "from-primary via-primary/90 to-secondary",
+    title: 'Your Support Changes Lives',
+    description:
+      'Every donation helps us rescue, rehabilitate, and rehome animals in need. Join thousands of compassionate supporters making a difference.',
+    primaryCTA: { text: 'Donate Now', href: '/donate', icon: Heart },
+    secondaryCTA: {
+      text: 'Become a Monthly Donor',
+      href: '/donate?type=recurring',
+      icon: ArrowRight,
+    },
+    gradient: 'from-primary via-primary/90 to-secondary',
   },
   volunteer: {
-    title: "Join Our Community of Animal Lovers",
-    description: "Make a hands-on difference in the lives of animals. Whether you have a few hours a week or want to foster, we need you.",
-    primaryCTA: { text: "Volunteer Today", href: "/volunteer", icon: Heart },
-    secondaryCTA: { text: "Learn About Fostering", href: "/foster", icon: ArrowRight },
-    gradient: "from-green-600 via-green-500 to-teal-600",
+    title: 'Join Our Community of Animal Lovers',
+    description:
+      'Make a hands-on difference in the lives of animals. Whether you have a few hours a week or want to foster, we need you.',
+    primaryCTA: { text: 'Volunteer Today', href: '/volunteer', icon: Heart },
+    secondaryCTA: {
+      text: 'Learn About Fostering',
+      href: '/foster',
+      icon: ArrowRight,
+    },
+    gradient: 'from-green-600 via-green-500 to-teal-600',
   },
   emergency: {
-    title: "Emergency Rescue Needed",
-    description: "We have urgent cases requiring immediate medical attention. Your quick action can save lives today.",
-    primaryCTA: { text: "Donate for Emergency", href: "/donate?campaign=emergency", icon: Heart },
-    secondaryCTA: { text: "Call Rescue Helpline", href: "tel:1800-XXX-XXXX", icon: Phone },
-    gradient: "from-red-600 via-red-500 to-orange-600",
+    title: 'Emergency Rescue Needed',
+    description:
+      'We have urgent cases requiring immediate medical attention. Your quick action can save lives today.',
+    primaryCTA: {
+      text: 'Donate for Emergency',
+      href: '/donate?campaign=emergency',
+      icon: Heart,
+    },
+    secondaryCTA: {
+      text: 'Call Rescue Helpline',
+      href: 'tel:1800-XXX-XXXX',
+      icon: Phone,
+    },
+    gradient: 'from-red-600 via-red-500 to-orange-600',
   },
   newsletter: {
-    title: "Stay Connected with Our Mission",
-    description: "Get rescue updates, success stories, and ways to help delivered to your inbox every month.",
-    primaryCTA: { text: "Subscribe Now", href: "#newsletter", icon: Mail },
-    secondaryCTA: { text: "View Past Updates", href: "/blog", icon: ArrowRight },
-    gradient: "from-blue-600 via-blue-500 to-indigo-600",
+    title: 'Stay Connected with Our Mission',
+    description:
+      'Get rescue updates, success stories, and ways to help delivered to your inbox every month.',
+    primaryCTA: { text: 'Subscribe Now', href: '#newsletter', icon: Mail },
+    secondaryCTA: {
+      text: 'View Past Updates',
+      href: '/blog',
+      icon: ArrowRight,
+    },
+    gradient: 'from-blue-600 via-blue-500 to-indigo-600',
   },
 };
 
 export function CTASection({
-  variant = "donate",
+  variant = 'donate',
   title,
   description,
   primaryCTA,
@@ -74,23 +98,22 @@ export function CTASection({
   const SecondaryIcon = finalSecondaryCTA?.icon || ArrowRight;
 
   return (
-    <section className={cn("relative py-20 overflow-hidden", className)}>
+    <section className={cn('relative overflow-hidden py-20', className)}>
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br",
-          config.gradient
-        )} />
+        <div
+          className={cn('absolute inset-0 bg-gradient-to-br', config.gradient)}
+        />
         {backgroundImage && (
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center opacity-10"
             style={{ backgroundImage: `url(${backgroundImage})` }}
           />
         )}
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute left-0 top-0 h-96 w-96 animate-pulse rounded-full bg-white/5 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-96 w-96 animate-pulse rounded-full bg-white/5 blur-3xl delay-1000" />
         </div>
       </div>
 
@@ -100,27 +123,24 @@ export function CTASection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto text-center"
+          className="mx-auto max-w-4xl text-center"
         >
           {/* Title */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl lg:text-5xl">
             {finalTitle}
           </h2>
 
           {/* Description */}
-          <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto">
+          <p className="mx-auto mb-10 max-w-3xl text-lg text-white/90 md:text-xl">
             {finalDescription}
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 h-auto shadow-xl"
+                className="h-auto bg-white px-8 py-6 text-lg text-primary shadow-xl hover:bg-white/90"
                 asChild
               >
                 <a href={finalPrimaryCTA.href}>
@@ -138,7 +158,7 @@ export function CTASection({
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 h-auto"
+                  className="h-auto border-2 border-white px-8 py-6 text-lg text-white hover:bg-white/10"
                   asChild
                 >
                   <a href={finalSecondaryCTA.href}>
@@ -151,18 +171,18 @@ export function CTASection({
           </div>
 
           {/* Additional Info for Emergency Variant */}
-          {variant === "emergency" && (
+          {variant === 'emergency' && (
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="mt-8 p-6 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20"
+              className="mt-8 rounded-xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm"
             >
-              <p className="text-white/90 text-sm mb-2">
+              <p className="mb-2 text-sm text-white/90">
                 <strong>24/7 Emergency Helpline:</strong> 1800-XXX-XXXX
               </p>
-              <p className="text-white/80 text-xs">
+              <p className="text-xs text-white/80">
                 For immediate rescue assistance, call our helpline anytime
               </p>
             </motion.div>
@@ -174,18 +194,18 @@ export function CTASection({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="mt-12 flex flex-wrap justify-center gap-8 text-white/80 text-sm"
+            className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-white/80"
           >
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-white rounded-full" />
+              <div className="h-2 w-2 rounded-full bg-white" />
               <span>100% Transparent</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-white rounded-full" />
+              <div className="h-2 w-2 rounded-full bg-white" />
               <span>Tax Deductible</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-white rounded-full" />
+              <div className="h-2 w-2 rounded-full bg-white" />
               <span>Secure Payments</span>
             </div>
           </motion.div>
@@ -195,7 +215,7 @@ export function CTASection({
       {/* Decorative Wave */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg
-          className="w-full h-16 text-white"
+          className="h-16 w-full text-white"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
         >

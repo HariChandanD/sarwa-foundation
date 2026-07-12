@@ -153,22 +153,6 @@ const config: Config = {
   				to: {
   					transform: 'translateX(0)'
   				}
-  			},
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
   			}
   		},
   		animation: {
@@ -179,9 +163,7 @@ const config: Config = {
   			'slide-in-from-top': 'slide-in-from-top 0.3s ease-out',
   			'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
   			'slide-in-from-left': 'slide-in-from-left 0.3s ease-out',
-  			'slide-in-from-right': 'slide-in-from-right 0.3s ease-out',
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'slide-in-from-right': 'slide-in-from-right 0.3s ease-out'
   		}
   	}
   },
