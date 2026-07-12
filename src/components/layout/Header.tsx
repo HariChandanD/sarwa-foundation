@@ -6,17 +6,7 @@ import { Menu, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-
-const navigation = [
-  { name: 'About', href: '/about' },
-  { name: 'Programs', href: '/programs' },
-  { name: 'Rescue Stories', href: '/rescue-stories' },
-  { name: 'Adoption', href: '/adoption' },
-  { name: 'Volunteer', href: '/volunteer' },
-  { name: 'Gallery', href: '/gallery' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Contact', href: '/contact' },
-];
+import { organization, navigation as navContent } from '@/content';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,13 +36,13 @@ export function Header() {
               <Heart className="h-6 w-6 fill-white text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">
-              Sarwa Foundation
+              {organization.name}
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex lg:items-center lg:space-x-8">
-            {navigation.map((item) => (
+            {navContent.main.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -65,9 +55,15 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:flex lg:items-center lg:space-x-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              <Heart className="mr-2 h-4 w-4" />
-              Donate Now
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90"
+              asChild
+            >
+              <Link href={navContent.cta[0].href}>
+                <Heart className="mr-2 h-4 w-4" />
+                {navContent.cta[0].name}
+              </Link>
             </Button>
           </div>
 
@@ -82,7 +78,7 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <div className="mt-8 flex flex-col space-y-6">
-                  {navigation.map((item) => (
+                  {navContent.main.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}
@@ -92,9 +88,11 @@ export function Header() {
                       {item.name}
                     </Link>
                   ))}
-                  <Button size="lg" className="mt-4 w-full">
-                    <Heart className="mr-2 h-4 w-4" />
-                    Donate Now
+                  <Button size="lg" className="mt-4 w-full" asChild>
+                    <Link href={navContent.cta[0].href}>
+                      <Heart className="mr-2 h-4 w-4" />
+                      {navContent.cta[0].name}
+                    </Link>
                   </Button>
                 </div>
               </SheetContent>
