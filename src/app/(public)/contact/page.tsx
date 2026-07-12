@@ -1,17 +1,24 @@
-import { Metadata } from 'next';
+'use client';
+
+import { useState, FormEvent } from 'react';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { Container } from '@/components/layout/Container';
-import { Phone, Mail, MapPin, Clock, MessageSquare, Send } from 'lucide-react';
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  MessageSquare,
+  Send,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
-export const metadata: Metadata = {
-  title: 'Contact Us - Sarwa Foundation',
-  description:
-    'Get in touch with Sarwa Foundation. Reach out for rescue emergencies, adoption inquiries, volunteer opportunities, or general questions.',
-};
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 const contactInfo = [
   {
@@ -65,6 +72,70 @@ const departments = [
 ];
 
 export default function ContactPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    const formData = new FormData(e.currentTarget);
+
+    // Combine first and last name
+    const name = `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+    const department = formData.get('department') as string;
+    const subjectText = formData.get('subject') as string;
+    const message = formData.get('message') as string;
+
+    // Combine department and subject for the subject field
+    const subject = department
+      ? `[${department}] ${subjectText}`
+      : subjectText;
+
+    try {
+      // Check if Supabase is configured
+      if (!isSupabaseConfigured()) {
+        throw new Error(
+          'Database connection not configured. Please contact the administrator.'
+        );
+      }
+
+      const { error } = await supabase.from('contact_messages').insert({
+        name,
+        email,
+        phone: phone || null,
+        subject,
+        message,
+      });
+
+      if (error) throw error;
+
+      setSubmitStatus({
+        type: 'success',
+        message:
+          'Thank you for your message! We will get back to you within 24-48 hours.',
+      });
+
+      // Reset form
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setSubmitStatus({
+        type: 'error',
+        message:
+          'There was an error sending your message. Please try again or contact us directly via phone or email.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -158,15 +229,48 @@ export default function ContactPage() {
             <div className="grid gap-8 md:grid-cols-3">
               {/* Form */}
               <div className="md:col-span-2">
-                <form className="space-y-6 rounded-2xl bg-white p-8 shadow-md">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-6 rounded-2xl bg-white p-8 shadow-md"
+                >
+                  {/* Success/Error Messages */}
+                  {submitStatus.type && (
+                    <div
+                      className={`flex items-start gap-3 rounded-lg p-4 ${
+                        submitStatus.type === 'success'
+                          ? 'bg-green-50 text-green-800'
+                          : 'bg-red-50 text-red-800'
+                      }`}
+                    >
+                      {submitStatus.type === 'success' ? (
+                        <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                      )}
+                      <p className="text-sm">{submitStatus.message}</p>
+                    </div>
+                  )}
+
                   <div className="grid gap-6 md:grid-cols-2">
                     <div>
                       <Label htmlFor="firstName">First Name *</Label>
-                      <Input id="firstName" placeholder="John" required />
+                      <Input
+                        id="firstName"
+                        name="firstName"
+                        placeholder="John"
+                        required
+                        disabled={isSubmitting}
+                      />
                     </div>
                     <div>
                       <Label htmlFor="lastName">Last Name *</Label>
-                      <Input id="lastName" placeholder="Doe" required />
+                      <Input
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Doe"
+                        required
+                        disabled={isSubmitting}
+                      />
                     </div>
                   </div>
 
@@ -175,17 +279,21 @@ export default function ContactPage() {
                       <Label htmlFor="email">Email *</Label>
                       <Input
                         id="email"
+                        name="email"
                         type="email"
                         placeholder="john@example.com"
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone Number</Label>
                       <Input
                         id="phone"
+                        name="phone"
                         type="tel"
                         placeholder="+91 98765 43210"
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -194,8 +302,10 @@ export default function ContactPage() {
                     <Label htmlFor="department">Department *</Label>
                     <select
                       id="department"
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary"
+                      name="department"
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
                       required
+                      disabled={isSubmitting}
                     >
                       <option value="">Select a department</option>
                       {departments.map((dept) => (
@@ -210,8 +320,10 @@ export default function ContactPage() {
                     <Label htmlFor="subject">Subject *</Label>
                     <Input
                       id="subject"
+                      name="subject"
                       placeholder="Brief subject of your message"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
 
@@ -219,9 +331,11 @@ export default function ContactPage() {
                     <Label htmlFor="message">Message *</Label>
                     <Textarea
                       id="message"
+                      name="message"
                       placeholder="Please provide details about your inquiry..."
                       rows={6}
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
 
@@ -229,8 +343,10 @@ export default function ContactPage() {
                     <input
                       type="checkbox"
                       id="consent"
+                      name="consent"
                       className="mt-1"
                       required
+                      disabled={isSubmitting}
                     />
                     <Label htmlFor="consent" className="text-sm text-gray-600">
                       I agree to be contacted by Sarwa Foundation regarding my
@@ -242,9 +358,19 @@ export default function ContactPage() {
                   <Button
                     type="submit"
                     className="w-full bg-primary py-6 text-lg hover:bg-primary/90"
+                    disabled={isSubmitting}
                   >
-                    <Send className="mr-2 h-5 w-5" />
-                    Send Message
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-5 w-5" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               </div>
