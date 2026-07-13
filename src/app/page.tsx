@@ -1,5 +1,4 @@
 import { HeroSection } from '@/components/sections/HeroSection';
-import { ImpactStatsSection } from '@/components/sections/ImpactStatsSection';
 import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -8,7 +7,7 @@ import Image from 'next/image';
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <HeroSection
         title="Every Life Deserves Love and Care"
         subtitle="Join us in our mission to rescue, rehabilitate, and rehome animals in our community"
@@ -16,11 +15,11 @@ export default function HomePage() {
         secondaryCTA={{ text: 'Learn More', href: '/about' }}
       />
 
-      {/* About Preview Section */}
-      <section className="bg-background py-20">
+      {/* 2. Who We Are Section */}
+      <section className="bg-background py-16">
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div className="relative h-[400px] overflow-hidden rounded-2xl">
+            <div className="relative h-[400px] overflow-hidden rounded-lg">
               <Image
                 src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&h=600&fit=crop"
                 alt="Rescued animals"
@@ -29,13 +28,13 @@ export default function HomePage() {
               />
             </div>
             <div className="flex flex-col justify-center">
-              <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-                About Sarwa Foundation
+              <h2 className="mb-4 text-3xl font-bold text-gray-900">
+                Who We Are
               </h2>
-              <p className="mb-6 text-lg text-gray-600">
-                We are a small community-based animal rescue organization dedicated to saving and caring for animals in need. Every rescue, every adoption, and every life saved is made possible by compassionate people like you.
+              <p className="mb-4 text-lg text-gray-600">
+                We are a small community-based animal rescue organization dedicated to saving and caring for animals in need.
               </p>
-              <p className="mb-8 text-lg text-gray-600">
+              <p className="mb-6 text-lg text-gray-600">
                 Our team of volunteers works tirelessly to provide medical care, shelter, and love to abandoned and injured animals until they find their forever homes.
               </p>
               <div>
@@ -48,11 +47,11 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* What We Do Section */}
-      <section className="bg-card py-20">
+      {/* 3. What We Do Section */}
+      <section className="bg-card py-16">
         <Container>
           <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">
               What We Do
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
@@ -60,10 +59,10 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            <div className="rounded-xl bg-card p-8 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
+            <div className="rounded-lg bg-background p-6">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                 <svg
-                  className="h-6 w-6 text-primary-600"
+                  className="h-6 w-6 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -80,13 +79,13 @@ export default function HomePage() {
                 Animal Rescue
               </h3>
               <p className="text-gray-600">
-                We respond to calls about abandoned, injured, or distressed animals in our community and provide immediate care and shelter.
+                We respond to calls about abandoned, injured, or distressed animals and provide immediate care and shelter.
               </p>
             </div>
-            <div className="rounded-xl bg-card p-8 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
+            <div className="rounded-lg bg-background p-6">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                 <svg
-                  className="h-6 w-6 text-primary-600"
+                  className="h-6 w-6 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -103,13 +102,13 @@ export default function HomePage() {
                 Medical Care
               </h3>
               <p className="text-gray-600">
-                Every rescued animal receives necessary medical treatment, vaccinations, and spaying/neutering before adoption.
+                Every rescued animal receives necessary medical treatment, vaccinations, and spaying/neutering.
               </p>
             </div>
-            <div className="rounded-xl bg-card p-8 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
+            <div className="rounded-lg bg-background p-6">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                 <svg
-                  className="h-6 w-6 text-primary-600"
+                  className="h-6 w-6 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -133,17 +132,11 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Impact Stats Section */}
-      <ImpactStatsSection
-        title="Our Impact in Numbers"
-        subtitle="Together, we're making a real difference in the lives of animals in our community"
-      />
-
-      {/* Recent Rescue Stories Section */}
-      <section className="bg-background py-20">
+      {/* 4. Recent Rescue Stories Section */}
+      <section className="bg-background py-16">
         <Container>
           <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">
               Recent Rescue Stories
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
@@ -151,7 +144,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            <div className="overflow-hidden rounded-xl bg-card shadow-md transition-shadow hover:shadow-lg">
+            <div className="overflow-hidden rounded-lg bg-card shadow-sm">
               <div className="relative h-64">
                 <Image
                   src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600&h=400&fit=crop"
@@ -172,7 +165,7 @@ export default function HomePage() {
                 </Button>
               </div>
             </div>
-            <div className="overflow-hidden rounded-xl bg-card shadow-md transition-shadow hover:shadow-lg">
+            <div className="overflow-hidden rounded-lg bg-card shadow-sm">
               <div className="relative h-64">
                 <Image
                   src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&h=400&fit=crop"
@@ -193,7 +186,7 @@ export default function HomePage() {
                 </Button>
               </div>
             </div>
-            <div className="overflow-hidden rounded-xl bg-card shadow-md transition-shadow hover:shadow-lg">
+            <div className="overflow-hidden rounded-lg bg-card shadow-sm">
               <div className="relative h-64">
                 <Image
                   src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&h=400&fit=crop"
@@ -223,11 +216,11 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Gallery Preview Section */}
-      <section className="bg-card py-20">
+      {/* 5. Gallery Preview Section */}
+      <section className="bg-card py-16">
         <Container>
           <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">
               Our Happy Tails
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
@@ -240,7 +233,7 @@ export default function HomePage() {
                 src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&h=400&fit=crop"
                 alt="Happy adopted dog"
                 fill
-                className="object-cover transition-transform hover:scale-110"
+                className="object-cover transition-transform hover:scale-105"
               />
             </div>
             <div className="relative h-64 overflow-hidden rounded-lg">
@@ -248,7 +241,7 @@ export default function HomePage() {
                 src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=400&fit=crop"
                 alt="Rescued cat"
                 fill
-                className="object-cover transition-transform hover:scale-110"
+                className="object-cover transition-transform hover:scale-105"
               />
             </div>
             <div className="relative h-64 overflow-hidden rounded-lg">
@@ -256,7 +249,7 @@ export default function HomePage() {
                 src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400&h=400&fit=crop"
                 alt="Playful puppy"
                 fill
-                className="object-cover transition-transform hover:scale-110"
+                className="object-cover transition-transform hover:scale-105"
               />
             </div>
             <div className="relative h-64 overflow-hidden rounded-lg">
@@ -264,7 +257,7 @@ export default function HomePage() {
                 src="https://images.unsplash.com/photo-1573865526739-10c1d3a1f0cc?w=400&h=400&fit=crop"
                 alt="Adopted kitten"
                 fill
-                className="object-cover transition-transform hover:scale-110"
+                className="object-cover transition-transform hover:scale-105"
               />
             </div>
           </div>
@@ -276,21 +269,28 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Combined CTA Section - Get Involved */}
-      <section className="bg-primary py-20 text-white">
+      {/* 6. Get Involved Section */}
+      <section className="bg-primary py-16 text-white">
         <Container>
           <div className="text-center">
-            <h2 className="mb-6 text-3xl font-bold md:text-4xl">
-              Get Involved
-            </h2>
+            <h2 className="mb-6 text-3xl font-bold">Get Involved</h2>
             <p className="mx-auto mb-12 max-w-2xl text-lg text-primary-foreground/90">
               Every contribution makes a difference. Whether you donate, volunteer, or spread the word, you're helping us save lives.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" variant="secondary" className="min-w-[200px]">
+              <Button
+                asChild
+                size="lg"
+                variant="secondary"
+                className="min-w-[200px]"
+              >
                 <Link href="/volunteer">Become a Volunteer</Link>
               </Button>
-              <Button asChild size="lg" className="min-w-[200px] bg-accent hover:bg-accent/90">
+              <Button
+                asChild
+                size="lg"
+                className="min-w-[200px] bg-accent hover:bg-accent/90"
+              >
                 <Link href="/donate">Donate Now</Link>
               </Button>
             </div>
