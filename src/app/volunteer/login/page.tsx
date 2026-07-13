@@ -28,25 +28,72 @@ export default function VolunteerLoginPage() {
     try {
       const supabase = createClient();
 
-      // Sign in with Supabase Auth
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // First check if there's an application for this email
+      const { data: application } = await supabase
+        .from('volunteer_applications')
+        .select('status')
+        .eq('email', email)
+        .single();
 
-      if (signInError) throw signInError;
+      // If no application exists, try to sign in (for existing volunteers)
+      if (!application) {
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      // Check if user has volunteer role
-      const userRole = data.user?.user_metadata?.role;
-      
-      if (userRole !== 'volunteer') {
-        await supabase.auth.signOut();
-        throw new Error('Access denied. Volunteer credentials required.');
+        if (signInError) {
+          throw new Error('No volunteer account found. Please apply first.');
+        }
+
+        // Check if user has volunteer role
+        const userRole = data.user?.user_metadata?.role;
+        
+        if (userRole !== 'volunteer') {
+          await supabase.auth.signOut();
+          throw new Error('Access denied. Volunteer credentials required.');
+        }
+
+        // Redirect to volunteer dashboard
+        router.push('/volunteer/dashboard');
+        router.refresh();
+        return;
       }
 
-      // Redirect to volunteer dashboard
-      router.push('/volunteer/dashboard');
-      router.refresh();
+      // Check application status
+      if (application.status === 'pending') {
+        throw new Error(
+          'Your application is under review. We will notify you once it has been processed.'
+        );
+      } else if (application.status === 'rejected') {
+        throw new Error(
+          'Your volunteer application was not approved. Please contact us for more information.'
+        );
+      } else if (application.status === 'more_info_requested') {
+        throw new Error(
+          'We need more information about your application. Please check your email.'
+        );
+      } else if (application.status === 'approved') {
+        // Try to sign in
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInError) throw signInError;
+
+        // Check if user has volunteer role
+        const userRole = data.user?.user_metadata?.role;
+        
+        if (userRole !== 'volunteer') {
+          await supabase.auth.signOut();
+          throw new Error('Access denied. Volunteer credentials required.');
+        }
+
+        // Redirect to volunteer dashboard
+        router.push('/volunteer/dashboard');
+        router.refresh();
+      }
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.message || 'Invalid email or password. Please try again.');

@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 
 const volunteerRoles = [
   {
@@ -83,52 +83,68 @@ export default function VolunteerPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    // Combine first and last name
-    const fullName =
-      `${formData.get('firstName')} ${formData.get('lastName')}`.trim();
-    const email = formData.get('email') as string;
-    const phone = formData.get('phone') as string;
-    const city = formData.get('city') as string;
-    const role = formData.get('role') as string;
-    const availability = formData.get('availability') as string;
-    const experience = formData.get('experience') as string;
-    const motivation = formData.get('motivation') as string;
-
-    // Combine interests
-    const interests = `${role}${experience ? ` | Experience: ${experience}` : ''}${motivation ? ` | Motivation: ${motivation}` : ''}`;
+    const applicationData = {
+      full_name: formData.get('fullName') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
+      address: formData.get('address') as string,
+      city: formData.get('city') as string,
+      occupation: formData.get('occupation') as string,
+      skills_experience: formData.get('skillsExperience') as string,
+      areas_of_interest: formData.get('areasOfInterest') as string,
+      availability: formData.get('availability') as string,
+      why_volunteer: formData.get('whyVolunteer') as string,
+      emergency_contact_name: formData.get('emergencyContactName') as string,
+      emergency_contact_phone: formData.get('emergencyContactPhone') as string,
+      status: 'pending',
+    };
 
     try {
-      // Check if Supabase is configured
-      if (!isSupabaseConfigured()) {
-        throw new Error(
-          'Database connection not configured. Please contact the administrator.'
-        );
+      const supabase = createClient();
+
+      // Check if email already exists
+      const { data: existing } = await supabase
+        .from('volunteer_applications')
+        .select('id, status')
+        .eq('email', applicationData.email)
+        .single();
+
+      if (existing) {
+        if (existing.status === 'pending') {
+          throw new Error(
+            'You have already submitted an application. Please wait for our review.'
+          );
+        } else if (existing.status === 'approved') {
+          throw new Error(
+            'You are already an approved volunteer. Please log in to access your dashboard.'
+          );
+        } else if (existing.status === 'rejected') {
+          throw new Error(
+            'Your previous application was not approved. Please contact us for more information.'
+          );
+        }
       }
 
-      const { error } = await supabase.from('volunteers').insert({
-        full_name: fullName,
-        email,
-        phone,
-        city,
-        interests,
-        availability,
-      });
+      const { error } = await supabase
+        .from('volunteer_applications')
+        .insert(applicationData);
 
       if (error) throw error;
 
       setSubmitStatus({
         type: 'success',
         message:
-          'Thank you for your application! We will review it and get back to you within 48 hours.',
+          'Thank you for your application! We will review it and get back to you within 48 hours. Please check your email for updates.',
       });
 
       // Reset form
       (e.target as HTMLFormElement).reset();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting volunteer application:', error);
       setSubmitStatus({
         type: 'error',
         message:
+          error.message ||
           'There was an error submitting your application. Please try again or contact us directly.',
       });
     } finally {
@@ -152,7 +168,7 @@ export default function VolunteerPage() {
         <Container>
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-              Why Volunteer With Sarwa Society for Animal Welfare?
+              Why Volunteer With SARWA?
             </h2>
             <p className="mx-auto max-w-3xl text-lg text-gray-600">
               Volunteering is more than just giving your time—it's about being
@@ -265,8 +281,8 @@ export default function VolunteerPage() {
                 Volunteer Application
               </h2>
               <p className="text-lg text-gray-600">
-                Fill out the form below and we'll get back to you within 48
-                hours.
+                Fill out the form below and we'll review your application within
+                48 hours.
               </p>
             </div>
 
@@ -277,43 +293,31 @@ export default function VolunteerPage() {
               {/* Success/Error Messages */}
               {submitStatus.type && (
                 <div
-                  className={`flex items-start gap-3 rounded-lg p-4 ${
+                  className={`flex items-start gap-3 rounded-lg border p-4 ${
                     submitStatus.type === 'success'
-                      ? 'bg-green-50 text-green-800'
-                      : 'bg-red-50 text-red-800'
+                      ? 'border-green-200 bg-green-50 text-green-800'
+                      : 'border-red-200 bg-red-50 text-red-800'
                   }`}
                 >
                   {submitStatus.type === 'success' ? (
-                    <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                    <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
                   ) : (
-                    <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                    <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
                   )}
                   <p className="text-sm">{submitStatus.message}</p>
                 </div>
               )}
 
               {/* Personal Information */}
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <Label htmlFor="firstName">First Name *</Label>
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    placeholder="John"
-                    required
-                    disabled={isSubmitting}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="lastName">Last Name *</Label>
-                  <Input
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Doe"
-                    required
-                    disabled={isSubmitting}
-                  />
-                </div>
+              <div>
+                <Label htmlFor="fullName">Full Name *</Label>
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  placeholder="John Doe"
+                  required
+                  disabled={isSubmitting}
+                />
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">
@@ -342,27 +346,65 @@ export default function VolunteerPage() {
               </div>
 
               <div>
-                <Label htmlFor="city">City *</Label>
+                <Label htmlFor="address">Address *</Label>
                 <Input
-                  id="city"
-                  name="city"
-                  placeholder="Mumbai"
+                  id="address"
+                  name="address"
+                  placeholder="123 Main Street, Apartment 4B"
                   required
                   disabled={isSubmitting}
                 />
               </div>
 
-              {/* Volunteer Preferences */}
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <Label htmlFor="city">City *</Label>
+                  <Input
+                    id="city"
+                    name="city"
+                    placeholder="Bangalore"
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="occupation">Occupation *</Label>
+                  <Input
+                    id="occupation"
+                    name="occupation"
+                    placeholder="Software Engineer"
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+              </div>
+
+              {/* Skills and Experience */}
               <div>
-                <Label htmlFor="role">Preferred Volunteer Role *</Label>
+                <Label htmlFor="skillsExperience">
+                  Skills / Experience *
+                </Label>
+                <Textarea
+                  id="skillsExperience"
+                  name="skillsExperience"
+                  placeholder="Tell us about your relevant skills and any previous experience with animals or volunteering..."
+                  rows={4}
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              {/* Areas of Interest */}
+              <div>
+                <Label htmlFor="areasOfInterest">Areas of Interest *</Label>
                 <select
-                  id="role"
-                  name="role"
+                  id="areasOfInterest"
+                  name="areasOfInterest"
                   className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
                   required
                   disabled={isSubmitting}
                 >
-                  <option value="">Select a role</option>
+                  <option value="">Select your area of interest</option>
                   {volunteerRoles.map((role, index) => (
                     <option key={index} value={role.title}>
                       {role.title}
@@ -371,6 +413,7 @@ export default function VolunteerPage() {
                 </select>
               </div>
 
+              {/* Availability */}
               <div>
                 <Label htmlFor="availability">Availability *</Label>
                 <select
@@ -380,7 +423,7 @@ export default function VolunteerPage() {
                   required
                   disabled={isSubmitting}
                 >
-                  <option value="">Select availability</option>
+                  <option value="">Select your availability</option>
                   <option value="weekdays">Weekdays</option>
                   <option value="weekends">Weekends</option>
                   <option value="both">Both Weekdays & Weekends</option>
@@ -388,33 +431,51 @@ export default function VolunteerPage() {
                 </select>
               </div>
 
+              {/* Why Volunteer */}
               <div>
-                <Label htmlFor="experience">
-                  Previous Experience with Animals
+                <Label htmlFor="whyVolunteer">
+                  Why do you want to volunteer? *
                 </Label>
                 <Textarea
-                  id="experience"
-                  name="experience"
-                  placeholder="Tell us about any previous experience you have with animals or volunteering..."
-                  rows={4}
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="motivation">
-                  Why do you want to volunteer with us? *
-                </Label>
-                <Textarea
-                  id="motivation"
-                  name="motivation"
-                  placeholder="Share your motivation and what you hope to contribute..."
+                  id="whyVolunteer"
+                  name="whyVolunteer"
+                  placeholder="Share your motivation and what you hope to contribute to animal welfare..."
                   rows={4}
                   required
                   disabled={isSubmitting}
                 />
               </div>
 
+              {/* Emergency Contact */}
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <Label htmlFor="emergencyContactName">
+                    Emergency Contact Name *
+                  </Label>
+                  <Input
+                    id="emergencyContactName"
+                    name="emergencyContactName"
+                    placeholder="Jane Doe"
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="emergencyContactPhone">
+                    Emergency Contact Phone *
+                  </Label>
+                  <Input
+                    id="emergencyContactPhone"
+                    name="emergencyContactPhone"
+                    type="tel"
+                    placeholder="+91 98765 43210"
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+              </div>
+
+              {/* Terms */}
               <div className="flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -426,7 +487,7 @@ export default function VolunteerPage() {
                 />
                 <Label htmlFor="terms" className="text-sm text-gray-600">
                   I agree to undergo a background check and commit to the
-                  volunteer guidelines and code of conduct.
+                  volunteer guidelines and code of conduct. *
                 </Label>
               </div>
 
@@ -438,7 +499,7 @@ export default function VolunteerPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Submitting...
+                    Submitting Application...
                   </>
                 ) : (
                   <>
@@ -467,7 +528,7 @@ export default function VolunteerPage() {
                 name: 'Priya Sharma',
                 role: 'Animal Care Volunteer',
                 quote:
-                  'Volunteering at Sarwa Society for Animal Welfare has been the most rewarding experience. Seeing animals recover and find homes is priceless.',
+                  'Volunteering at SARWA has been the most rewarding experience. Seeing animals recover and find homes is priceless.',
               },
               {
                 name: 'Rahul Mehta',

@@ -21,6 +21,8 @@ interface DashboardStats {
   events: number;
   pendingReports: number;
   pendingVolunteers: number;
+  approvedVolunteers: number;
+  rejectedVolunteers: number;
 }
 
 export default function AdminDashboardPage() {
@@ -32,6 +34,8 @@ export default function AdminDashboardPage() {
     events: 0,
     pendingReports: 0,
     pendingVolunteers: 0,
+    approvedVolunteers: 0,
+    rejectedVolunteers: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -60,12 +64,21 @@ export default function AdminDashboardPage() {
           ?.filter((d) => new Date(d.created_at) >= firstDayOfMonth)
           .reduce((sum, d) => sum + Number(d.amount), 0) || 0;
 
-        // Fetch volunteers count
-        const { count: volunteersCount, error: volunteersError } = await supabase
-          .from('volunteers')
-          .select('*', { count: 'exact', head: true });
+        // Fetch volunteer applications by status
+        const { count: pendingCount } = await supabase
+          .from('volunteer_applications')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending');
 
-        if (volunteersError) throw volunteersError;
+        const { count: approvedCount } = await supabase
+          .from('volunteer_applications')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'approved');
+
+        const { count: rejectedCount } = await supabase
+          .from('volunteer_applications')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'rejected');
 
         // Fetch contact messages count (as pending reports)
         const { count: messagesCount, error: messagesError } = await supabase
@@ -78,10 +91,12 @@ export default function AdminDashboardPage() {
           totalVisitors: 12450, // Placeholder - would need analytics integration
           totalDonations: Math.round(totalDonations),
           monthlyDonations: Math.round(monthlyDonations),
-          volunteers: volunteersCount || 0,
+          volunteers: (approvedCount || 0) + (pendingCount || 0) + (rejectedCount || 0),
           events: 8, // Placeholder - would need events table
           pendingReports: messagesCount || 0,
-          pendingVolunteers: Math.floor((volunteersCount || 0) * 0.3), // Placeholder
+          pendingVolunteers: pendingCount || 0,
+          approvedVolunteers: approvedCount || 0,
+          rejectedVolunteers: rejectedCount || 0,
         });
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
