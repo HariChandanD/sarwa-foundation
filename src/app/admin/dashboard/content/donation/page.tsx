@@ -47,7 +47,8 @@ export default function DonationCMSPage() {
       setDonation(data);
     } catch (err) {
       console.error('Error fetching donation settings:', err);
-      setError('Failed to load donation settings');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load donation settings';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

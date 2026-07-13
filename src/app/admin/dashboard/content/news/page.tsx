@@ -42,7 +42,8 @@ export default function NewsCMSPage() {
       setArticles(data || []);
     } catch (err) {
       console.error('Error fetching articles:', err);
-      setError('Failed to load articles');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load articles';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

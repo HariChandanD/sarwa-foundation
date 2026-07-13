@@ -40,7 +40,8 @@ export default function GalleryCMSPage() {
       setItems(data || []);
     } catch (err) {
       console.error('Error fetching gallery:', err);
-      setError('Failed to load gallery');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load gallery';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

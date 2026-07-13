@@ -42,7 +42,8 @@ export default function StoriesCMSPage() {
       setStories(data || []);
     } catch (err) {
       console.error('Error fetching stories:', err);
-      setError('Failed to load stories');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load stories';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

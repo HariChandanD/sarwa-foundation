@@ -49,7 +49,8 @@ export default function ContactCMSPage() {
       setContact(data);
     } catch (err) {
       console.error('Error fetching contact:', err);
-      setError('Failed to load contact information');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load contact information';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

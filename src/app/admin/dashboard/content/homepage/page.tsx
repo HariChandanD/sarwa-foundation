@@ -54,7 +54,8 @@ export default function HomepageCMSPage() {
       setHero(data);
     } catch (err) {
       console.error('Error fetching hero:', err);
-      setError('Failed to load homepage content');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load homepage content';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

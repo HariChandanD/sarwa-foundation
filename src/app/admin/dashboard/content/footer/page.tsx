@@ -57,8 +57,9 @@ export default function FooterCMSPage() {
       setFooter(data);
     } catch (err) {
       console.error('Error fetching footer:', err);
-      setError('Failed to load footer content');
-    } finally {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load footer content';
+      setError(errorMessage);
+    } finally{
       setLoading(false);
     }
   };

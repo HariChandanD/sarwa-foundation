@@ -43,11 +43,6 @@ const getNavigation = (isSuperAdminUser: boolean) => [
     ],
   },
   {
-    name: 'Donations',
-    href: '/admin/dashboard/donations',
-    icon: DollarSign,
-  },
-  {
     name: 'Volunteers',
     href: '/admin/dashboard/volunteers',
     icon: Users,

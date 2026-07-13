@@ -44,7 +44,8 @@ export default function EventsCMSPage() {
       setEvents(data || []);
     } catch (err) {
       console.error('Error fetching events:', err);
-      setError('Failed to load events');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load events';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

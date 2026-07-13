@@ -55,7 +55,8 @@ export default function AboutCMSPage() {
       setAbout(data);
     } catch (err) {
       console.error('Error fetching about:', err);
-      setError('Failed to load about content');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load about content';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

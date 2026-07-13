@@ -50,7 +50,8 @@ export default function ProgramsCMSPage() {
       setPrograms(data || []);
     } catch (err) {
       console.error('Error fetching programs:', err);
-      setError('Failed to load programs');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load programs';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
