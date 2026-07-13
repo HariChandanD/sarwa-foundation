@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { createClient } from '@/lib/supabase-auth';
+import { createClient } from '@/lib/supabase-client';
 import {
   LayoutDashboard,
   FileText,
