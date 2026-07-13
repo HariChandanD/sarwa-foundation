@@ -23,13 +23,34 @@ export default function HomepageCMSPage() {
   const fetchHero = async () => {
     try {
       const supabase = createClient();
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('homepage_hero')
         .select('*')
         .eq('is_active', true)
         .single();
 
-      if (error) throw error;
+      // If no record exists, create a default one
+      if (error && error.code === 'PGRST116') {
+        const { data: newData, error: insertError } = await supabase
+          .from('homepage_hero')
+          .insert({
+            title: 'Every Life Deserves Love and Care',
+            subtitle: 'Join us in our mission to rescue, rehabilitate, and rehome animals in need.',
+            primary_cta_text: 'Donate Now',
+            primary_cta_link: '/donate',
+            secondary_cta_text: 'Learn More',
+            secondary_cta_link: '/about',
+            is_active: true,
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+        data = newData;
+      } else if (error) {
+        throw error;
+      }
+
       setHero(data);
     } catch (err) {
       console.error('Error fetching hero:', err);
@@ -89,13 +110,8 @@ export default function HomepageCMSPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600" />
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">
-            No Content Found
-          </h2>
-          <p className="text-gray-600">
-            Please run database migrations to initialize homepage content.
-          </p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-gray-600">Initializing content...</p>
         </div>
       </div>
     );

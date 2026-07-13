@@ -23,12 +23,27 @@ export default function DonationCMSPage() {
   const fetchDonation = async () => {
     try {
       const supabase = createClient();
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('donation_settings')
         .select('*')
         .single();
 
-      if (error) throw error;
+      // If no record exists, create a default one
+      if (error && error.code === 'PGRST116') {
+        const { data: newData, error: insertError } = await supabase
+          .from('donation_settings')
+          .insert({
+            donation_message: 'Your generous donation helps us continue our mission to rescue and care for animals in need.',
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+        data = newData;
+      } else if (error) {
+        throw error;
+      }
+
       setDonation(data);
     } catch (err) {
       console.error('Error fetching donation settings:', err);
@@ -90,10 +105,8 @@ export default function DonationCMSPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600" />
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">
-            No Content Found
-          </h2>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-gray-600">Initializing content...</p>
         </div>
       </div>
     );

@@ -25,12 +25,33 @@ export default function AboutCMSPage() {
   const fetchAbout = async () => {
     try {
       const supabase = createClient();
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('about_content')
         .select('*')
         .single();
 
-      if (error) throw error;
+      // If no record exists, create a default one
+      if (error && error.code === 'PGRST116') {
+        const { data: newData, error: insertError } = await supabase
+          .from('about_content')
+          .insert({
+            about_text: 'SARWA Foundation is dedicated to the welfare and protection of animals.',
+            mission: 'To rescue, rehabilitate, and rehome animals in need.',
+            vision: 'A world where every animal is treated with dignity and respect.',
+            values: [
+              { title: 'Compassion', description: 'We treat every animal with kindness' },
+              { title: 'Integrity', description: 'We operate with transparency' },
+            ],
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+        data = newData;
+      } else if (error) {
+        throw error;
+      }
+
       setAbout(data);
     } catch (err) {
       console.error('Error fetching about:', err);
@@ -109,17 +130,13 @@ export default function AboutCMSPage() {
     );
   }
 
+
   if (!about) {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600" />
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">
-            No Content Found
-          </h2>
-          <p className="text-gray-600">
-            Please run database migrations to initialize about content.
-          </p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-gray-600">Initializing content...</p>
         </div>
       </div>
     );
