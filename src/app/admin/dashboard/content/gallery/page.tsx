@@ -2,16 +2,16 @@
 
 import { Construction } from 'lucide-react';
 
-export default function ProgramsCMSPage() {
+export default function GalleryCMSPage() {
   return (
     <div className="flex h-full items-center justify-center">
       <div className="text-center">
         <Construction className="mx-auto mb-4 h-16 w-16 text-primary" />
         <h2 className="mb-2 text-2xl font-bold text-gray-900">
-          Programs Management
+          Gallery Management
         </h2>
         <p className="text-gray-600">
-          Full CRUD interface for programs coming soon
+          Full interface for albums and media coming soon
         </p>
       </div>
     </div>

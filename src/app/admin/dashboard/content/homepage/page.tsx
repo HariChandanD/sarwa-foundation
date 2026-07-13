@@ -1,145 +1,252 @@
 'use client';
 
-import { FileText, Image as ImageIcon, Save } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase-client';
+import { HomepageHero } from '@/types/cms';
+import { ImageUpload } from '@/components/cms/ImageUpload';
+import { SaveButton } from '@/components/cms/SaveButton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { AlertCircle, CheckCircle } from 'lucide-react';
 
-export default function HomepageContentPage() {
+export default function HomepageCMSPage() {
+  const [hero, setHero] = useState<HomepageHero | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchHero();
+  }, []);
+
+  const fetchHero = async () => {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('homepage_hero')
+        .select('*')
+        .eq('is_active', true)
+        .single();
+
+      if (error) throw error;
+      setHero(data);
+    } catch (err) {
+      console.error('Error fetching hero:', err);
+      setError('Failed to load homepage content');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!hero) return;
+
+    setSaving(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from('homepage_hero')
+        .update({
+          title: hero.title,
+          subtitle: hero.subtitle,
+          primary_cta_text: hero.primary_cta_text,
+          primary_cta_link: hero.primary_cta_link,
+          secondary_cta_text: hero.secondary_cta_text,
+          secondary_cta_link: hero.secondary_cta_link,
+          hero_image_url: hero.hero_image_url,
+        })
+        .eq('id', hero.id);
+
+      if (error) throw error;
+
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to save changes';
+      setError(errorMessage);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-gray-600">Loading homepage content...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hero) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600" />
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">
+            No Content Found
+          </h2>
+          <p className="text-gray-600">
+            Please run database migrations to initialize homepage content.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Homepage Content</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Homepage Content
+          </h1>
           <p className="mt-2 text-gray-600">
-            Manage hero section, featured content, and homepage elements
+            Manage your homepage hero section and call-to-action buttons
           </p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90">
-          <Save className="mr-2 h-4 w-4" />
-          Save Changes
-        </Button>
+        <SaveButton
+          onClick={handleSave}
+          loading={saving}
+          success={success}
+        />
       </div>
 
-      {/* Content Sections */}
-      <div className="space-y-6">
-        {/* Hero Section */}
-        <div className="rounded-xl bg-white p-6 shadow-md">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="rounded-lg bg-blue-100 p-2">
-              <FileText className="h-5 w-5 text-blue-600" />
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Hero Section
-            </h2>
+      {/* Messages */}
+      {error && (
+        <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
+
+      {success && (
+        <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
+          <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+          <p className="text-sm text-green-800">
+            Changes saved successfully! The homepage will update immediately.
+          </p>
+        </div>
+      )}
+
+      {/* Hero Section */}
+      <div className="rounded-xl bg-white p-6 shadow-md">
+        <h2 className="mb-6 text-xl font-semibold text-gray-900">
+          Hero Section
+        </h2>
+
+        <div className="space-y-6">
+          {/* Title */}
+          <div>
+            <Label htmlFor="title">Hero Title *</Label>
+            <Input
+              id="title"
+              value={hero.title}
+              onChange={(e) => setHero({ ...hero, title: e.target.value })}
+              placeholder="Every Life Deserves Love and Care"
+              className="mt-2"
+            />
           </div>
-          <div className="space-y-4">
+
+          {/* Subtitle */}
+          <div>
+            <Label htmlFor="subtitle">Hero Subtitle *</Label>
+            <textarea
+              id="subtitle"
+              value={hero.subtitle}
+              onChange={(e) => setHero({ ...hero, subtitle: e.target.value })}
+              placeholder="Join us in our mission to rescue, rehabilitate, and rehome animals in need."
+              rows={3}
+              className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+
+          {/* Hero Image */}
+          <ImageUpload
+            label="Hero Background Image"
+            value={hero.hero_image_url || ''}
+            onChange={(url) => setHero({ ...hero, hero_image_url: url })}
+            folder="homepage"
+            aspectRatio="aspect-[21/9]"
+          />
+
+          {/* Primary CTA */}
+          <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Main Heading
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                placeholder="Every Animal Deserves Love and Care"
-                disabled
+              <Label htmlFor="primary_cta_text">Primary Button Text *</Label>
+              <Input
+                id="primary_cta_text"
+                value={hero.primary_cta_text}
+                onChange={(e) =>
+                  setHero({ ...hero, primary_cta_text: e.target.value })
+                }
+                placeholder="Donate Now"
+                className="mt-2"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Subheading
-              </label>
-              <textarea
-                className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                rows={3}
-                placeholder="Join us in our mission to rescue, rehabilitate, and rehome animals in need..."
-                disabled
+              <Label htmlFor="primary_cta_link">Primary Button Link *</Label>
+              <Input
+                id="primary_cta_link"
+                value={hero.primary_cta_link}
+                onChange={(e) =>
+                  setHero({ ...hero, primary_cta_link: e.target.value })
+                }
+                placeholder="/donate"
+                className="mt-2"
+              />
+            </div>
+          </div>
+
+          {/* Secondary CTA */}
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="secondary_cta_text">
+                Secondary Button Text (Optional)
+              </Label>
+              <Input
+                id="secondary_cta_text"
+                value={hero.secondary_cta_text || ''}
+                onChange={(e) =>
+                  setHero({ ...hero, secondary_cta_text: e.target.value })
+                }
+                placeholder="Learn More"
+                className="mt-2"
+              />
+            </div>
+            <div>
+              <Label htmlFor="secondary_cta_link">
+                Secondary Button Link (Optional)
+              </Label>
+              <Input
+                id="secondary_cta_link"
+                value={hero.secondary_cta_link || ''}
+                onChange={(e) =>
+                  setHero({ ...hero, secondary_cta_link: e.target.value })
+                }
+                placeholder="/about"
+                className="mt-2"
               />
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Featured Images */}
-        <div className="rounded-xl bg-white p-6 shadow-md">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="rounded-lg bg-green-100 p-2">
-              <ImageIcon className="h-5 w-5 text-green-600" />
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Featured Images
-            </h2>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="flex h-48 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"
-              >
-                <div className="text-center">
-                  <ImageIcon className="mx-auto h-8 w-8 text-gray-400" />
-                  <p className="mt-2 text-sm text-gray-500">Image {i}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div className="rounded-xl bg-white p-6 shadow-md">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="rounded-lg bg-purple-100 p-2">
-              <FileText className="h-5 w-5 text-purple-600" />
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Impact Statistics
-            </h2>
-          </div>
-          <div className="grid gap-4 md:grid-cols-4">
-            {[
-              { label: 'Animals Rescued', value: '500+' },
-              { label: 'Successful Adoptions', value: '300+' },
-              { label: 'Active Volunteers', value: '200+' },
-              { label: 'Years of Service', value: '10+' },
-            ].map((stat, i) => (
-              <div key={i}>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  {stat.label}
-                </label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                  defaultValue={stat.value}
-                  disabled
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Placeholder Notice */}
-        <div className="rounded-xl border-2 border-yellow-200 bg-yellow-50 p-6">
-          <div className="flex items-start gap-3">
-            <div className="rounded-lg bg-yellow-100 p-2">
-              <FileText className="h-5 w-5 text-yellow-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">
-                Content Management Coming Soon
-              </h3>
-              <p className="mt-2 text-sm text-gray-700">
-                This is a placeholder page. Full CRUD functionality for managing
-                homepage content will be implemented in the next phase. For now,
-                content is managed directly in the codebase.
-              </p>
-              <p className="mt-2 text-sm text-gray-600">
-                <strong>Current Features:</strong> View-only mode
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Coming Soon:</strong> Edit text, upload images, manage
-                sections, preview changes
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Save Button (Bottom) */}
+      <div className="flex justify-end">
+        <SaveButton
+          onClick={handleSave}
+          loading={saving}
+          success={success}
+        />
       </div>
     </div>
   );
