@@ -18,7 +18,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Sarwa Society for Animal Welfare - Rescuing, Rehabilitating, and Rehoming Animals',
+  title:
+    'Sarwa Society for Animal Welfare - Rescuing, Rehabilitating, and Rehoming Animals',
   description:
     'Join Sarwa Society for Animal Welfare in our mission to rescue, rehabilitate, and rehome animals in need. Every life deserves love and care. Make a difference today.',
   keywords: [
@@ -33,18 +34,32 @@ export const metadata: Metadata = {
     'bangalore animal rescue',
   ],
   authors: [{ name: 'Sarwa Society for Animal Welfare' }],
+  icons: {
+    icon: '/logo/sarwa-logo.jpg',
+    apple: '/logo/sarwa-logo.jpg',
+  },
   openGraph: {
-    title: 'Sarwa Society for Animal Welfare - Every Life Deserves Love and Care',
+    title:
+      'Sarwa Society for Animal Welfare - Every Life Deserves Love and Care',
     description:
       'Join Sarwa Society for Animal Welfare in our mission to rescue, rehabilitate, and rehome animals in need.',
     type: 'website',
     locale: 'en_US',
     siteName: 'Sarwa Society for Animal Welfare',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Sarwa Society for Animal Welfare',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Sarwa Society for Animal Welfare',
     description: 'Rescuing, Rehabilitating, and Rehoming Animals in Need',
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,

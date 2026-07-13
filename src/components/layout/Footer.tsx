@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
-  Heart,
   Mail,
   Phone,
   MapPin,
@@ -56,9 +56,14 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5 lg:gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="mb-4 flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-                <Heart className="h-6 w-6 fill-white text-white" />
+            <Link href="/" className="mb-4 flex items-center space-x-3">
+              <div className="relative h-12 w-12 flex-shrink-0">
+                <Image
+                  src="/logo/sarwa-logo.jpg"
+                  alt="SARWA Logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-xl font-bold text-white">
                 Sarwa Society
