@@ -54,11 +54,15 @@ const getNavigation = (isSuperAdminUser: boolean) => [
     href: '/admin/dashboard/activity',
     icon: Activity,
   },
-  ...(isSuperAdminUser ? [{
-    name: 'Admin Management',
-    href: '/admin/dashboard/admins',
-    icon: Shield,
-  }] : []),
+  ...(isSuperAdminUser
+    ? [
+        {
+          name: 'Admin Management',
+          href: '/admin/dashboard/admins',
+          icon: Shield,
+        },
+      ]
+    : []),
   {
     name: 'Settings',
     href: '/admin/dashboard/settings',
@@ -74,13 +78,15 @@ export default function AdminDashboardLayout({
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [expandedItems, setExpandedItems] = useState<string[]>(['Website Content']);
+  const [expandedItems, setExpandedItems] = useState<string[]>([
+    'Website Content',
+  ]);
   const [user, setUser] = useState<any>(null);
   const [isSuperAdminUser, setIsSuperAdminUser] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
-    
+
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       setIsSuperAdminUser(user ? isSuperAdmin(user) : false);
@@ -106,7 +112,9 @@ export default function AdminDashboardLayout({
 
   const toggleExpanded = (name: string) => {
     setExpandedItems((prev) =>
-      prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
+      prev.includes(name)
+        ? prev.filter((item) => item !== name)
+        : [...prev, name]
     );
   };
 
@@ -118,7 +126,7 @@ export default function AdminDashboardLayout({
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

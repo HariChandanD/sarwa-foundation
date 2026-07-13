@@ -489,9 +489,9 @@ export default function DonatePage() {
                     80G Tax Exemption Certificate
                   </h3>
                   <p className="mb-4 text-gray-700">
-                    Sarwa Society for Animal Welfare is registered under Section 80G of the
-                    Income Tax Act. Your donations are eligible for tax
-                    deductions as per Indian tax laws.
+                    Sarwa Society for Animal Welfare is registered under Section
+                    80G of the Income Tax Act. Your donations are eligible for
+                    tax deductions as per Indian tax laws.
                   </p>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start">

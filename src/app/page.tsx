@@ -32,10 +32,13 @@ export default function HomePage() {
                 Who We Are
               </h2>
               <p className="mb-4 text-lg text-gray-600">
-                We are a small community-based animal rescue organization dedicated to saving and caring for animals in need.
+                We are a small community-based animal rescue organization
+                dedicated to saving and caring for animals in need.
               </p>
               <p className="mb-6 text-lg text-gray-600">
-                Our team of volunteers works tirelessly to provide medical care, shelter, and love to abandoned and injured animals until they find their forever homes.
+                Our team of volunteers works tirelessly to provide medical care,
+                shelter, and love to abandoned and injured animals until they
+                find their forever homes.
               </p>
               <div>
                 <Button asChild size="lg">
@@ -55,7 +58,8 @@ export default function HomePage() {
               What We Do
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
-              Our mission is simple: rescue, rehabilitate, and rehome animals in need within our community.
+              Our mission is simple: rescue, rehabilitate, and rehome animals in
+              need within our community.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
@@ -79,7 +83,8 @@ export default function HomePage() {
                 Animal Rescue
               </h3>
               <p className="text-gray-600">
-                We respond to calls about abandoned, injured, or distressed animals and provide immediate care and shelter.
+                We respond to calls about abandoned, injured, or distressed
+                animals and provide immediate care and shelter.
               </p>
             </div>
             <div className="rounded-lg bg-background p-6">
@@ -102,7 +107,8 @@ export default function HomePage() {
                 Medical Care
               </h3>
               <p className="text-gray-600">
-                Every rescued animal receives necessary medical treatment, vaccinations, and spaying/neutering.
+                Every rescued animal receives necessary medical treatment,
+                vaccinations, and spaying/neutering.
               </p>
             </div>
             <div className="rounded-lg bg-background p-6">
@@ -125,7 +131,8 @@ export default function HomePage() {
                 Adoption Services
               </h3>
               <p className="text-gray-600">
-                We carefully match rescued animals with loving families, ensuring each pet finds the perfect forever home.
+                We carefully match rescued animals with loving families,
+                ensuring each pet finds the perfect forever home.
               </p>
             </div>
           </div>
@@ -140,7 +147,8 @@ export default function HomePage() {
               Recent Rescue Stories
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
-              Every animal has a story. Here are some of our recent rescues finding their way to safety and love.
+              Every animal has a story. Here are some of our recent rescues
+              finding their way to safety and love.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
@@ -158,7 +166,9 @@ export default function HomePage() {
                   Max's Second Chance
                 </h3>
                 <p className="mb-4 text-gray-600">
-                  Found abandoned on the roadside, Max was scared and malnourished. After weeks of care and love, he's now healthy and ready for adoption.
+                  Found abandoned on the roadside, Max was scared and
+                  malnourished. After weeks of care and love, he's now healthy
+                  and ready for adoption.
                 </p>
                 <Button asChild variant="outline" size="sm">
                   <Link href="/rescue-stories">Read More</Link>
@@ -179,7 +189,9 @@ export default function HomePage() {
                   Luna's Journey Home
                 </h3>
                 <p className="mb-4 text-gray-600">
-                  This sweet cat was found injured after an accident. Thanks to emergency medical care and foster support, Luna has fully recovered.
+                  This sweet cat was found injured after an accident. Thanks to
+                  emergency medical care and foster support, Luna has fully
+                  recovered.
                 </p>
                 <Button asChild variant="outline" size="sm">
                   <Link href="/rescue-stories">Read More</Link>
@@ -200,7 +212,9 @@ export default function HomePage() {
                   Bella's New Beginning
                 </h3>
                 <p className="mb-4 text-gray-600">
-                  Rescued from a neglectful situation, little Bella is now thriving in foster care and learning what it means to be loved.
+                  Rescued from a neglectful situation, little Bella is now
+                  thriving in foster care and learning what it means to be
+                  loved.
                 </p>
                 <Button asChild variant="outline" size="sm">
                   <Link href="/rescue-stories">Read More</Link>
@@ -224,7 +238,8 @@ export default function HomePage() {
               Our Happy Tails
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
-              See the joy and love in action through our gallery of rescued animals and their new families.
+              See the joy and love in action through our gallery of rescued
+              animals and their new families.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -275,7 +290,8 @@ export default function HomePage() {
           <div className="text-center">
             <h2 className="mb-6 text-3xl font-bold">Get Involved</h2>
             <p className="mx-auto mb-12 max-w-2xl text-lg text-primary-foreground/90">
-              Every contribution makes a difference. Whether you donate, volunteer, or spread the word, you're helping us save lives.
+              Every contribution makes a difference. Whether you donate,
+              volunteer, or spread the word, you're helping us save lives.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button

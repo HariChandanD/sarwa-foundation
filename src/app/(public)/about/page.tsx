@@ -44,13 +44,25 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  SARWA Society for Advocacy of Rights and Welfare of Animals is a non-profit organization committed to protecting, rescuing, and improving the lives of animals through timely intervention, compassionate care, and community engagement.
+                  SARWA Society for Advocacy of Rights and Welfare of Animals is
+                  a non-profit organization committed to protecting, rescuing,
+                  and improving the lives of animals through timely
+                  intervention, compassionate care, and community engagement.
                 </p>
                 <p>
-                  We believe every animal deserves to live with dignity, free from pain, cruelty, neglect, and exploitation. Our primary focus is providing immediate medical assistance to injured, sick, and distressed animals wherever they are found, ensuring they receive the care they need as quickly as possible.
+                  We believe every animal deserves to live with dignity, free
+                  from pain, cruelty, neglect, and exploitation. Our primary
+                  focus is providing immediate medical assistance to injured,
+                  sick, and distressed animals wherever they are found, ensuring
+                  they receive the care they need as quickly as possible.
                 </p>
                 <p>
-                  Unlike traditional shelter-based organizations, SARWA specializes in on-site emergency rescue and treatment. Our trained rescue volunteers and veterinary partners respond to public reports, providing first aid and emergency medical care directly at the location whenever possible—reducing stress for the animal and enabling faster treatment.
+                  Unlike traditional shelter-based organizations, SARWA
+                  specializes in on-site emergency rescue and treatment. Our
+                  trained rescue volunteers and veterinary partners respond to
+                  public reports, providing first aid and emergency medical care
+                  directly at the location whenever possible—reducing stress for
+                  the animal and enabling faster treatment.
                 </p>
               </div>
             </div>
@@ -79,7 +91,10 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="text-gray-600">
-                To protect and improve the lives of animals through rapid rescue, on-site medical treatment, advocacy, education, and collaboration with animal welfare organizations, ensuring every animal receives timely care and compassionate support.
+                To protect and improve the lives of animals through rapid
+                rescue, on-site medical treatment, advocacy, education, and
+                collaboration with animal welfare organizations, ensuring every
+                animal receives timely care and compassionate support.
               </p>
             </div>
 
@@ -92,7 +107,9 @@ export default function AboutPage() {
                 Our Vision
               </h2>
               <p className="text-gray-600">
-                To create a society where every animal is treated with compassion, protected from cruelty, and provided the opportunity to live a safe, healthy, and dignified life.
+                To create a society where every animal is treated with
+                compassion, protected from cruelty, and provided the opportunity
+                to live a safe, healthy, and dignified life.
               </p>
             </div>
           </div>
@@ -155,13 +172,23 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-gray-600">
               <p>
-                When animals require advanced medical attention, surgery, or long-term rehabilitation, SARWA works in close collaboration with established animal welfare organizations such as CUPA (Compassion Unlimited Plus Action). Animals needing specialized treatment are safely transported to their facilities, ensuring they receive the highest standard of veterinary care.
+                When animals require advanced medical attention, surgery, or
+                long-term rehabilitation, SARWA works in close collaboration
+                with established animal welfare organizations such as CUPA
+                (Compassion Unlimited Plus Action). Animals needing specialized
+                treatment are safely transported to their facilities, ensuring
+                they receive the highest standard of veterinary care.
               </p>
               <p>
-                Our work extends beyond rescue operations. We strive to build a compassionate society by promoting animal welfare awareness, encouraging responsible pet ownership, educating communities about animal rights, and inspiring citizens to become active participants in protecting vulnerable animals.
+                Our work extends beyond rescue operations. We strive to build a
+                compassionate society by promoting animal welfare awareness,
+                encouraging responsible pet ownership, educating communities
+                about animal rights, and inspiring citizens to become active
+                participants in protecting vulnerable animals.
               </p>
               <p className="text-lg font-medium text-gray-900">
-                "Every Life Matters. Every Rescue Counts. Together We Can Make a Difference."
+                "Every Life Matters. Every Rescue Counts. Together We Can Make a
+                Difference."
               </p>
             </div>
           </div>
@@ -177,12 +204,27 @@ export default function AboutPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
               { title: 'Compassion', description: 'For every living being' },
-              { title: 'Rapid Response', description: 'Emergency rescue operations' },
-              { title: 'Integrity', description: 'Transparency and accountability' },
+              {
+                title: 'Rapid Response',
+                description: 'Emergency rescue operations',
+              },
+              {
+                title: 'Integrity',
+                description: 'Transparency and accountability',
+              },
               { title: 'Collaboration', description: 'Working with partners' },
-              { title: 'Community', description: 'Volunteerism and participation' },
-              { title: 'Respect', description: 'For animal rights and welfare' },
-              { title: 'Sustainability', description: 'Long-term welfare initiatives' },
+              {
+                title: 'Community',
+                description: 'Volunteerism and participation',
+              },
+              {
+                title: 'Respect',
+                description: 'For animal rights and welfare',
+              },
+              {
+                title: 'Sustainability',
+                description: 'Long-term welfare initiatives',
+              },
               { title: 'Commitment', description: 'Dedicated to our mission' },
             ].map((value, index) => (
               <div
@@ -227,7 +269,10 @@ export default function AboutPage() {
                 <div className="space-y-3 text-gray-600">
                   <div className="flex flex-col gap-2 border-b border-gray-200 pb-3 sm:flex-row sm:justify-between">
                     <span className="font-medium">Registered Name:</span>
-                    <span className="text-right">SARWA SOCIETY FOR ADVOCACY OF RIGHTS AND WELFARE OF ANIMALS</span>
+                    <span className="text-right">
+                      SARWA SOCIETY FOR ADVOCACY OF RIGHTS AND WELFARE OF
+                      ANIMALS
+                    </span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">Registration Number:</span>
@@ -239,7 +284,10 @@ export default function AboutPage() {
                   </div>
                   <div className="flex flex-col gap-2 border-b border-gray-200 pb-3 sm:flex-row sm:justify-between">
                     <span className="font-medium">Registered Office:</span>
-                    <span className="text-right">24, 4th B main 4th Cross, Mahalakshmilayout, Bangalore, Karnataka 560086</span>
+                    <span className="text-right">
+                      24, 4th B main 4th Cross, Mahalakshmilayout, Bangalore,
+                      Karnataka 560086
+                    </span>
                   </div>
                   <div className="flex justify-between pb-2">
                     <span className="font-medium">Nature of Organisation:</span>
@@ -279,7 +327,9 @@ export default function AboutPage() {
                 <div className="space-y-3 text-gray-600">
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">CSR Partnerships:</span>
-                    <span>Open to CSR partnerships and corporate collaborations</span>
+                    <span>
+                      Open to CSR partnerships and corporate collaborations
+                    </span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">12A Registration:</span>
@@ -296,7 +346,9 @@ export default function AboutPage() {
                 </div>
                 <div className="mt-4 rounded-lg bg-background p-4">
                   <p className="text-sm text-gray-600">
-                    We welcome CSR partnerships, employee volunteering programs, and community animal welfare initiatives with responsible corporate organizations.
+                    We welcome CSR partnerships, employee volunteering programs,
+                    and community animal welfare initiatives with responsible
+                    corporate organizations.
                   </p>
                 </div>
               </div>
@@ -322,8 +374,12 @@ export default function AboutPage() {
                     <div className="flex items-center gap-3">
                       <FileText className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="font-medium text-gray-900">Registration Certificate</p>
-                        <p className="text-sm text-gray-500">Form 10AC - Section 12A Registration</p>
+                        <p className="font-medium text-gray-900">
+                          Registration Certificate
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Form 10AC - Section 12A Registration
+                        </p>
                       </div>
                     </div>
                     <span className="text-sm text-primary">View PDF →</span>
@@ -337,8 +393,12 @@ export default function AboutPage() {
                     <div className="flex items-center gap-3">
                       <FileText className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="font-medium text-gray-900">Form 10BD Acknowledgement</p>
-                        <p className="text-sm text-gray-500">Annual Return Acknowledgement</p>
+                        <p className="font-medium text-gray-900">
+                          Form 10BD Acknowledgement
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Annual Return Acknowledgement
+                        </p>
                       </div>
                     </div>
                     <span className="text-sm text-primary">View PDF →</span>

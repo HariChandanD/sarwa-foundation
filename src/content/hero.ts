@@ -50,7 +50,8 @@ export const hero = {
   },
   blog: {
     title: 'Latest Updates',
-    subtitle: 'News, Stories, and Insights from Sarwa Society for Animal Welfare',
+    subtitle:
+      'News, Stories, and Insights from Sarwa Society for Animal Welfare',
     description:
       'Stay updated with our latest rescue stories, animal care tips, and community initiatives.',
   },

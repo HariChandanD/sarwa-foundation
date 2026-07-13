@@ -1,16 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase-client';
-import {
-  Activity,
-  User,
-  Calendar,
-  Filter,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Activity, User, Calendar, Filter, AlertCircle } from 'lucide-react';
 
 interface ActivityLog {
   id: string;
@@ -19,7 +11,7 @@ interface ActivityLog {
   action: string;
   description: string;
   created_at: string;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
 }
 
 export default function ActivityLogPage() {
@@ -28,11 +20,7 @@ export default function ActivityLogPage() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>('all');
 
-  useEffect(() => {
-    fetchActivities();
-  }, [filter]);
-
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     try {
       const supabase = createClient();
 
@@ -52,19 +40,32 @@ export default function ActivityLogPage() {
       if (error) throw error;
 
       setActivities(data || []);
-    } catch (err: any) {
-      console.error('Error fetching activities:', err);
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchActivities();
+  }, [fetchActivities]);
 
   const getActionColor = (action: string) => {
-    if (action.includes('approved') || action.includes('donation')) return 'bg-green-100 text-green-700';
-    if (action.includes('rejected') || action.includes('disabled') || action.includes('removed')) return 'bg-red-100 text-red-700';
-    if (action.includes('pending') || action.includes('invited')) return 'bg-yellow-100 text-yellow-700';
-    if (action.includes('updated') || action.includes('enabled')) return 'bg-blue-100 text-blue-700';
+    if (action.includes('approved') || action.includes('donation'))
+      return 'bg-green-100 text-green-700';
+    if (
+      action.includes('rejected') ||
+      action.includes('disabled') ||
+      action.includes('removed')
+    )
+      return 'bg-red-100 text-red-700';
+    if (action.includes('pending') || action.includes('invited'))
+      return 'bg-yellow-100 text-yellow-700';
+    if (action.includes('updated') || action.includes('enabled'))
+      return 'bg-blue-100 text-blue-700';
     return 'bg-gray-100 text-gray-700';
   };
 
@@ -79,7 +80,7 @@ export default function ActivityLogPage() {
     const date = new Date(dateString);
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
+
     if (seconds < 60) return 'Just now';
     if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
@@ -91,7 +92,7 @@ export default function ActivityLogPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-gray-600">Loading activity log...</p>
         </div>
       </div>
@@ -125,8 +126,8 @@ export default function ActivityLogPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
           <p className="text-sm text-red-800">{error}</p>
         </div>
       )}
@@ -139,7 +140,9 @@ export default function ActivityLogPage() {
               <Activity className="h-5 w-5 text-blue-600" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Recent Activity</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Recent Activity
+              </h2>
               <p className="text-sm text-gray-500">Last 100 activities</p>
             </div>
           </div>
@@ -147,36 +150,49 @@ export default function ActivityLogPage() {
 
         {activities.length === 0 ? (
           <div className="p-12 text-center">
-            <Activity className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <Activity className="mx-auto mb-4 h-12 w-12 text-gray-400" />
             <p className="text-gray-600">No activity logs found</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
             {activities.map((activity) => (
-              <div key={activity.id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div
+                key={activity.id}
+                className="p-6 transition-colors hover:bg-gray-50"
+              >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
                     <div className="rounded-full bg-gray-100 p-2">
                       <User className="h-5 w-5 text-gray-600" />
                     </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-gray-900">{activity.user_email}</span>
-                      <span className={`text-xs px-2 py-1 rounded ${getRoleBadgeColor(activity.user_role)}`}>
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1 flex items-center gap-2">
+                      <span className="font-medium text-gray-900">
+                        {activity.user_email}
+                      </span>
+                      <span
+                        className={`rounded px-2 py-1 text-xs ${getRoleBadgeColor(activity.user_role)}`}
+                      >
                         {activity.user_role.replace('_', ' ')}
                       </span>
-                      <span className={`text-xs px-2 py-1 rounded ${getActionColor(activity.action)}`}>
+                      <span
+                        className={`rounded px-2 py-1 text-xs ${getActionColor(activity.action)}`}
+                      >
                         {activity.action.replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-700 mb-2">{activity.description}</p>
+                    <p className="mb-2 text-sm text-gray-700">
+                      {activity.description}
+                    </p>
                     <div className="flex items-center gap-4 text-xs text-gray-500">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         <span>{formatTimeAgo(activity.created_at)}</span>
                       </div>
-                      <span>{new Date(activity.created_at).toLocaleString()}</span>
+                      <span>
+                        {new Date(activity.created_at).toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -187,15 +203,15 @@ export default function ActivityLogPage() {
       </div>
 
       {/* Info Box */}
-      <div className="rounded-lg bg-blue-50 border border-blue-200 p-4">
+      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
         <div className="flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
           <div className="text-sm text-blue-800">
-            <p className="font-medium mb-1">Activity Log Information</p>
+            <p className="mb-1 font-medium">Activity Log Information</p>
             <p>
-              This log shows the last 100 activities in the system. Activities are automatically
-              recorded when users perform actions like approving volunteers, updating settings,
-              or managing admins.
+              This log shows the last 100 activities in the system. Activities
+              are automatically recorded when users perform actions like
+              approving volunteers, updating settings, or managing admins.
             </p>
           </div>
         </div>

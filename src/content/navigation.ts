@@ -9,9 +9,7 @@ export const navigation = {
     { name: 'Gallery', href: '/gallery' },
     { name: 'Contact', href: '/contact' },
   ],
-  cta: [
-    { name: 'Donate', href: '/donate', variant: 'default' as const },
-  ],
+  cta: [{ name: 'Donate', href: '/donate', variant: 'default' as const }],
 };
 
 // Made with Bob

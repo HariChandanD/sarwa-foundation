@@ -14,42 +14,48 @@ const placeholderStories = [
   {
     id: 1,
     animalType: 'Street Dog',
-    image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=600&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=600&fit=crop',
     location: 'Bangalore',
     status: 'Coming Soon',
   },
   {
     id: 2,
     animalType: 'Cow',
-    image: 'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=800&h=600&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=800&h=600&fit=crop',
     location: 'Bangalore',
     status: 'Coming Soon',
   },
   {
     id: 3,
     animalType: 'Calf',
-    image: 'https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?w=800&h=600&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?w=800&h=600&fit=crop',
     location: 'Bangalore',
     status: 'Coming Soon',
   },
   {
     id: 4,
     animalType: 'Puppy',
-    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=600&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=600&fit=crop',
     location: 'Bangalore',
     status: 'Coming Soon',
   },
   {
     id: 5,
     animalType: 'Cat',
-    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=600&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=600&fit=crop',
     location: 'Bangalore',
     status: 'Coming Soon',
   },
   {
     id: 6,
     animalType: 'Rescue Operation',
-    image: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&h=600&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&h=600&fit=crop',
     location: 'Bangalore',
     status: 'Coming Soon',
   },
@@ -81,9 +87,12 @@ export default function RescueStoriesPage() {
             </h2>
             <div className="space-y-6 text-gray-600">
               <p className="text-lg">
-                At SARWA, every rescue begins with a call from a concerned community member. Our approach is built on rapid response, on-site emergency care, and collaborative partnerships that ensure every animal receives the help they need.
+                At SARWA, every rescue begins with a call from a concerned
+                community member. Our approach is built on rapid response,
+                on-site emergency care, and collaborative partnerships that
+                ensure every animal receives the help they need.
               </p>
-              
+
               <div className="grid gap-6 md:grid-cols-3">
                 <div className="rounded-lg bg-background p-6">
                   <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -93,7 +102,9 @@ export default function RescueStoriesPage() {
                     On-Site Emergency Response
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Our trained volunteers provide immediate first aid and emergency medical care directly at the rescue location, reducing stress and enabling faster treatment.
+                    Our trained volunteers provide immediate first aid and
+                    emergency medical care directly at the rescue location,
+                    reducing stress and enabling faster treatment.
                   </p>
                 </div>
 
@@ -105,7 +116,9 @@ export default function RescueStoriesPage() {
                     Veterinary Coordination
                   </h3>
                   <p className="text-sm text-gray-600">
-                    We work closely with veterinary partners and organizations like CUPA for specialized treatment, surgery, and long-term rehabilitation when needed.
+                    We work closely with veterinary partners and organizations
+                    like CUPA for specialized treatment, surgery, and long-term
+                    rehabilitation when needed.
                   </p>
                 </div>
 
@@ -117,7 +130,9 @@ export default function RescueStoriesPage() {
                     Community Participation
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Every rescue is made possible through the support of compassionate volunteers, donors, and community members who share our vision.
+                    Every rescue is made possible through the support of
+                    compassionate volunteers, donors, and community members who
+                    share our vision.
                   </p>
                 </div>
               </div>
@@ -134,7 +149,9 @@ export default function RescueStoriesPage() {
               Rescue Stories
             </h2>
             <p className="mx-auto max-w-2xl text-gray-600">
-              Each rescue represents a life saved through community action and compassionate care. Real SARWA rescue stories will be shared here as they happen.
+              Each rescue represents a life saved through community action and
+              compassionate care. Real SARWA rescue stories will be shared here
+              as they happen.
             </p>
           </div>
 
@@ -164,7 +181,7 @@ export default function RescueStoriesPage() {
                   <h3 className="mb-3 text-xl font-bold text-gray-900">
                     {story.animalType}
                   </h3>
-                  
+
                   <div className="mb-4 space-y-2 text-sm text-gray-600">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary" />
@@ -201,7 +218,9 @@ export default function RescueStoriesPage() {
               Every Rescue is Possible Because of Volunteers and Donors
             </h2>
             <p className="mb-8 text-lg text-white/90">
-              Join us in making a difference for animals in need. Your support enables us to respond quickly to emergencies and provide compassionate care.
+              Join us in making a difference for animals in need. Your support
+              enables us to respond quickly to emergencies and provide
+              compassionate care.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <a

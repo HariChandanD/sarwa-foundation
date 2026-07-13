@@ -34,7 +34,8 @@ export default function MissionContentPage() {
             {
               label: 'Value 1: Compassion',
               type: 'textarea',
-              value: 'We treat every animal with empathy, kindness, and respect.',
+              value:
+                'We treat every animal with empathy, kindness, and respect.',
             },
             {
               label: 'Value 2: Integrity',

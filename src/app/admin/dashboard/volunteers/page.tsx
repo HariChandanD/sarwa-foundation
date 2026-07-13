@@ -56,11 +56,7 @@ export default function VolunteersPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchApplications();
-  }, [activeTab]);
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
     try {
       setLoading(true);
       const supabase = createClient();
@@ -79,7 +75,11 @@ export default function VolunteersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
 
   const handleViewDetails = (application: VolunteerApplication) => {
     setSelectedApplication(application);
@@ -103,30 +103,35 @@ export default function VolunteersPage() {
       const tempPassword = Math.random().toString(36).slice(-12) + 'A1!';
 
       // Create auth user
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: selectedApplication.email,
-        password: tempPassword,
-        email_confirm: true,
-        user_metadata: {
-          full_name: selectedApplication.full_name,
-        },
-      });
+      const { data: authData, error: authError } =
+        await supabase.auth.admin.createUser({
+          email: selectedApplication.email,
+          password: tempPassword,
+          email_confirm: true,
+          user_metadata: {
+            full_name: selectedApplication.full_name,
+          },
+        });
 
       if (authError) throw authError;
 
       // Create user profile
-      const { error: profileError } = await supabase.from('user_profiles').insert({
-        id: authData.user.id,
-        email: selectedApplication.email,
-        full_name: selectedApplication.full_name,
-        role: 'volunteer',
-      });
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert({
+          id: authData.user.id,
+          email: selectedApplication.email,
+          full_name: selectedApplication.full_name,
+          role: 'volunteer',
+        });
 
       if (profileError) throw profileError;
 
       // Update application status
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       const { error: updateError } = await supabase
         .from('volunteer_applications')
         .update({
@@ -143,10 +148,10 @@ export default function VolunteersPage() {
       setSuccess(
         `Application approved! Temporary password: ${tempPassword}\nPlease share this with the volunteer securely.`
       );
-      
+
       // Refresh applications
       fetchApplications();
-      
+
       // Close details after 5 seconds
       setTimeout(() => {
         setShowDetails(false);
@@ -171,7 +176,9 @@ export default function VolunteersPage() {
 
     try {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       const { error } = await supabase
         .from('volunteer_applications')
@@ -187,7 +194,7 @@ export default function VolunteersPage() {
 
       setSuccess('Application rejected successfully.');
       fetchApplications();
-      
+
       setTimeout(() => {
         setShowDetails(false);
         setSelectedApplication(null);
@@ -209,7 +216,9 @@ export default function VolunteersPage() {
 
     try {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       const { error } = await supabase
         .from('volunteer_applications')
@@ -225,7 +234,7 @@ export default function VolunteersPage() {
 
       setSuccess('More information requested. The applicant will be notified.');
       fetchApplications();
-      
+
       setTimeout(() => {
         setShowDetails(false);
         setSelectedApplication(null);
@@ -240,15 +249,25 @@ export default function VolunteersPage() {
 
   const tabs = [
     { id: 'pending' as TabType, label: 'Pending Applications', icon: Clock },
-    { id: 'approved' as TabType, label: 'Approved Volunteers', icon: CheckCircle },
-    { id: 'rejected' as TabType, label: 'Rejected Applications', icon: XCircle },
+    {
+      id: 'approved' as TabType,
+      label: 'Approved Volunteers',
+      icon: CheckCircle,
+    },
+    {
+      id: 'rejected' as TabType,
+      label: 'Rejected Applications',
+      icon: XCircle,
+    },
   ];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Volunteer Management</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Volunteer Management
+        </h1>
         <p className="mt-2 text-gray-600">
           Review and manage volunteer applications
         </p>
@@ -318,7 +337,8 @@ export default function VolunteersPage() {
                         {application.full_name}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        Applied {new Date(application.created_at).toLocaleDateString()}
+                        Applied{' '}
+                        {new Date(application.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <span
@@ -387,7 +407,8 @@ export default function VolunteersPage() {
                   Application Details
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Submitted {new Date(selectedApplication.created_at).toLocaleString()}
+                  Submitted{' '}
+                  {new Date(selectedApplication.created_at).toLocaleString()}
                 </p>
               </div>
               <button
@@ -412,7 +433,9 @@ export default function VolunteersPage() {
             {success && (
               <div className="mb-4 flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
                 <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
-                <p className="whitespace-pre-line text-sm text-green-800">{success}</p>
+                <p className="whitespace-pre-line text-sm text-green-800">
+                  {success}
+                </p>
               </div>
             )}
 
@@ -420,33 +443,53 @@ export default function VolunteersPage() {
             <div className="mb-6 space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Full Name</label>
-                  <p className="text-gray-900">{selectedApplication.full_name}</p>
+                  <label className="text-sm font-medium text-gray-700">
+                    Full Name
+                  </label>
+                  <p className="text-gray-900">
+                    {selectedApplication.full_name}
+                  </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Email</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Email
+                  </label>
                   <p className="text-gray-900">{selectedApplication.email}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Phone</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Phone
+                  </label>
                   <p className="text-gray-900">{selectedApplication.phone}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">City</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    City
+                  </label>
                   <p className="text-gray-900">{selectedApplication.city}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Occupation</label>
-                  <p className="text-gray-900">{selectedApplication.occupation}</p>
+                  <label className="text-sm font-medium text-gray-700">
+                    Occupation
+                  </label>
+                  <p className="text-gray-900">
+                    {selectedApplication.occupation}
+                  </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Availability</label>
-                  <p className="text-gray-900">{selectedApplication.availability}</p>
+                  <label className="text-sm font-medium text-gray-700">
+                    Availability
+                  </label>
+                  <p className="text-gray-900">
+                    {selectedApplication.availability}
+                  </p>
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Address</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Address
+                </label>
                 <p className="text-gray-900">{selectedApplication.address}</p>
               </div>
 
@@ -454,21 +497,27 @@ export default function VolunteersPage() {
                 <label className="text-sm font-medium text-gray-700">
                   Areas of Interest
                 </label>
-                <p className="text-gray-900">{selectedApplication.areas_of_interest}</p>
+                <p className="text-gray-900">
+                  {selectedApplication.areas_of_interest}
+                </p>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-700">
                   Skills / Experience
                 </label>
-                <p className="text-gray-900">{selectedApplication.skills_experience}</p>
+                <p className="text-gray-900">
+                  {selectedApplication.skills_experience}
+                </p>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-700">
                   Why Volunteer?
                 </label>
-                <p className="text-gray-900">{selectedApplication.why_volunteer}</p>
+                <p className="text-gray-900">
+                  {selectedApplication.why_volunteer}
+                </p>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">

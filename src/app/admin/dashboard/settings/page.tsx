@@ -146,7 +146,7 @@ export default function SettingsPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-gray-600">Loading settings...</p>
         </div>
       </div>
@@ -165,15 +165,15 @@ export default function SettingsPage() {
 
       {/* Messages */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
           <p className="text-sm text-red-800">{error}</p>
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
-          <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
+          <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
           <p className="text-sm text-green-800">{success}</p>
         </div>
       )}
@@ -185,7 +185,9 @@ export default function SettingsPage() {
             <div className="rounded-lg bg-blue-100 p-2">
               <Building2 className="h-5 w-5 text-blue-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Basic Information</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Basic Information
+            </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
@@ -220,7 +222,9 @@ export default function SettingsPage() {
                   type="tel"
                   className="pl-10"
                   value={settings.contact_number}
-                  onChange={(e) => handleChange('contact_number', e.target.value)}
+                  onChange={(e) =>
+                    handleChange('contact_number', e.target.value)
+                  }
                   required
                 />
               </div>
@@ -248,7 +252,9 @@ export default function SettingsPage() {
             <div className="rounded-lg bg-purple-100 p-2">
               <SettingsIcon className="h-5 w-5 text-purple-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Social Media Links</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Social Media Links
+            </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
@@ -289,7 +295,9 @@ export default function SettingsPage() {
                   className="pl-10"
                   placeholder="https://instagram.com/your-ngo"
                   value={settings.instagram_url}
-                  onChange={(e) => handleChange('instagram_url', e.target.value)}
+                  onChange={(e) =>
+                    handleChange('instagram_url', e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -330,7 +338,9 @@ export default function SettingsPage() {
             <div className="rounded-lg bg-green-100 p-2">
               <CreditCard className="h-5 w-5 text-green-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Bank & Payment Details</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Bank & Payment Details
+            </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
@@ -347,7 +357,9 @@ export default function SettingsPage() {
               <Input
                 id="account_holder_name"
                 value={settings.account_holder_name}
-                onChange={(e) => handleChange('account_holder_name', e.target.value)}
+                onChange={(e) =>
+                  handleChange('account_holder_name', e.target.value)
+                }
                 placeholder="SARWA Society"
               />
             </div>

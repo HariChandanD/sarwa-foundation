@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient, isSuperAdmin } from '@/lib/supabase-client';
 import { useRouter } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
 import {
   Users,
   UserPlus,
@@ -43,7 +44,7 @@ interface Invitation {
 
 export default function AdminManagementPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,24 +53,21 @@ export default function AdminManagementPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  useEffect(() => {
-    checkAccess();
-    fetchData();
-  }, []);
-
-  const checkAccess = async () => {
+  const checkAccess = useCallback(async () => {
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user || !isSuperAdmin(user)) {
       router.push('/admin/dashboard');
       return;
     }
-    
-    setUser(user);
-  };
 
-  const fetchData = async () => {
+    setUser(user);
+  }, [router]);
+
+  const fetchData = useCallback(async () => {
     try {
       const supabase = createClient();
 
@@ -92,13 +90,19 @@ export default function AdminManagementPage() {
 
       if (invitationsError) throw invitationsError;
       setInvitations(invitationsData || []);
-    } catch (err: any) {
-      console.error('Error fetching data:', err);
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    checkAccess();
+    fetchData();
+  }, [checkAccess, fetchData]);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -158,8 +162,10 @@ export default function AdminManagementPage() {
       setSuccess(`Invitation sent to ${inviteEmail}`);
       setInviteEmail('');
       fetchData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     } finally {
       setInviting(false);
     }
@@ -186,8 +192,10 @@ export default function AdminManagementPage() {
 
       setSuccess(`Approved invitation for ${email}`);
       fetchData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     }
   };
 
@@ -211,8 +219,10 @@ export default function AdminManagementPage() {
 
       setSuccess(`Rejected invitation for ${email}`);
       fetchData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     }
   };
 
@@ -239,8 +249,10 @@ export default function AdminManagementPage() {
 
       setSuccess(`Admin ${email} has been disabled`);
       fetchData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     }
   };
 
@@ -265,8 +277,10 @@ export default function AdminManagementPage() {
 
       setSuccess(`Admin ${email} has been enabled`);
       fetchData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     }
   };
 
@@ -291,13 +305,20 @@ export default function AdminManagementPage() {
       });
 
       setSuccess(`Password reset email sent to ${email}`);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     }
   };
 
   const handleRemove = async (adminId: string, email: string) => {
-    if (!confirm(`Are you sure you want to permanently remove ${email}? This action cannot be undone.`)) return;
+    if (
+      !confirm(
+        `Are you sure you want to permanently remove ${email}? This action cannot be undone.`
+      )
+    )
+      return;
 
     try {
       const supabase = createClient();
@@ -319,8 +340,10 @@ export default function AdminManagementPage() {
 
       setSuccess(`Admin ${email} has been removed`);
       fetchData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
     }
   };
 
@@ -328,7 +351,7 @@ export default function AdminManagementPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-gray-600">Loading admin management...</p>
         </div>
       </div>
@@ -339,9 +362,13 @@ export default function AdminManagementPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="mx-auto h-16 w-16 text-red-600 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-600">Only Super Admins can access this page.</p>
+          <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600" />
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">
+            Access Denied
+          </h2>
+          <p className="text-gray-600">
+            Only Super Admins can access this page.
+          </p>
         </div>
       </div>
     );
@@ -359,15 +386,15 @@ export default function AdminManagementPage() {
 
       {/* Messages */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
           <p className="text-sm text-red-800">{error}</p>
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
-          <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
+          <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
           <p className="text-sm text-green-800">{success}</p>
         </div>
       )}
@@ -378,11 +405,15 @@ export default function AdminManagementPage() {
           <div className="rounded-lg bg-blue-100 p-2">
             <UserPlus className="h-5 w-5 text-blue-600" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900">Invite New Admin</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Invite New Admin
+          </h2>
         </div>
         <form onSubmit={handleInvite} className="flex gap-4">
           <div className="flex-1">
-            <Label htmlFor="inviteEmail" className="sr-only">Email Address</Label>
+            <Label htmlFor="inviteEmail" className="sr-only">
+              Email Address
+            </Label>
             <Input
               id="inviteEmail"
               type="email"
@@ -416,7 +447,9 @@ export default function AdminManagementPage() {
             <div className="rounded-lg bg-yellow-100 p-2">
               <Clock className="h-5 w-5 text-yellow-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Pending Invitations</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Pending Invitations
+            </h2>
           </div>
           <div className="space-y-3">
             {invitations.map((invitation) => (
@@ -425,7 +458,9 @@ export default function AdminManagementPage() {
                 className="flex items-center justify-between rounded-lg border border-gray-200 p-4"
               >
                 <div>
-                  <p className="font-medium text-gray-900">{invitation.email}</p>
+                  <p className="font-medium text-gray-900">
+                    {invitation.email}
+                  </p>
                   <p className="text-sm text-gray-500">
                     Sent {new Date(invitation.created_at).toLocaleDateString()}
                   </p>
@@ -434,7 +469,9 @@ export default function AdminManagementPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleApprove(invitation.id, invitation.email)}
+                    onClick={() =>
+                      handleApprove(invitation.id, invitation.email)
+                    }
                     className="text-green-600 hover:text-green-700"
                   >
                     <CheckCircle className="mr-1 h-4 w-4" />
@@ -443,7 +480,9 @@ export default function AdminManagementPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleReject(invitation.id, invitation.email)}
+                    onClick={() =>
+                      handleReject(invitation.id, invitation.email)
+                    }
                     className="text-red-600 hover:text-red-700"
                   >
                     <XCircle className="mr-1 h-4 w-4" />
@@ -462,7 +501,9 @@ export default function AdminManagementPage() {
           <div className="rounded-lg bg-purple-100 p-2">
             <Users className="h-5 w-5 text-purple-600" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900">All Admins ({admins.length})</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            All Admins ({admins.length})
+          </h2>
         </div>
         <div className="space-y-3">
           {admins.map((admin) => (
@@ -481,26 +522,32 @@ export default function AdminManagementPage() {
                         {admin.full_name || admin.email}
                       </p>
                       {admin.role === 'super_admin' && (
-                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                        <span className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-700">
                           Super Admin
                         </span>
                       )}
                       {admin.status === 'disabled' && (
-                        <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+                        <span className="rounded bg-red-100 px-2 py-1 text-xs text-red-700">
                           Disabled
                         </span>
                       )}
-                      {admin.status === 'active' && admin.role !== 'super_admin' && (
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                          Active
-                        </span>
-                      )}
+                      {admin.status === 'active' &&
+                        admin.role !== 'super_admin' && (
+                          <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-700">
+                            Active
+                          </span>
+                        )}
                     </div>
                     <p className="text-sm text-gray-500">{admin.email}</p>
-                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
-                      <span>Joined {new Date(admin.created_at).toLocaleDateString()}</span>
+                    <div className="mt-1 flex items-center gap-3 text-xs text-gray-400">
+                      <span>
+                        Joined {new Date(admin.created_at).toLocaleDateString()}
+                      </span>
                       {admin.last_login && (
-                        <span>Last login: {new Date(admin.last_login).toLocaleDateString()}</span>
+                        <span>
+                          Last login:{' '}
+                          {new Date(admin.last_login).toLocaleDateString()}
+                        </span>
                       )}
                     </div>
                   </div>

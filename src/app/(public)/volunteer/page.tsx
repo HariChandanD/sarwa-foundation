@@ -139,13 +139,14 @@ export default function VolunteerPage() {
 
       // Reset form
       (e.target as HTMLFormElement).reset();
-    } catch (error: any) {
-      console.error('Error submitting volunteer application:', error);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'There was an error submitting your application. Please try again or contact us directly.';
       setSubmitStatus({
         type: 'error',
-        message:
-          error.message ||
-          'There was an error submitting your application. Please try again or contact us directly.',
+        message: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
@@ -381,9 +382,7 @@ export default function VolunteerPage() {
 
               {/* Skills and Experience */}
               <div>
-                <Label htmlFor="skillsExperience">
-                  Skills / Experience *
-                </Label>
+                <Label htmlFor="skillsExperience">Skills / Experience *</Label>
                 <Textarea
                   id="skillsExperience"
                   name="skillsExperience"

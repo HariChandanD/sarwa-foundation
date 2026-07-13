@@ -64,17 +64,16 @@ export default function AdminDashboardPage() {
         if (donationsError) throw donationsError;
 
         // Calculate total donations
-        const totalDonations = donations?.reduce(
-          (sum, d) => sum + Number(d.amount),
-          0
-        ) || 0;
+        const totalDonations =
+          donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0;
 
         // Calculate monthly donations (current month)
         const now = new Date();
         const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const monthlyDonations = donations
-          ?.filter((d) => new Date(d.created_at) >= firstDayOfMonth)
-          .reduce((sum, d) => sum + Number(d.amount), 0) || 0;
+        const monthlyDonations =
+          donations
+            ?.filter((d) => new Date(d.created_at) >= firstDayOfMonth)
+            .reduce((sum, d) => sum + Number(d.amount), 0) || 0;
 
         // Fetch volunteer applications by status
         const { count: pendingCount } = await supabase
@@ -112,7 +111,8 @@ export default function AdminDashboardPage() {
           totalVisitors: 12450, // Placeholder - would need analytics integration
           totalDonations: Math.round(totalDonations),
           monthlyDonations: Math.round(monthlyDonations),
-          volunteers: (approvedCount || 0) + (pendingCount || 0) + (rejectedCount || 0),
+          volunteers:
+            (approvedCount || 0) + (pendingCount || 0) + (rejectedCount || 0),
           events: 8, // Placeholder - would need events table
           pendingReports: messagesCount || 0,
           pendingVolunteers: pendingCount || 0,
@@ -198,9 +198,12 @@ export default function AdminDashboardPage() {
   ];
 
   const getActivityColor = (action: string) => {
-    if (action.includes('approved') || action.includes('donation')) return 'bg-green-500';
-    if (action.includes('rejected') || action.includes('disabled')) return 'bg-red-500';
-    if (action.includes('pending') || action.includes('invited')) return 'bg-yellow-500';
+    if (action.includes('approved') || action.includes('donation'))
+      return 'bg-green-500';
+    if (action.includes('rejected') || action.includes('disabled'))
+      return 'bg-red-500';
+    if (action.includes('pending') || action.includes('invited'))
+      return 'bg-yellow-500';
     return 'bg-blue-500';
   };
 
@@ -208,7 +211,7 @@ export default function AdminDashboardPage() {
     const date = new Date(dateString);
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
+
     if (seconds < 60) return 'Just now';
     if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
@@ -219,7 +222,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-gray-600">Loading dashboard...</p>
         </div>
       </div>
@@ -247,7 +250,9 @@ export default function AdminDashboardPage() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-600">{card.title}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    {card.title}
+                  </p>
                   <p className="mt-2 text-3xl font-bold text-gray-900">
                     {card.value}
                   </p>
@@ -282,11 +287,20 @@ export default function AdminDashboardPage() {
           {recentActivities.length > 0 ? (
             <ul className="space-y-3">
               {recentActivities.map((activity) => (
-                <li key={activity.id} className="flex items-start gap-3 text-sm">
-                  <div className={`mt-1 h-2 w-2 rounded-full ${getActivityColor(activity.action)}`}></div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-gray-900 truncate">{activity.description}</p>
-                    <p className="text-gray-500 text-xs">{formatTimeAgo(activity.created_at)}</p>
+                <li
+                  key={activity.id}
+                  className="flex items-start gap-3 text-sm"
+                >
+                  <div
+                    className={`mt-1 h-2 w-2 rounded-full ${getActivityColor(activity.action)}`}
+                  ></div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-gray-900">
+                      {activity.description}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {formatTimeAgo(activity.created_at)}
+                    </p>
                   </div>
                 </li>
               ))}

@@ -3,16 +3,18 @@ import { createClient } from '@/lib/supabase-client';
 export interface ActivityLogData {
   action: string;
   description: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export async function logActivity(data: ActivityLogData): Promise<void> {
   try {
     const supabase = createClient();
-    
+
     // Get current user
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user) {
       console.warn('No user found for activity logging');
       return;
@@ -55,23 +57,23 @@ export const ActivityActions = {
   ADMIN_ENABLED: 'admin_enabled',
   ADMIN_REMOVED: 'admin_removed',
   ADMIN_PASSWORD_RESET: 'admin_password_reset',
-  
+
   // Volunteer actions
   VOLUNTEER_APPLIED: 'volunteer_applied',
   VOLUNTEER_APPROVED: 'volunteer_approved',
   VOLUNTEER_REJECTED: 'volunteer_rejected',
   VOLUNTEER_INFO_REQUESTED: 'volunteer_info_requested',
-  
+
   // Settings actions
   SETTINGS_UPDATED: 'settings_updated',
-  
+
   // Donation actions
   DONATION_RECEIVED: 'donation_received',
-  
+
   // Auth actions
   USER_LOGIN: 'user_login',
   USER_LOGOUT: 'user_logout',
-  
+
   // Content actions
   CONTENT_UPDATED: 'content_updated',
 } as const;

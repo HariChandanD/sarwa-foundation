@@ -8,7 +8,17 @@ import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Shield, Mail, Lock, User, Loader2, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import {
+  Shield,
+  Mail,
+  Lock,
+  User,
+  Loader2,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  CheckCircle,
+} from 'lucide-react';
 
 export default function SuperAdminSetupPage() {
   const router = useRouter();
@@ -18,14 +28,10 @@ export default function SuperAdminSetupPage() {
   const [error, setError] = useState<string | null>(null);
   const [superAdminExists, setSuperAdminExists] = useState(false);
 
-  useEffect(() => {
-    checkSuperAdminExists();
-  }, []);
-
-  const checkSuperAdminExists = async () => {
+  const checkSuperAdminExists = useCallback(async () => {
     try {
       const supabase = createClient();
-      
+
       // Check if any super admin exists
       const { data, error } = await supabase
         .from('user_profiles')
@@ -45,7 +51,11 @@ export default function SuperAdminSetupPage() {
     } finally {
       setIsChecking(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkSuperAdminExists();
+  }, [checkSuperAdminExists]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,16 +98,18 @@ export default function SuperAdminSetupPage() {
       }
 
       // Create the super admin user
-      const { data: authData, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            role: 'super_admin',
+      const { data: authData, error: signUpError } = await supabase.auth.signUp(
+        {
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+              role: 'super_admin',
+            },
           },
-        },
-      });
+        }
+      );
 
       if (signUpError) throw signUpError;
 
@@ -110,7 +122,9 @@ export default function SuperAdminSetupPage() {
       router.refresh();
     } catch (err: any) {
       console.error('Setup error:', err);
-      setError(err.message || 'Failed to create Super Admin. Please try again.');
+      setError(
+        err.message || 'Failed to create Super Admin. Please try again.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -120,7 +134,7 @@ export default function SuperAdminSetupPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-gray-600">Checking system status...</p>
         </div>
       </div>
@@ -131,9 +145,13 @@ export default function SuperAdminSetupPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <CheckCircle className="mx-auto h-16 w-16 text-green-600 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Setup Complete</h2>
-          <p className="text-gray-600 mb-4">Super Admin already exists. Redirecting to login...</p>
+          <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-600" />
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">
+            Setup Complete
+          </h2>
+          <p className="mb-4 text-gray-600">
+            Super Admin already exists. Redirecting to login...
+          </p>
         </div>
       </div>
     );
@@ -142,7 +160,7 @@ export default function SuperAdminSetupPage() {
   return (
     <div className="flex min-h-screen">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-600 to-purple-800 p-12 flex-col justify-between">
+      <div className="hidden flex-col justify-between bg-gradient-to-br from-purple-600 to-purple-800 p-12 lg:flex lg:w-1/2">
         <div>
           <Link href="/" className="flex items-center gap-3 text-white">
             <Image
@@ -154,51 +172,54 @@ export default function SuperAdminSetupPage() {
             />
             <div>
               <div className="text-2xl font-bold">SARWA</div>
-              <div className="text-sm opacity-90">Society for Animal Welfare</div>
+              <div className="text-sm opacity-90">
+                Society for Animal Welfare
+              </div>
             </div>
           </Link>
         </div>
 
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-white">
-            Super Admin Setup
-          </h1>
+          <h1 className="text-4xl font-bold text-white">Super Admin Setup</h1>
           <p className="text-xl text-white/90">
-            Create the first Super Admin account to manage your NGO platform. This is a one-time setup process.
+            Create the first Super Admin account to manage your NGO platform.
+            This is a one-time setup process.
           </p>
-          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-3">Super Admin Powers</h3>
+          <div className="rounded-lg bg-white/20 p-6 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-white">
+              Super Admin Powers
+            </h3>
             <ul className="space-y-2 text-white/90">
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
                 <span>Invite and manage Admin users</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
                 <span>Full access to all platform features</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
                 <span>Approve or reject admin invitations</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
                 <span>Disable or remove admin accounts</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="text-white/60 text-sm">
+        <div className="text-sm text-white/60">
           © 2024 Sarwa Society for Animal Welfare. All rights reserved.
         </div>
       </div>
 
       {/* Right Side - Setup Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
+      <div className="flex flex-1 items-center justify-center bg-gray-50 p-8">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
-          <div className="lg:hidden mb-8 text-center">
+          <div className="mb-8 text-center lg:hidden">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image
                 src="/logo.png"
@@ -214,22 +235,26 @@ export default function SuperAdminSetupPage() {
             </Link>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="rounded-2xl bg-white p-8 shadow-xl">
             <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-purple-100 rounded-xl">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-xl bg-purple-100 p-3">
                   <Shield className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Create Super Admin</h2>
-                  <p className="text-sm text-gray-600">One-time setup - Choose credentials carefully</p>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Create Super Admin
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    One-time setup - Choose credentials carefully
+                  </p>
                 </div>
               </div>
             </div>
 
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="mb-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
+                <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                 <p className="text-sm text-red-800">{error}</p>
               </div>
             )}
@@ -300,7 +325,10 @@ export default function SuperAdminSetupPage() {
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" className="flex items-center gap-2">
+                <Label
+                  htmlFor="confirmPassword"
+                  className="flex items-center gap-2"
+                >
                   <Lock className="h-4 w-4" />
                   Confirm Password
                 </Label>
@@ -317,16 +345,18 @@ export default function SuperAdminSetupPage() {
                 />
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
                 <p className="text-sm text-yellow-800">
-                  <strong>Important:</strong> This is a one-time setup. After creating the Super Admin account, 
-                  this page will be permanently disabled. Future admins must be invited by the Super Admin.
+                  <strong>Important:</strong> This is a one-time setup. After
+                  creating the Super Admin account, this page will be
+                  permanently disabled. Future admins must be invited by the
+                  Super Admin.
                 </p>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 py-6 text-lg"
+                className="w-full bg-purple-600 py-6 text-lg hover:bg-purple-700"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -344,7 +374,10 @@ export default function SuperAdminSetupPage() {
             </form>
 
             <div className="mt-6 text-center">
-              <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
+              <Link
+                href="/"
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
                 ← Back to website
               </Link>
             </div>

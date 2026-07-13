@@ -70,9 +70,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="mb-6 max-w-md text-sm text-gray-400">
-              Sarwa Society for Animal Welfare is dedicated to rescuing, rehabilitating, and
-              rehoming animals in need. Every life matters, and together we can
-              make a difference.
+              Sarwa Society for Animal Welfare is dedicated to rescuing,
+              rehabilitating, and rehoming animals in need. Every life matters,
+              and together we can make a difference.
             </p>
 
             {/* Contact Info */}
@@ -188,8 +188,8 @@ export function Footer() {
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
             <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} Sarwa Society for Animal Welfare. All rights
-              reserved.
+              © {new Date().getFullYear()} Sarwa Society for Animal Welfare. All
+              rights reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-6">
               {footerLinks.legal.map((link) => (

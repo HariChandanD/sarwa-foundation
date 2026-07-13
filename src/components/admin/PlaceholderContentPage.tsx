@@ -96,8 +96,8 @@ export function PlaceholderContentPage({
               </h3>
               <p className="mt-2 text-sm text-gray-700">
                 This is a placeholder page. Full CRUD functionality for managing
-                content will be implemented in the next phase. For now, content is
-                managed directly in the codebase.
+                content will be implemented in the next phase. For now, content
+                is managed directly in the codebase.
               </p>
               <p className="mt-2 text-sm text-gray-600">
                 <strong>Current Features:</strong> View-only mode

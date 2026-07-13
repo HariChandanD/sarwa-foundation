@@ -41,14 +41,12 @@ export default function VolunteerDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (!user) {
         router.push('/volunteer/login');
@@ -70,7 +68,11 @@ export default function VolunteerDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -94,7 +96,9 @@ export default function VolunteerDashboardPage() {
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
           <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600" />
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">Error Loading Profile</h2>
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">
+            Error Loading Profile
+          </h2>
           <p className="mb-4 text-gray-600">{error || 'Profile not found'}</p>
           <Button onClick={() => router.push('/volunteer/login')}>
             Back to Login
@@ -115,8 +119,12 @@ export default function VolunteerDashboardPage() {
                 <Heart className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Volunteer Dashboard</h1>
-                <p className="text-sm text-gray-600">Welcome back, {profile.full_name}!</p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Volunteer Dashboard
+                </h1>
+                <p className="text-sm text-gray-600">
+                  Welcome back, {profile.full_name}!
+                </p>
               </div>
             </div>
             <Button onClick={handleLogout} variant="outline">
@@ -137,48 +145,62 @@ export default function VolunteerDashboardPage() {
                 <div className="rounded-lg bg-green-100 p-2">
                   <User className="h-5 w-5 text-green-600" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900">My Profile</h2>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  My Profile
+                </h2>
               </div>
 
               <div className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="text-sm font-medium text-gray-700">Full Name</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Full Name
+                    </label>
                     <div className="mt-1 flex items-center gap-2 text-gray-900">
                       <User className="h-4 w-4 text-gray-400" />
                       {profile.full_name}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700">Email</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Email
+                    </label>
                     <div className="mt-1 flex items-center gap-2 text-gray-900">
                       <Mail className="h-4 w-4 text-gray-400" />
                       {profile.email}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700">Phone</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Phone
+                    </label>
                     <div className="mt-1 flex items-center gap-2 text-gray-900">
                       <Phone className="h-4 w-4 text-gray-400" />
                       {profile.phone}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700">City</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      City
+                    </label>
                     <div className="mt-1 flex items-center gap-2 text-gray-900">
                       <MapPin className="h-4 w-4 text-gray-400" />
                       {profile.city}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700">Occupation</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Occupation
+                    </label>
                     <div className="mt-1 flex items-center gap-2 text-gray-900">
                       <Briefcase className="h-4 w-4 text-gray-400" />
                       {profile.occupation}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700">Availability</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Availability
+                    </label>
                     <div className="mt-1 flex items-center gap-2 text-gray-900">
                       <Calendar className="h-4 w-4 text-gray-400" />
                       {profile.availability}
@@ -187,22 +209,34 @@ export default function VolunteerDashboardPage() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Address</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Address
+                  </label>
                   <p className="mt-1 text-gray-900">{profile.address}</p>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Areas of Interest</label>
-                  <p className="mt-1 text-gray-900">{profile.areas_of_interest}</p>
+                  <label className="text-sm font-medium text-gray-700">
+                    Areas of Interest
+                  </label>
+                  <p className="mt-1 text-gray-900">
+                    {profile.areas_of_interest}
+                  </p>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Skills / Experience</label>
-                  <p className="mt-1 text-gray-900">{profile.skills_experience}</p>
+                  <label className="text-sm font-medium text-gray-700">
+                    Skills / Experience
+                  </label>
+                  <p className="mt-1 text-gray-900">
+                    {profile.skills_experience}
+                  </p>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Why I Volunteer</label>
+                  <label className="text-sm font-medium text-gray-700">
+                    Why I Volunteer
+                  </label>
                   <p className="mt-1 text-gray-900">{profile.why_volunteer}</p>
                 </div>
 
@@ -211,13 +245,17 @@ export default function VolunteerDashboardPage() {
                     <label className="text-sm font-medium text-gray-700">
                       Emergency Contact Name
                     </label>
-                    <p className="mt-1 text-gray-900">{profile.emergency_contact_name}</p>
+                    <p className="mt-1 text-gray-900">
+                      {profile.emergency_contact_name}
+                    </p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-700">
                       Emergency Contact Phone
                     </label>
-                    <p className="mt-1 text-gray-900">{profile.emergency_contact_phone}</p>
+                    <p className="mt-1 text-gray-900">
+                      {profile.emergency_contact_phone}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -228,7 +266,9 @@ export default function VolunteerDashboardPage() {
           <div className="space-y-6">
             {/* Status Card */}
             <div className="rounded-xl bg-white p-6 shadow-md">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900">Status</h3>
+              <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                Status
+              </h3>
               <div className="flex items-center gap-2">
                 <span
                   className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
@@ -239,7 +279,8 @@ export default function VolunteerDashboardPage() {
                         : 'bg-red-100 text-red-800'
                   }`}
                 >
-                  {profile.status.charAt(0).toUpperCase() + profile.status.slice(1)}
+                  {profile.status.charAt(0).toUpperCase() +
+                    profile.status.slice(1)}
                 </span>
               </div>
               <p className="mt-2 text-sm text-gray-600">
@@ -249,24 +290,40 @@ export default function VolunteerDashboardPage() {
 
             {/* Quick Links */}
             <div className="rounded-xl bg-white p-6 shadow-md">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900">Quick Links</h3>
+              <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                Quick Links
+              </h3>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start" disabled>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  disabled
+                >
                   <Calendar className="mr-2 h-4 w-4" />
                   My Activities
-                  <span className="ml-auto text-xs text-gray-500">(Coming Soon)</span>
+                  <span className="ml-auto text-xs text-gray-500">
+                    (Coming Soon)
+                  </span>
                 </Button>
-                <Button variant="outline" className="w-full justify-start" disabled>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  disabled
+                >
                   <Heart className="mr-2 h-4 w-4" />
                   Assigned Tasks
-                  <span className="ml-auto text-xs text-gray-500">(Coming Soon)</span>
+                  <span className="ml-auto text-xs text-gray-500">
+                    (Coming Soon)
+                  </span>
                 </Button>
               </div>
             </div>
 
             {/* Help Card */}
             <div className="rounded-xl bg-green-50 p-6">
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Need Help?</h3>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                Need Help?
+              </h3>
               <p className="mb-4 text-sm text-gray-600">
                 Contact our volunteer coordinator for any questions or concerns.
               </p>

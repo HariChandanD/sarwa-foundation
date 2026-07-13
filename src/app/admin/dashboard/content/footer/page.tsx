@@ -48,12 +48,14 @@ export default function FooterContentPage() {
             {
               label: 'Copyright Text',
               type: 'text',
-              value: '© 2024 Sarwa Society for Animal Welfare. All rights reserved.',
+              value:
+                '© 2024 Sarwa Society for Animal Welfare. All rights reserved.',
             },
             {
               label: 'Registration Info',
               type: 'text',
-              value: 'Registered under Society Registration Act, 1860 | Reg. No: E-39746',
+              value:
+                'Registered under Society Registration Act, 1860 | Reg. No: E-39746',
             },
           ],
         },
