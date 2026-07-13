@@ -40,17 +40,17 @@ export default function AboutPage() {
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <div>
               <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                Our Story
+                Who We Are
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  Sarwa Society for Animal Welfare was founded in 2023 by a group of passionate animal lovers in Bangalore who witnessed the growing need for organized animal welfare efforts in our community. We started with a simple mission: to provide immediate help to animals in distress and create a compassionate community that values all life.
+                  SARWA Society for Advocacy of Rights and Welfare of Animals is a non-profit organization committed to protecting, rescuing, and improving the lives of animals through timely intervention, compassionate care, and community engagement.
                 </p>
                 <p>
-                  Our journey began with responding to emergency rescue calls for injured street dogs and abandoned puppies. What started as a small volunteer effort has grown into a registered charitable society dedicated to comprehensive animal welfare.
+                  We believe every animal deserves to live with dignity, free from pain, cruelty, neglect, and exploitation. Our primary focus is providing immediate medical assistance to injured, sick, and distressed animals wherever they are found, ensuring they receive the care they need as quickly as possible.
                 </p>
                 <p>
-                  Though we are a young organization, our commitment is strong. With the support of our dedicated volunteers and compassionate community members, we continue to grow and expand our reach.
+                  Unlike traditional shelter-based organizations, SARWA specializes in on-site emergency rescue and treatment. Our trained rescue volunteers and veterinary partners respond to public reports, providing first aid and emergency medical care directly at the location whenever possible—reducing stress for the animal and enabling faster treatment.
                 </p>
               </div>
             </div>
@@ -79,7 +79,7 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="text-gray-600">
-                To rescue, rehabilitate, and rehome animals in need while promoting compassion and responsible pet ownership in our community.
+                To protect and improve the lives of animals through rapid rescue, on-site medical treatment, advocacy, education, and collaboration with animal welfare organizations, ensuring every animal receives timely care and compassionate support.
               </p>
             </div>
 
@@ -92,7 +92,7 @@ export default function AboutPage() {
                 Our Vision
               </h2>
               <p className="text-gray-600">
-                A world where every animal is treated with dignity, compassion, and respect, and where the bond between humans and animals is celebrated and protected.
+                To create a society where every animal is treated with compassion, protected from cruelty, and provided the opportunity to live a safe, healthy, and dignified life.
               </p>
             </div>
           </div>
@@ -109,21 +109,21 @@ export default function AboutPage() {
             {[
               {
                 icon: Heart,
-                title: 'Animal Rescue',
+                title: 'Emergency Rescue & On-Site Treatment',
                 description:
-                  'Emergency response and rescue operations for animals in distress.',
+                  'Rapid response to distress calls with trained volunteers providing immediate first aid and emergency medical care at the location.',
               },
               {
                 icon: Award,
-                title: 'Medical Care Coordination',
+                title: 'Veterinary Partnerships',
                 description:
-                  'Coordinating veterinary treatment and medical support for rescued animals.',
+                  'Collaboration with established organizations like CUPA for specialized treatment, surgery, and long-term rehabilitation when needed.',
               },
               {
                 icon: Users,
-                title: 'Adoption Support',
+                title: 'Cattle Rescue & Rehabilitation',
                 description:
-                  'Helping rescued animals find loving forever homes through our adoption network.',
+                  'Rescuing cattle from illegal transportation, abandonment, and neglect, relocating them to recognized shelter homes and goshalas.',
               },
             ].map((item, index) => {
               const Icon = item.icon;
@@ -146,19 +146,22 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* Why We Started */}
+      {/* Our Approach */}
       <section className="bg-background py-16">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="mb-6 text-3xl font-bold text-gray-900">
-              Why We Started
+              Our Approach
             </h2>
             <div className="space-y-4 text-gray-600">
               <p>
-                We started because we saw too many animals suffering on the streets without help. Every day, injured dogs, abandoned puppies, and sick cats needed immediate care but had nowhere to turn.
+                When animals require advanced medical attention, surgery, or long-term rehabilitation, SARWA works in close collaboration with established animal welfare organizations such as CUPA (Compassion Unlimited Plus Action). Animals needing specialized treatment are safely transported to their facilities, ensuring they receive the highest standard of veterinary care.
               </p>
               <p>
-                Our founders realized that while individual efforts were valuable, organized action could create lasting change. We came together to build a community-driven organization that could respond quickly to emergencies and provide sustained support for animal welfare.
+                Our work extends beyond rescue operations. We strive to build a compassionate society by promoting animal welfare awareness, encouraging responsible pet ownership, educating communities about animal rights, and inspiring citizens to become active participants in protecting vulnerable animals.
+              </p>
+              <p className="text-lg font-medium text-gray-900">
+                "Every Life Matters. Every Rescue Counts. Together We Can Make a Difference."
               </p>
             </div>
           </div>
@@ -173,10 +176,14 @@ export default function AboutPage() {
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { title: 'Compassion', description: 'Every life matters' },
-              { title: 'Integrity', description: 'Honest and transparent' },
-              { title: 'Community', description: 'Working together' },
-              { title: 'Dedication', description: 'Committed to our cause' },
+              { title: 'Compassion', description: 'For every living being' },
+              { title: 'Rapid Response', description: 'Emergency rescue operations' },
+              { title: 'Integrity', description: 'Transparency and accountability' },
+              { title: 'Collaboration', description: 'Working with partners' },
+              { title: 'Community', description: 'Volunteerism and participation' },
+              { title: 'Respect', description: 'For animal rights and welfare' },
+              { title: 'Sustainability', description: 'Long-term welfare initiatives' },
+              { title: 'Commitment', description: 'Dedicated to our mission' },
             ].map((value, index) => (
               <div
                 key={index}
