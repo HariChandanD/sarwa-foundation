@@ -10,16 +10,13 @@ import {
   FileText,
   DollarSign,
   Users,
-  AlertCircle,
-  Image as ImageIcon,
-  Calendar,
-  Newspaper,
   Settings,
   LogOut,
   Menu,
   X,
   ChevronDown,
   Shield,
+  Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -53,24 +50,9 @@ const getNavigation = (isSuperAdminUser: boolean) => [
     icon: Users,
   },
   {
-    name: 'Rescue Reports',
-    href: '/admin/dashboard/rescue-reports',
-    icon: AlertCircle,
-  },
-  {
-    name: 'Gallery',
-    href: '/admin/dashboard/gallery',
-    icon: ImageIcon,
-  },
-  {
-    name: 'Events',
-    href: '/admin/dashboard/events',
-    icon: Calendar,
-  },
-  {
-    name: 'News & Updates',
-    href: '/admin/dashboard/news',
-    icon: Newspaper,
+    name: 'Activity Log',
+    href: '/admin/dashboard/activity',
+    icon: Activity,
   },
   ...(isSuperAdminUser ? [{
     name: 'Admin Management',

@@ -15,16 +15,21 @@ import {
   Clock,
   Loader2,
   AlertCircle,
+  CheckCircle2,
+  Key,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { logActivity, ActivityActions } from '@/lib/activity-logger';
 
 interface Admin {
   id: string;
   email: string;
   full_name: string;
   role: string;
+  status: string;
+  last_login: string | null;
   created_at: string;
 }
 
@@ -143,6 +148,13 @@ export default function AdminManagementPage() {
 
       if (inviteError) throw inviteError;
 
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_INVITED,
+        description: `Invited ${inviteEmail} as admin`,
+        metadata: { email: inviteEmail },
+      });
+
       setSuccess(`Invitation sent to ${inviteEmail}`);
       setInviteEmail('');
       fetchData();
@@ -165,6 +177,13 @@ export default function AdminManagementPage() {
 
       if (error) throw error;
 
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_APPROVED,
+        description: `Approved admin invitation for ${email}`,
+        metadata: { email },
+      });
+
       setSuccess(`Approved invitation for ${email}`);
       fetchData();
     } catch (err: any) {
@@ -183,6 +202,13 @@ export default function AdminManagementPage() {
 
       if (error) throw error;
 
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_REJECTED,
+        description: `Rejected admin invitation for ${email}`,
+        metadata: { email },
+      });
+
       setSuccess(`Rejected invitation for ${email}`);
       fetchData();
     } catch (err: any) {
@@ -190,13 +216,81 @@ export default function AdminManagementPage() {
     }
   };
 
-  const handleDisable = async (_adminId: string, email: string) => {
+  const handleDisable = async (adminId: string, email: string) => {
     if (!confirm(`Are you sure you want to disable ${email}?`)) return;
 
     try {
-      // In a real implementation, you would update a status field
-      // For now, we'll just show a message
+      const supabase = createClient();
+
+      // Update user profile status to disabled
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ status: 'disabled' })
+        .eq('id', adminId);
+
+      if (error) throw error;
+
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_DISABLED,
+        description: `Disabled admin ${email}`,
+        metadata: { email, adminId },
+      });
+
       setSuccess(`Admin ${email} has been disabled`);
+      fetchData();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleEnable = async (adminId: string, email: string) => {
+    try {
+      const supabase = createClient();
+
+      // Update user profile status to active
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ status: 'active' })
+        .eq('id', adminId);
+
+      if (error) throw error;
+
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_ENABLED,
+        description: `Enabled admin ${email}`,
+        metadata: { email, adminId },
+      });
+
+      setSuccess(`Admin ${email} has been enabled`);
+      fetchData();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleResetPassword = async (adminId: string, email: string) => {
+    if (!confirm(`Send password reset email to ${email}?`)) return;
+
+    try {
+      const supabase = createClient();
+
+      // Send password reset email
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/admin/reset-password`,
+      });
+
+      if (error) throw error;
+
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_PASSWORD_RESET,
+        description: `Sent password reset email to ${email}`,
+        metadata: { email, adminId },
+      });
+
+      setSuccess(`Password reset email sent to ${email}`);
     } catch (err: any) {
       setError(err.message);
     }
@@ -215,6 +309,13 @@ export default function AdminManagementPage() {
         .eq('id', adminId);
 
       if (error) throw error;
+
+      // Log activity
+      await logActivity({
+        action: ActivityActions.ADMIN_REMOVED,
+        description: `Removed admin ${email}`,
+        metadata: { email, adminId },
+      });
 
       setSuccess(`Admin ${email} has been removed`);
       fetchData();
@@ -369,35 +470,73 @@ export default function AdminManagementPage() {
               key={admin.id}
               className="flex items-center justify-between rounded-lg border border-gray-200 p-4"
             >
-              <div className="flex items-center gap-3">
-                {admin.role === 'super_admin' && (
-                  <Shield className="h-5 w-5 text-purple-600" />
-                )}
-                <div>
-                  <p className="font-medium text-gray-900">
-                    {admin.full_name || admin.email}
-                    {admin.role === 'super_admin' && (
-                      <span className="ml-2 text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
-                        Super Admin
-                      </span>
-                    )}
-                  </p>
-                  <p className="text-sm text-gray-500">{admin.email}</p>
-                  <p className="text-xs text-gray-400">
-                    Joined {new Date(admin.created_at).toLocaleDateString()}
-                  </p>
+              <div className="flex-1">
+                <div className="flex items-center gap-3">
+                  {admin.role === 'super_admin' && (
+                    <Shield className="h-5 w-5 text-purple-600" />
+                  )}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-gray-900">
+                        {admin.full_name || admin.email}
+                      </p>
+                      {admin.role === 'super_admin' && (
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                          Super Admin
+                        </span>
+                      )}
+                      {admin.status === 'disabled' && (
+                        <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+                          Disabled
+                        </span>
+                      )}
+                      {admin.status === 'active' && admin.role !== 'super_admin' && (
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                          Active
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500">{admin.email}</p>
+                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
+                      <span>Joined {new Date(admin.created_at).toLocaleDateString()}</span>
+                      {admin.last_login && (
+                        <span>Last login: {new Date(admin.last_login).toLocaleDateString()}</span>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
               {admin.role !== 'super_admin' && admin.id !== user.id && (
                 <div className="flex gap-2">
+                  {admin.status === 'active' ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDisable(admin.id, admin.email)}
+                      className="text-orange-600 hover:text-orange-700"
+                    >
+                      <Ban className="mr-1 h-4 w-4" />
+                      Disable
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleEnable(admin.id, admin.email)}
+                      className="text-green-600 hover:text-green-700"
+                    >
+                      <CheckCircle2 className="mr-1 h-4 w-4" />
+                      Enable
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleDisable(admin.id, admin.email)}
-                    className="text-orange-600 hover:text-orange-700"
+                    onClick={() => handleResetPassword(admin.id, admin.email)}
+                    className="text-blue-600 hover:text-blue-700"
                   >
-                    <Ban className="mr-1 h-4 w-4" />
-                    Disable
+                    <Key className="mr-1 h-4 w-4" />
+                    Reset
                   </Button>
                   <Button
                     size="sm"

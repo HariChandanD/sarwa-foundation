@@ -11,6 +11,7 @@ import {
   Eye,
   CheckCircle,
   Clock,
+  FileText,
 } from 'lucide-react';
 
 interface DashboardStats {
@@ -23,6 +24,15 @@ interface DashboardStats {
   pendingVolunteers: number;
   approvedVolunteers: number;
   rejectedVolunteers: number;
+  totalNewsPosts: number;
+}
+
+interface ActivityLog {
+  id: string;
+  action: string;
+  description: string;
+  created_at: string;
+  user_email: string;
 }
 
 export default function AdminDashboardPage() {
@@ -36,7 +46,9 @@ export default function AdminDashboardPage() {
     pendingVolunteers: 0,
     approvedVolunteers: 0,
     rejectedVolunteers: 0,
+    totalNewsPosts: 0,
   });
+  const [recentActivities, setRecentActivities] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -87,6 +99,15 @@ export default function AdminDashboardPage() {
 
         if (messagesError) throw messagesError;
 
+        // Fetch recent activity logs
+        const { data: activities } = await supabase
+          .from('activity_logs')
+          .select('id, action, description, created_at, user_email')
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        setRecentActivities(activities || []);
+
         setStats({
           totalVisitors: 12450, // Placeholder - would need analytics integration
           totalDonations: Math.round(totalDonations),
@@ -97,6 +118,7 @@ export default function AdminDashboardPage() {
           pendingVolunteers: pendingCount || 0,
           approvedVolunteers: approvedCount || 0,
           rejectedVolunteers: rejectedCount || 0,
+          totalNewsPosts: 0, // Placeholder - would need news/blog table
         });
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
@@ -165,7 +187,33 @@ export default function AdminDashboardPage() {
       trend: 'Review required',
       trendUp: false,
     },
+    {
+      title: 'News Posts',
+      value: stats.totalNewsPosts.toLocaleString(),
+      icon: FileText,
+      color: 'bg-indigo-500',
+      trend: 'Published',
+      trendUp: true,
+    },
   ];
+
+  const getActivityColor = (action: string) => {
+    if (action.includes('approved') || action.includes('donation')) return 'bg-green-500';
+    if (action.includes('rejected') || action.includes('disabled')) return 'bg-red-500';
+    if (action.includes('pending') || action.includes('invited')) return 'bg-yellow-500';
+    return 'bg-blue-500';
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+    return `${Math.floor(seconds / 86400)} days ago`;
+  };
 
   if (loading) {
     return (
@@ -231,29 +279,21 @@ export default function AdminDashboardPage() {
             </div>
             <h3 className="font-semibold text-gray-900">Recent Activity</h3>
           </div>
-          <ul className="space-y-3">
-            <li className="flex items-start gap-3 text-sm">
-              <div className="mt-1 h-2 w-2 rounded-full bg-green-500"></div>
-              <div>
-                <p className="text-gray-900">New donation received</p>
-                <p className="text-gray-500">₹5,000 - 2 hours ago</p>
-              </div>
-            </li>
-            <li className="flex items-start gap-3 text-sm">
-              <div className="mt-1 h-2 w-2 rounded-full bg-blue-500"></div>
-              <div>
-                <p className="text-gray-900">Volunteer application</p>
-                <p className="text-gray-500">John Doe - 5 hours ago</p>
-              </div>
-            </li>
-            <li className="flex items-start gap-3 text-sm">
-              <div className="mt-1 h-2 w-2 rounded-full bg-purple-500"></div>
-              <div>
-                <p className="text-gray-900">Contact form submission</p>
-                <p className="text-gray-500">Adoption inquiry - 1 day ago</p>
-              </div>
-            </li>
-          </ul>
+          {recentActivities.length > 0 ? (
+            <ul className="space-y-3">
+              {recentActivities.map((activity) => (
+                <li key={activity.id} className="flex items-start gap-3 text-sm">
+                  <div className={`mt-1 h-2 w-2 rounded-full ${getActivityColor(activity.action)}`}></div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-900 truncate">{activity.description}</p>
+                    <p className="text-gray-500 text-xs">{formatTimeAgo(activity.created_at)}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-gray-500">No recent activity</p>
+          )}
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-md">
