@@ -213,3 +213,14 @@ If you encounter issues:
 
 **Last Updated**: July 13, 2026  
 **Version**: 1.0.0
+### Migration 7: Fix CMS RLS Policies (CRITICAL - Run this if CMS pages fail to load)
+
+1. In Supabase dashboard, go to **SQL Editor**
+2. Click **New Query**
+3. Copy the contents of `supabase/migrations/20260714_fix_cms_rls_policies.sql`
+4. Paste into the SQL editor
+5. Click **Run** to execute
+
+This fixes Row Level Security policies to allow admins to view all CMS content (including inactive/draft items).
+
+---
