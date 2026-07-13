@@ -99,6 +99,15 @@ export default function VolunteersPage() {
     try {
       const supabase = createClient();
 
+      // Get current admin user
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
+
+      if (!currentUser) {
+        throw new Error('You must be logged in to approve applications');
+      }
+
       // Generate a temporary password
       const tempPassword = Math.random().toString(36).slice(-12) + 'A1!';
 
@@ -128,10 +137,6 @@ export default function VolunteersPage() {
       if (profileError) throw profileError;
 
       // Update application status
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
       const { error: updateError } = await supabase
         .from('volunteer_applications')
         .update({
@@ -139,7 +144,7 @@ export default function VolunteersPage() {
           user_id: authData.user.id,
           admin_notes: adminNotes,
           reviewed_at: new Date().toISOString(),
-          reviewed_by: user?.id,
+          reviewed_by: currentUser.id,
         })
         .eq('id', selectedApplication.id);
 

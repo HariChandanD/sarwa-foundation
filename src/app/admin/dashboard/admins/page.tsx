@@ -110,6 +110,13 @@ export default function AdminManagementPage() {
     setError(null);
     setSuccess(null);
 
+    // Verify user is authenticated
+    if (!user) {
+      setError('You must be logged in to invite admins');
+      setInviting(false);
+      return;
+    }
+
     try {
       const supabase = createClient();
 
