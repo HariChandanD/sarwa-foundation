@@ -1,6 +1,5 @@
 import { HeroSection } from '@/components/sections/HeroSection';
 import { ImpactStatsSection } from '@/components/sections/ImpactStatsSection';
-import { CTASection } from '@/components/sections/CTASection';
 import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -18,7 +17,7 @@ export default function HomePage() {
       />
 
       {/* About Preview Section */}
-      <section className="bg-white py-16">
+      <section className="bg-background py-20">
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="relative h-[400px] overflow-hidden rounded-2xl">
@@ -50,7 +49,7 @@ export default function HomePage() {
       </section>
 
       {/* What We Do Section */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-card py-20">
         <Container>
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
@@ -61,7 +60,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            <div className="rounded-xl bg-white p-8 shadow-sm">
+            <div className="rounded-xl bg-card p-8 shadow-sm">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
                 <svg
                   className="h-6 w-6 text-primary-600"
@@ -84,7 +83,7 @@ export default function HomePage() {
                 We respond to calls about abandoned, injured, or distressed animals in our community and provide immediate care and shelter.
               </p>
             </div>
-            <div className="rounded-xl bg-white p-8 shadow-sm">
+            <div className="rounded-xl bg-card p-8 shadow-sm">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
                 <svg
                   className="h-6 w-6 text-primary-600"
@@ -107,7 +106,7 @@ export default function HomePage() {
                 Every rescued animal receives necessary medical treatment, vaccinations, and spaying/neutering before adoption.
               </p>
             </div>
-            <div className="rounded-xl bg-white p-8 shadow-sm">
+            <div className="rounded-xl bg-card p-8 shadow-sm">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
                 <svg
                   className="h-6 w-6 text-primary-600"
@@ -141,7 +140,7 @@ export default function HomePage() {
       />
 
       {/* Recent Rescue Stories Section */}
-      <section className="bg-white py-16">
+      <section className="bg-background py-20">
         <Container>
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
@@ -152,7 +151,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            <div className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg">
+            <div className="overflow-hidden rounded-xl bg-card shadow-md transition-shadow hover:shadow-lg">
               <div className="relative h-64">
                 <Image
                   src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600&h=400&fit=crop"
@@ -173,7 +172,7 @@ export default function HomePage() {
                 </Button>
               </div>
             </div>
-            <div className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg">
+            <div className="overflow-hidden rounded-xl bg-card shadow-md transition-shadow hover:shadow-lg">
               <div className="relative h-64">
                 <Image
                   src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&h=400&fit=crop"
@@ -194,7 +193,7 @@ export default function HomePage() {
                 </Button>
               </div>
             </div>
-            <div className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg">
+            <div className="overflow-hidden rounded-xl bg-card shadow-md transition-shadow hover:shadow-lg">
               <div className="relative h-64">
                 <Image
                   src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&h=400&fit=crop"
@@ -225,7 +224,7 @@ export default function HomePage() {
       </section>
 
       {/* Gallery Preview Section */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-card py-20">
         <Container>
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
@@ -277,34 +276,22 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* CTA Section - Volunteer */}
-      <CTASection
-        variant="volunteer"
-        title="Join Our Community of Animal Lovers"
-        description="Make a hands-on difference in the lives of animals. Whether you have a few hours a week or want to foster, we need you."
-      />
-
-      {/* CTA Section - Donate */}
-      <CTASection
-        variant="donate"
-        title="Help Us Save More Lives"
-        description="Your donation directly supports rescue operations, medical care, and finding forever homes for animals in need."
-        className="mt-0"
-      />
-
-      {/* Contact Section */}
-      <section className="bg-primary-800 py-16 text-white">
+      {/* Combined CTA Section - Get Involved */}
+      <section className="bg-primary py-20 text-white">
         <Container>
           <div className="text-center">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-              Get in Touch
+            <h2 className="mb-6 text-3xl font-bold md:text-4xl">
+              Get Involved
             </h2>
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-primary-100">
-              Have questions or want to report an animal in need? We're here to help. Reach out to us anytime.
+            <p className="mx-auto mb-12 max-w-2xl text-lg text-primary-foreground/90">
+              Every contribution makes a difference. Whether you donate, volunteer, or spread the word, you're helping us save lives.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" variant="secondary">
-                <Link href="/contact">Contact Us</Link>
+              <Button asChild size="lg" variant="secondary" className="min-w-[200px]">
+                <Link href="/volunteer">Become a Volunteer</Link>
+              </Button>
+              <Button asChild size="lg" className="min-w-[200px] bg-accent hover:bg-accent/90">
+                <Link href="/donate">Donate Now</Link>
               </Button>
             </div>
           </div>

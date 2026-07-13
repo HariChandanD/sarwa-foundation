@@ -5,13 +5,12 @@ export const navigation = {
     { name: 'Programs', href: '/programs' },
     { name: 'Rescue Stories', href: '/rescue-stories' },
     { name: 'Adoption', href: '/adoption' },
+    { name: 'Volunteer', href: '/volunteer' },
     { name: 'Gallery', href: '/gallery' },
-    { name: 'Blog', href: '/blog' },
     { name: 'Contact', href: '/contact' },
   ],
   cta: [
     { name: 'Donate', href: '/donate', variant: 'default' as const },
-    { name: 'Volunteer', href: '/volunteer', variant: 'outline' as const },
   ],
 };
 

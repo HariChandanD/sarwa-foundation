@@ -4,25 +4,26 @@
 
 @layer base {
   :root {
-    --background: 60 14% 98%;
-    --foreground: 0 0% 18%;
-    --card: 60 14% 98%;
-    --card-foreground: 0 0% 18%;
-    --popover: 60 14% 98%;
-    --popover-foreground: 0 0% 18%;
-    --primary: 145 50% 33%;
+    /* Primary: #3F6B4B (Forest Sage) - HSL: 145, 26%, 34% */
+    --background: 45 35% 89%; /* #EDE1C1 cream background */
+    --foreground: 0 0% 17%; /* #2B2B2B text */
+    --card: 0 0% 100%; /* #FFFFFF white cards */
+    --card-foreground: 0 0% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 17%;
+    --primary: 145 26% 34%; /* #3F6B4B Forest Sage */
     --primary-foreground: 0 0% 100%;
-    --secondary: 145 50% 33%;
+    --secondary: 145 26% 34%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 60 14% 95%;
+    --muted: 45 35% 85%;
     --muted-foreground: 0 0% 45%;
-    --accent: 28 100% 48%;
+    --accent: 28 93% 47%; /* #D97706 Warm Amber */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 60 14% 90%;
-    --input: 60 14% 90%;
-    --ring: 145 50% 33%;
+    --border: 45 35% 80%;
+    --input: 45 35% 85%;
+    --ring: 145 26% 34%;
     --radius: 0.5rem;
   }
 
