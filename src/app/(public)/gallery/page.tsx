@@ -5,9 +5,9 @@ import { Heart, Image as ImageIcon, Video, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: 'Gallery - Sarwa Foundation',
+  title: 'Gallery - Sarwa Society for Animal Welfare',
   description:
-    'Browse photos and videos of rescued animals, adoption success stories, and our team in action at Sarwa Foundation.',
+    'Browse photos and videos of rescued animals, adoption success stories, and our team in action at Sarwa Society for Animal Welfare.',
 };
 
 const galleryItems = [

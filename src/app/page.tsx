@@ -21,8 +21,8 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="relative h-[400px] overflow-hidden rounded-lg">
               <Image
-                src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&h=600&fit=crop"
-                alt="Rescued animals"
+                src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&h=600&fit=crop"
+                alt="Volunteers caring for rescued street dogs"
                 fill
                 className="object-cover"
               />
@@ -147,8 +147,8 @@ export default function HomePage() {
             <div className="overflow-hidden rounded-lg bg-card shadow-sm">
               <div className="relative h-64">
                 <Image
-                  src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600&h=400&fit=crop"
-                  alt="Rescued dog"
+                  src="https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=600&h=400&fit=crop"
+                  alt="Rescued street dog recovering"
                   fill
                   className="object-cover"
                 />
@@ -230,8 +230,8 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div className="relative h-64 overflow-hidden rounded-lg">
               <Image
-                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&h=400&fit=crop"
-                alt="Happy adopted dog"
+                src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=400&h=400&fit=crop"
+                alt="Happy rescued dog with volunteer"
                 fill
                 className="object-cover transition-transform hover:scale-105"
               />
@@ -246,8 +246,8 @@ export default function HomePage() {
             </div>
             <div className="relative h-64 overflow-hidden rounded-lg">
               <Image
-                src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400&h=400&fit=crop"
-                alt="Playful puppy"
+                src="https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=400&h=400&fit=crop"
+                alt="Rescued puppy playing"
                 fill
                 className="object-cover transition-transform hover:scale-105"
               />

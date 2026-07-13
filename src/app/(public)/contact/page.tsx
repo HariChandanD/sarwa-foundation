@@ -348,7 +348,7 @@ export default function ContactPage() {
                       disabled={isSubmitting}
                     />
                     <Label htmlFor="consent" className="text-sm text-gray-600">
-                      I agree to be contacted by Sarwa Foundation regarding my
+                      I agree to be contacted by Sarwa Society for Animal Welfare regarding my
                       inquiry and understand that my information will be handled
                       according to the privacy policy.
                     </Label>

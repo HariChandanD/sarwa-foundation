@@ -12,9 +12,9 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us - Sarwa Foundation',
+  title: 'About Us - Sarwa Society for Animal Welfare',
   description:
-    'Learn about Sarwa Foundation - a community-driven animal welfare organization dedicated to rescue, rehabilitation, and adoption support.',
+    'Learn about Sarwa Society for Animal Welfare - a community-driven animal welfare organization dedicated to rescue, rehabilitation, and adoption support.',
 };
 
 export default function AboutPage() {
@@ -25,7 +25,7 @@ export default function AboutPage() {
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-              About Sarwa Foundation
+              About Sarwa Society for Animal Welfare
             </h1>
             <p className="text-lg text-white/90">
               A community-driven initiative dedicated to animal welfare
@@ -43,17 +43,21 @@ export default function AboutPage() {
                 Our Story
               </h2>
               <div className="space-y-4 text-gray-600">
-                <p>[Our Story]</p>
                 <p>
-                  Placeholder for the organization's founding story, how it
-                  started, and the journey so far.
+                  Sarwa Society for Animal Welfare was founded in 2023 by a group of passionate animal lovers in Bangalore who witnessed the growing need for organized animal welfare efforts in our community. We started with a simple mission: to provide immediate help to animals in distress and create a compassionate community that values all life.
+                </p>
+                <p>
+                  Our journey began with responding to emergency rescue calls for injured street dogs and abandoned puppies. What started as a small volunteer effort has grown into a registered charitable society dedicated to comprehensive animal welfare.
+                </p>
+                <p>
+                  Though we are a young organization, our commitment is strong. With the support of our dedicated volunteers and compassionate community members, we continue to grow and expand our reach.
                 </p>
               </div>
             </div>
             <div className="relative h-80 overflow-hidden rounded-lg">
               <Image
-                src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&h=600&fit=crop"
-                alt="Our Story"
+                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=600&fit=crop"
+                alt="Rescued dog receiving care"
                 fill
                 className="object-cover"
               />
@@ -74,9 +78,8 @@ export default function AboutPage() {
               <h2 className="mb-4 text-2xl font-bold text-gray-900">
                 Our Mission
               </h2>
-              <p className="text-gray-600">[Mission]</p>
-              <p className="mt-2 text-gray-600">
-                Placeholder for the organization's mission statement.
+              <p className="text-gray-600">
+                To rescue, rehabilitate, and rehome animals in need while promoting compassion and responsible pet ownership in our community.
               </p>
             </div>
 
@@ -88,9 +91,8 @@ export default function AboutPage() {
               <h2 className="mb-4 text-2xl font-bold text-gray-900">
                 Our Vision
               </h2>
-              <p className="text-gray-600">[Vision]</p>
-              <p className="mt-2 text-gray-600">
-                Placeholder for the organization's vision statement.
+              <p className="text-gray-600">
+                A world where every animal is treated with dignity, compassion, and respect, and where the bond between humans and animals is celebrated and protected.
               </p>
             </div>
           </div>
@@ -152,10 +154,11 @@ export default function AboutPage() {
               Why We Started
             </h2>
             <div className="space-y-4 text-gray-600">
-              <p>[Why We Started]</p>
               <p>
-                Placeholder for the story behind why the organization was
-                founded and what drives the work.
+                We started because we saw too many animals suffering on the streets without help. Every day, injured dogs, abandoned puppies, and sick cats needed immediate care but had nowhere to turn.
+              </p>
+              <p>
+                Our founders realized that while individual efforts were valuable, organized action could create lasting change. We came together to build a community-driven organization that could respond quickly to emergencies and provide sustained support for animal welfare.
               </p>
             </div>
           </div>
@@ -215,17 +218,25 @@ export default function AboutPage() {
                   </h3>
                 </div>
                 <div className="space-y-3 text-gray-600">
+                  <div className="flex flex-col gap-2 border-b border-gray-200 pb-3 sm:flex-row sm:justify-between">
+                    <span className="font-medium">Registered Name:</span>
+                    <span className="text-right">SARWA SOCIETY FOR ADVOCACY OF RIGHTS AND WELFARE OF ANIMALS</span>
+                  </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">Registration Number:</span>
-                    <span>[Registration Number]</span>
+                    <span>ABBTS8549JE20231</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">Registration Date:</span>
-                    <span>[Registration Date]</span>
+                    <span>06-11-2023</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-medium">Registered Under:</span>
-                    <span>[Act/Authority Name]</span>
+                  <div className="flex flex-col gap-2 border-b border-gray-200 pb-3 sm:flex-row sm:justify-between">
+                    <span className="font-medium">Registered Office:</span>
+                    <span className="text-right">24, 4th B main 4th Cross, Mahalakshmilayout, Bangalore, Karnataka 560086</span>
+                  </div>
+                  <div className="flex justify-between pb-2">
+                    <span className="font-medium">Nature of Organisation:</span>
+                    <span>Charitable</span>
                   </div>
                 </div>
               </div>
@@ -241,11 +252,11 @@ export default function AboutPage() {
                 <div className="space-y-3 text-gray-600">
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">12A Registration:</span>
-                    <span>[12A Details or N/A]</span>
+                    <span>Provisional (AY 2024-25 to AY 2026-2027)</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">80G Certification:</span>
-                    <span>[80G Details or N/A]</span>
+                    <span>Application in process</span>
                   </div>
                 </div>
               </div>
@@ -261,28 +272,58 @@ export default function AboutPage() {
                 <div className="space-y-3 text-gray-600">
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">CSR Registration:</span>
-                    <span>[CSR Information or N/A]</span>
+                    <span>Not applicable</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
                     <span className="font-medium">FCRA Status:</span>
-                    <span>[FCRA Details or N/A]</span>
+                    <span>Not registered</span>
                   </div>
                 </div>
               </div>
 
-              {/* Documents Section */}
-              <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center">
-                <FileText className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                <h4 className="mb-2 text-lg font-semibold text-gray-900">
-                  Registration Documents
-                </h4>
+              {/* Official Documents Section */}
+              <div className="rounded-lg bg-card p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <FileText className="h-6 w-6 text-primary" />
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Official Documents
+                  </h3>
+                </div>
                 <p className="mb-4 text-sm text-gray-600">
-                  Official registration certificates and documents will be
-                  displayed here
+                  View and download our official registration documents
                 </p>
-                <p className="text-xs text-gray-500">
-                  Documents can be uploaded as scanned PDFs or images
-                </p>
+                <div className="space-y-3">
+                  <a
+                    href="/documents/registration-certificate.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium text-gray-900">Registration Certificate</p>
+                        <p className="text-sm text-gray-500">Form 10AC - Section 12A Registration</p>
+                      </div>
+                    </div>
+                    <span className="text-sm text-primary">View PDF →</span>
+                  </a>
+                  <a
+                    href="/documents/form-10bd-acknowledgement.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium text-gray-900">Form 10BD Acknowledgement</p>
+                        <p className="text-sm text-gray-500">Annual Return Acknowledgement</p>
+                      </div>
+                    </div>
+                    <span className="text-sm text-primary">View PDF →</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -5,9 +5,9 @@ import { Heart, Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: 'Rescue Stories - Sarwa Foundation',
+  title: 'Rescue Stories - Sarwa Society for Animal Welfare',
   description:
-    'Read inspiring stories of animals rescued, rehabilitated, and rehomed by Sarwa Foundation. Every story is a testament to hope and compassion.',
+    'Read inspiring stories of animals rescued, rehabilitated, and rehomed by Sarwa Society for Animal Welfare. Every story is a testament to hope and compassion.',
 };
 
 const stories = [

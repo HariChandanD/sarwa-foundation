@@ -6,9 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: 'Adopt a Pet - Sarwa Foundation',
+  title: 'Adopt a Pet - Sarwa Society for Animal Welfare',
   description:
-    'Give a rescued animal a forever home. Browse our adoptable pets and find your perfect companion at Sarwa Foundation.',
+    'Give a rescued animal a forever home. Browse our adoptable pets and find your perfect companion at Sarwa Society for Animal Welfare.',
 };
 
 const adoptablePets = [

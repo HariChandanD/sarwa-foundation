@@ -7,7 +7,7 @@ export const hero = {
     secondaryCTA: { text: 'Learn More', href: '/about' },
   },
   about: {
-    title: 'About Sarwa Foundation',
+    title: 'About Sarwa Society for Animal Welfare',
     subtitle: 'Dedicated to Animal Welfare Since 2010',
     primaryCTA: { text: 'Support Our Mission', href: '/donate' },
     secondaryCTA: { text: 'Join Our Team', href: '/volunteer' },
@@ -50,7 +50,7 @@ export const hero = {
   },
   blog: {
     title: 'Latest Updates',
-    subtitle: 'News, Stories, and Insights from Sarwa Foundation',
+    subtitle: 'News, Stories, and Insights from Sarwa Society for Animal Welfare',
     description:
       'Stay updated with our latest rescue stories, animal care tips, and community initiatives.',
   },

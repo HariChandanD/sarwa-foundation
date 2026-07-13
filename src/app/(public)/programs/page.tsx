@@ -13,9 +13,9 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Our Programs - Sarwa Foundation',
+  title: 'Our Programs - Sarwa Society for Animal Welfare',
   description:
-    "Discover Sarwa Foundation's comprehensive programs including rescue operations, medical care, adoption services, and community education.",
+    "Discover Sarwa Society for Animal Welfare's comprehensive programs including rescue operations, medical care, adoption services, and community education.",
 };
 
 const programs = [

@@ -2,10 +2,10 @@ export const about = {
   story: {
     title: 'Our Story',
     content: [
-      "What began as a small group of animal lovers in 2010 has grown into one of the region's most trusted animal welfare organizations. Sarwa Foundation was born from a simple belief: every animal deserves compassion, care, and a chance at a better life.",
-      "Our journey started with rescuing stray dogs from the streets of Mumbai. Today, we've expanded our reach to include cats, birds, and other animals in distress. From injured animals nursed back to health to abandoned pets finding their forever homes.",
-      "Today, Sarwa Foundation stands as a beacon of hope for animals in distress. We've rescued over 10,000 animals, facilitated 5,000+ adoptions, and provided medical care to thousands more. But our work is far from over.",
-      "Every day, we encounter animals who need our help – whether it's emergency medical care, shelter from harsh conditions, or simply a loving home. With the support of our dedicated volunteers, generous donors, and compassionate community, we continue to make a difference, one life at a time.",
+      "Sarwa Society for Animal Welfare was founded in 2023 by a group of passionate animal lovers in Bangalore who witnessed the growing need for organized animal welfare efforts in our community. We started with a simple mission: to provide immediate help to animals in distress and create a compassionate community that values all life.",
+      "Our journey began with responding to emergency rescue calls for injured street dogs and abandoned puppies. What started as a small volunteer effort has grown into a registered charitable society dedicated to comprehensive animal welfare. We work closely with local communities, veterinarians, and animal lovers to provide rescue, medical care, and rehabilitation services.",
+      "Today, we focus on rescuing stray animals, providing emergency medical treatment, facilitating adoptions, and educating the community about responsible pet ownership and animal welfare. Every animal that comes to us receives the care, love, and attention they deserve.",
+      "Though we are a young organization, our commitment is strong. With the support of our dedicated volunteers, generous donors, and compassionate community members, we continue to grow and expand our reach. Every rescue, every treatment, every adoption is a step toward our vision of a more compassionate world for animals.",
     ],
   },
   values: [

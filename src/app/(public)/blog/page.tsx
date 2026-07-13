@@ -5,9 +5,9 @@ import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: 'Blog - Sarwa Foundation',
+  title: 'Blog - Sarwa Society for Animal Welfare',
   description:
-    'Read the latest news, stories, and insights about animal welfare from Sarwa Foundation. Stay updated on our rescue operations and success stories.',
+    'Read the latest news, stories, and insights about animal welfare from Sarwa Society for Animal Welfare. Stay updated on our rescue operations and success stories.',
 };
 
 const blogPosts = [
@@ -79,7 +79,7 @@ const blogPosts = [
     title: 'Volunteer Spotlight: Meet the Heroes Behind Our Rescue Operations',
     excerpt:
       'Get to know the dedicated volunteers who work tirelessly to rescue and rehabilitate animals in need.',
-    author: 'Sarwa Foundation Team',
+    author: 'Sarwa Society for Animal Welfare Team',
     date: '2024-01-03',
     readTime: '5 min read',
     category: 'Volunteers',

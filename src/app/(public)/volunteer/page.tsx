@@ -152,7 +152,7 @@ export default function VolunteerPage() {
         <Container>
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-              Why Volunteer With Sarwa Foundation?
+              Why Volunteer With Sarwa Society for Animal Welfare?
             </h2>
             <p className="mx-auto max-w-3xl text-lg text-gray-600">
               Volunteering is more than just giving your time—it's about being
@@ -467,7 +467,7 @@ export default function VolunteerPage() {
                 name: 'Priya Sharma',
                 role: 'Animal Care Volunteer',
                 quote:
-                  'Volunteering at Sarwa Foundation has been the most rewarding experience. Seeing animals recover and find homes is priceless.',
+                  'Volunteering at Sarwa Society for Animal Welfare has been the most rewarding experience. Seeing animals recover and find homes is priceless.',
               },
               {
                 name: 'Rahul Mehta',

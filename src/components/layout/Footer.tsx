@@ -61,11 +61,11 @@ export function Footer() {
                 <Heart className="h-6 w-6 fill-white text-white" />
               </div>
               <span className="text-xl font-bold text-white">
-                Sarwa Foundation
+                Sarwa Society
               </span>
             </Link>
             <p className="mb-6 max-w-md text-sm text-gray-400">
-              Sarwa Foundation is dedicated to rescuing, rehabilitating, and
+              Sarwa Society for Animal Welfare is dedicated to rescuing, rehabilitating, and
               rehoming animals in need. Every life matters, and together we can
               make a difference.
             </p>
@@ -78,7 +78,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3 text-sm">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>contact@sarwafoundation.org</span>
+                <span>contact@sarwasociety.org</span>
               </div>
               <div className="flex items-center space-x-3 text-sm">
                 <MapPin className="h-4 w-4 text-primary" />
@@ -183,7 +183,7 @@ export function Footer() {
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
             <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} Sarwa Foundation. All rights
+              © {new Date().getFullYear()} Sarwa Society for Animal Welfare. All rights
               reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-6">
