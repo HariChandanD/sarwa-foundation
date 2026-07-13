@@ -1,81 +1,57 @@
 import { Metadata } from 'next';
-import { HeroSection } from '@/components/sections/HeroSection';
 import { Container } from '@/components/layout/Container';
-import { Heart, Calendar, MapPin, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { Heart, MapPin, Users, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
   title: 'Rescue Stories - Sarwa Society for Animal Welfare',
   description:
-    'Read inspiring stories of animals rescued, rehabilitated, and rehomed by Sarwa Society for Animal Welfare. Every story is a testament to hope and compassion.',
+    'Real rescue stories from SARWA - on-site emergency response, veterinary coordination, and community-driven animal welfare in action.',
 };
 
-const stories = [
+const placeholderStories = [
   {
     id: 1,
-    title: "Max's Journey: From Street to Forever Home",
-    excerpt:
-      "Found injured and alone on a busy highway, Max's transformation is nothing short of miraculous. Today, he's a beloved family member.",
-    image: '/images/stories/max.jpg',
-    date: '2024-01-15',
-    location: 'Mumbai',
-    category: 'Success Story',
-    readTime: '5 min read',
+    animalType: 'Street Dog',
+    image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=600&fit=crop',
+    location: 'Bangalore',
+    status: 'Coming Soon',
   },
   {
     id: 2,
-    title: 'The Miracle of Luna: A Second Chance at Life',
-    excerpt:
-      "Rescued from a construction site with severe injuries, Luna's recovery journey inspired our entire team and community.",
-    image: '/images/stories/luna.jpg',
-    date: '2024-01-10',
-    location: 'Delhi',
-    category: 'Medical Rescue',
-    readTime: '7 min read',
+    animalType: 'Cow',
+    image: 'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=800&h=600&fit=crop',
+    location: 'Bangalore',
+    status: 'Coming Soon',
   },
   {
     id: 3,
-    title: "Bella and Her Puppies: A Mother's Love",
-    excerpt:
-      'A pregnant street dog found shelter just in time. Bella and all her puppies found loving homes.',
-    image: '/images/stories/bella.jpg',
-    date: '2024-01-05',
+    animalType: 'Calf',
+    image: 'https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?w=800&h=600&fit=crop',
     location: 'Bangalore',
-    category: 'Rescue & Adoption',
-    readTime: '6 min read',
+    status: 'Coming Soon',
   },
   {
     id: 4,
-    title: "Rocky's Recovery: Against All Odds",
-    excerpt:
-      "Hit by a vehicle and left for dead, Rocky's will to survive and our team's dedication brought him back to health.",
-    image: '/images/stories/rocky.jpg',
-    date: '2023-12-28',
-    location: 'Pune',
-    category: 'Emergency Rescue',
-    readTime: '8 min read',
+    animalType: 'Puppy',
+    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=600&fit=crop',
+    location: 'Bangalore',
+    status: 'Coming Soon',
   },
   {
     id: 5,
-    title: 'Whiskers: The Cat Who Came Back',
-    excerpt:
-      'Lost for months, Whiskers was reunited with his family through our microchip scanning program.',
-    image: '/images/stories/whiskers.jpg',
-    date: '2023-12-20',
-    location: 'Chennai',
-    category: 'Reunion',
-    readTime: '4 min read',
+    animalType: 'Cat',
+    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=600&fit=crop',
+    location: 'Bangalore',
+    status: 'Coming Soon',
   },
   {
     id: 6,
-    title: 'The Great Flood Rescue: 50 Lives Saved',
-    excerpt:
-      'When floods hit the region, our team worked tirelessly to rescue 50 animals trapped in rising waters.',
-    image: '/images/stories/flood-rescue.jpg',
-    date: '2023-12-15',
-    location: 'Kerala',
-    category: 'Disaster Response',
-    readTime: '10 min read',
+    animalType: 'Rescue Operation',
+    image: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&h=600&fit=crop',
+    location: 'Bangalore',
+    status: 'Coming Soon',
   },
 ];
 
@@ -83,149 +59,164 @@ export default function RescueStoriesPage() {
   return (
     <>
       {/* Hero Section */}
-      <HeroSection
-        variant="about"
-        title="Rescue Stories"
-        subtitle="Every rescue is a story of hope, resilience, and the power of compassion. These are the lives we've touched and the hearts we've healed."
-        primaryCTA={{ text: 'Support More Rescues', href: '/donate' }}
-        secondaryCTA={{ text: 'Share Your Story', href: '/contact' }}
-      />
-
-      {/* Stories Grid */}
-      <section className="bg-white py-20">
+      <section className="bg-primary py-16 text-white">
         <Container>
-          <div className="mb-16 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-              Stories of Hope and Transformation
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+              Rescue Stories
+            </h1>
+            <p className="text-lg text-white/90">
+              Real stories of hope, compassion, and community action
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Our Rescue Philosophy */}
+      <section className="bg-white py-16">
+        <Container>
+          <div className="mx-auto max-w-4xl">
+            <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">
+              Our Rescue Approach
             </h2>
-            <p className="mx-auto max-w-3xl text-lg text-gray-600">
-              Each story represents a life saved, a family completed, and a
-              community inspired to make a difference.
+            <div className="space-y-6 text-gray-600">
+              <p className="text-lg">
+                At SARWA, every rescue begins with a call from a concerned community member. Our approach is built on rapid response, on-site emergency care, and collaborative partnerships that ensure every animal receives the help they need.
+              </p>
+              
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="rounded-lg bg-background p-6">
+                  <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <Heart className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                    On-Site Emergency Response
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Our trained volunteers provide immediate first aid and emergency medical care directly at the rescue location, reducing stress and enabling faster treatment.
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-background p-6">
+                  <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <Users className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                    Veterinary Coordination
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    We work closely with veterinary partners and organizations like CUPA for specialized treatment, surgery, and long-term rehabilitation when needed.
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-background p-6">
+                  <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <MapPin className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                    Community Participation
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Every rescue is made possible through the support of compassionate volunteers, donors, and community members who share our vision.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Rescue Stories Grid */}
+      <section className="bg-background py-16">
+        <Container>
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">
+              Rescue Stories
+            </h2>
+            <p className="mx-auto max-w-2xl text-gray-600">
+              Each rescue represents a life saved through community action and compassionate care. Real SARWA rescue stories will be shared here as they happen.
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {stories.map((story) => (
+            {placeholderStories.map((story) => (
               <article
                 key={story.id}
-                className="group overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                className="overflow-hidden rounded-lg bg-white shadow-md"
               >
                 {/* Image */}
-                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Heart className="h-24 w-24 text-primary/30" />
-                  </div>
+                <div className="relative h-64 overflow-hidden">
+                  <Image
+                    src={story.image}
+                    alt={`${story.animalType} rescue`}
+                    fill
+                    className="object-cover"
+                  />
                   <div className="absolute left-4 top-4">
                     <Badge className="bg-white text-primary">
-                      {story.category}
+                      {story.status}
                     </Badge>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-primary">
-                    {story.title}
+                  <h3 className="mb-3 text-xl font-bold text-gray-900">
+                    {story.animalType}
                   </h3>
-                  <p className="mb-4 line-clamp-3 text-gray-600">
-                    {story.excerpt}
-                  </p>
-
-                  {/* Meta */}
-                  <div className="mb-4 flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center gap-4">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        {new Date(story.date).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        {story.location}
-                      </span>
+                  
+                  <div className="mb-4 space-y-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      <span>Rescue Location: {story.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-primary" />
+                      <span>Date: To be updated</span>
                     </div>
                   </div>
 
-                  {/* Read More */}
-                  <a
-                    href={`/rescue-stories/${story.id}`}
-                    className="inline-flex items-center font-medium text-primary transition-all hover:gap-2"
-                  >
-                    Read Full Story
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </a>
+                  <div className="rounded-lg bg-background p-4">
+                    <p className="text-sm font-medium text-gray-900">
+                      Real SARWA rescue story coming soon.
+                    </p>
+                    <div className="mt-3 space-y-1 text-xs text-gray-600">
+                      <p>• Rescue summary</p>
+                      <p>• Treatment provided</p>
+                      <p>• Current status</p>
+                    </div>
+                  </div>
                 </div>
               </article>
-            ))}
-          </div>
-
-          {/* Load More */}
-          <div className="mt-12 text-center">
-            <button className="rounded-lg bg-primary px-8 py-3 font-medium text-white transition-colors hover:bg-primary/90">
-              Load More Stories
-            </button>
-          </div>
-        </Container>
-      </section>
-
-      {/* Impact Stats */}
-      <section className="bg-gray-50 py-20">
-        <Container>
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-              Every Story Matters
-            </h2>
-            <p className="mx-auto max-w-3xl text-lg text-gray-600">
-              Behind every number is a life transformed, a family reunited, or a
-              community inspired.
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-4">
-            {[
-              { value: '10,000+', label: 'Animals Rescued' },
-              { value: '5,000+', label: 'Adoption Success' },
-              { value: '98%', label: 'Recovery Rate' },
-              { value: '24/7', label: 'Emergency Response' },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="mb-2 text-4xl font-bold text-primary md:text-5xl">
-                  {stat.value}
-                </div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
             ))}
           </div>
         </Container>
       </section>
 
       {/* Call to Action */}
-      <section className="bg-gradient-to-br from-primary to-secondary py-20 text-white">
+      <section className="bg-primary py-16 text-white">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-6 text-3xl font-bold md:text-4xl">
-              Be Part of the Next Success Story
+            <h2 className="mb-4 text-3xl font-bold">
+              Every Rescue is Possible Because of Volunteers and Donors
             </h2>
-            <p className="mb-8 text-xl text-white/90">
-              Your support helps us rescue more animals and create more happy
-              endings. Every contribution makes a difference.
+            <p className="mb-8 text-lg text-white/90">
+              Join us in making a difference for animals in need. Your support enables us to respond quickly to emergencies and provide compassionate care.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <a
-                href="/donate"
+                href="/volunteer"
                 className="inline-flex items-center justify-center rounded-lg bg-white px-8 py-3 font-medium text-primary transition-colors hover:bg-white/90"
               >
-                <Heart className="mr-2 h-5 w-5" />
-                Donate Now
+                <Users className="mr-2 h-5 w-5" />
+                Volunteer
               </a>
               <a
-                href="/volunteer"
+                href="/donate"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-white bg-transparent px-8 py-3 font-medium text-white transition-colors hover:bg-white/10"
               >
-                Volunteer With Us
+                <Heart className="mr-2 h-5 w-5" />
+                Donate
               </a>
             </div>
           </div>
