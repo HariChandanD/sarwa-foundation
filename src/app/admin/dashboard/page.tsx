@@ -8,14 +8,12 @@ import {
   Calendar,
   AlertCircle,
   TrendingUp,
-  Eye,
   CheckCircle,
   Clock,
   FileText,
 } from 'lucide-react';
 
 interface DashboardStats {
-  totalVisitors: number;
   totalDonations: number;
   monthlyDonations: number;
   volunteers: number;
@@ -37,7 +35,6 @@ interface ActivityLog {
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats>({
-    totalVisitors: 0,
     totalDonations: 0,
     monthlyDonations: 0,
     volunteers: 0,
@@ -92,33 +89,40 @@ export default function AdminDashboardPage() {
           .eq('status', 'rejected');
 
         // Fetch contact messages count (as pending reports)
-        const { count: messagesCount, error: messagesError } = await supabase
+        const { count: messagesCount } = await supabase
           .from('contact_messages')
           .select('*', { count: 'exact', head: true });
 
-        if (messagesError) throw messagesError;
+        // Fetch events count
+        const { count: eventsCount } = await supabase
+          .from('events')
+          .select('*', { count: 'exact', head: true });
+
+        // Fetch news articles count
+        const { count: newsCount } = await supabase
+          .from('news_articles')
+          .select('*', { count: 'exact', head: true });
 
         // Fetch recent activity logs
         const { data: activities } = await supabase
           .from('activity_logs')
           .select('id, action, description, created_at, user_email')
-          .order('created_at', { ascending: false })
+          .order('created_at', { ascending: false})
           .limit(5);
 
         setRecentActivities(activities || []);
 
         setStats({
-          totalVisitors: 12450, // Placeholder - would need analytics integration
           totalDonations: Math.round(totalDonations),
           monthlyDonations: Math.round(monthlyDonations),
           volunteers:
             (approvedCount || 0) + (pendingCount || 0) + (rejectedCount || 0),
-          events: 8, // Placeholder - would need events table
+          events: eventsCount || 0,
           pendingReports: messagesCount || 0,
           pendingVolunteers: pendingCount || 0,
           approvedVolunteers: approvedCount || 0,
           rejectedVolunteers: rejectedCount || 0,
-          totalNewsPosts: 0, // Placeholder - would need news/blog table
+          totalNewsPosts: newsCount || 0,
         });
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
@@ -132,60 +136,40 @@ export default function AdminDashboardPage() {
 
   const cards = [
     {
-      title: 'Total Visitors',
-      value: stats.totalVisitors.toLocaleString(),
-      icon: Eye,
-      color: 'bg-blue-500',
-      trend: '+12.5%',
-      trendUp: true,
-    },
-    {
       title: 'Total Donations',
       value: `₹${stats.totalDonations.toLocaleString()}`,
       icon: DollarSign,
       color: 'bg-green-500',
-      trend: '+8.2%',
-      trendUp: true,
     },
     {
       title: 'Monthly Donations',
       value: `₹${stats.monthlyDonations.toLocaleString()}`,
       icon: TrendingUp,
       color: 'bg-emerald-500',
-      trend: '+15.3%',
-      trendUp: true,
     },
     {
       title: 'Volunteers',
       value: stats.volunteers.toLocaleString(),
       icon: Users,
       color: 'bg-purple-500',
-      trend: '+5.7%',
-      trendUp: true,
     },
     {
       title: 'Events',
       value: stats.events.toLocaleString(),
       icon: Calendar,
       color: 'bg-orange-500',
-      trend: '2 upcoming',
-      trendUp: true,
     },
     {
       title: 'Pending Reports',
       value: stats.pendingReports.toLocaleString(),
       icon: AlertCircle,
       color: 'bg-red-500',
-      trend: 'Needs attention',
-      trendUp: false,
     },
     {
       title: 'Pending Approvals',
       value: stats.pendingVolunteers.toLocaleString(),
       icon: Clock,
       color: 'bg-yellow-500',
-      trend: 'Review required',
-      trendUp: false,
     },
     {
       title: 'News Posts',

@@ -76,9 +76,12 @@ export default function AdminManagementPage() {
         .from('user_profiles')
         .select('*')
         .in('role', ['admin', 'super_admin'])
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false});
 
-      if (adminsError) throw adminsError;
+      if (adminsError) {
+        console.error('Error fetching admins:', adminsError);
+        throw new Error(`Failed to load admins: ${adminsError.message}`);
+      }
       setAdmins(adminsData || []);
 
       // Fetch pending invitations
@@ -88,11 +91,15 @@ export default function AdminManagementPage() {
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
-      if (invitationsError) throw invitationsError;
+      if (invitationsError) {
+        console.error('Error fetching invitations:', invitationsError);
+        throw new Error(`Failed to load invitations: ${invitationsError.message}`);
+      }
       setInvitations(invitationsData || []);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : 'An error occurred';
+        err instanceof Error ? err.message : 'An error occurred while loading admin data';
+      console.error('Admin management error:', err);
       setError(errorMessage);
     } finally {
       setLoading(false);

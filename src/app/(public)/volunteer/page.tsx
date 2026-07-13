@@ -129,7 +129,10 @@ export default function VolunteerPage() {
         .from('volunteer_applications')
         .insert(applicationData);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Volunteer application error:', error);
+        throw new Error(error.message || 'Failed to submit application. Please try again.');
+      }
 
       setSubmitStatus({
         type: 'success',
