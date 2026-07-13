@@ -261,23 +261,36 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              {/* CSR Information */}
+              {/* Corporate Partnerships */}
               <div className="rounded-lg bg-card p-6">
                 <div className="mb-4 flex items-center gap-3">
                   <Users className="h-6 w-6 text-primary" />
                   <h3 className="text-xl font-semibold text-gray-900">
-                    CSR Eligibility
+                    Corporate Partnerships
                   </h3>
                 </div>
                 <div className="space-y-3 text-gray-600">
                   <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-medium">CSR Registration:</span>
-                    <span>Not applicable</span>
+                    <span className="font-medium">CSR Partnerships:</span>
+                    <span>Open to CSR partnerships and corporate collaborations</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-2">
-                    <span className="font-medium">FCRA Status:</span>
-                    <span>Not registered</span>
+                    <span className="font-medium">12A Registration:</span>
+                    <span>Provisional (AY 2024-25 to AY 2026-2027)</span>
                   </div>
+                  <div className="flex justify-between border-b border-gray-200 pb-2">
+                    <span className="font-medium">80G Status:</span>
+                    <span>Application in Process</span>
+                  </div>
+                  <div className="flex justify-between pb-2">
+                    <span className="font-medium">FCRA Status:</span>
+                    <span>Not Registered (Domestic donations only)</span>
+                  </div>
+                </div>
+                <div className="mt-4 rounded-lg bg-background p-4">
+                  <p className="text-sm text-gray-600">
+                    We welcome CSR partnerships, employee volunteering programs, and community animal welfare initiatives with responsible corporate organizations.
+                  </p>
                 </div>
               </div>
 
