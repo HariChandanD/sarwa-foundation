@@ -316,6 +316,7 @@ export default function NewsCMSPage() {
                 className="flex items-center gap-4 rounded-lg border border-gray-200 p-4"
               >
                 {article.featured_image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={article.featured_image_url}
                     alt={article.title}

@@ -8,7 +8,7 @@ import { SaveButton } from '@/components/cms/SaveButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckCircle, Plus, Trash2, Edit, X, Star } from 'lucide-react';
+import { AlertCircle, CheckCircle, Trash2, Edit, X, Star } from 'lucide-react';
 
 export default function StoriesCMSPage() {
   const [stories, setStories] = useState<RescueStory[]>([]);
@@ -275,6 +275,7 @@ export default function StoriesCMSPage() {
                 className="flex items-center gap-4 rounded-lg border border-gray-200 p-4"
               >
                 {story.before_image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={story.before_image_url}
                     alt={story.animal_name}

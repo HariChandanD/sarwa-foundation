@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import {
   AlertCircle,
   CheckCircle,
-  Plus,
   Trash2,
   Edit,
   X,
@@ -300,6 +299,7 @@ export default function ProgramsCMSPage() {
                 <GripVertical className="h-5 w-5 text-gray-400" />
                 
                 {program.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={program.image_url}
                     alt={program.title}

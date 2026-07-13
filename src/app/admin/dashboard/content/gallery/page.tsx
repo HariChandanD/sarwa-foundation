@@ -260,6 +260,7 @@ export default function GalleryCMSPage() {
                 className="group relative overflow-hidden rounded-lg border border-gray-200"
               >
                 {item.media_type === 'image' ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={item.media_url}
                     alt={item.title || 'Gallery image'}

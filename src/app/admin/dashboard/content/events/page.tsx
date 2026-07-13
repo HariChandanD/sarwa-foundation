@@ -360,6 +360,7 @@ export default function EventsCMSPage() {
                 className="flex items-center gap-4 rounded-lg border border-gray-200 p-4"
               >
                 {event.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={event.image_url}
                     alt={event.title}
