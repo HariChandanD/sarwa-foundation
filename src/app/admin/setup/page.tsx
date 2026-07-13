@@ -8,39 +8,40 @@ import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Shield, Mail, Lock, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Shield, Mail, Lock, User, Loader2, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react';
 
-export default function AdminLoginPage() {
+export default function SuperAdminSetupPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [superAdminExists, setSuperAdminExists] = useState(false);
 
   useEffect(() => {
-    checkSuperAdminSetup();
+    checkSuperAdminExists();
   }, []);
 
-  const checkSuperAdminSetup = async () => {
+  const checkSuperAdminExists = async () => {
     try {
       const supabase = createClient();
       
-      // Check if any super admin or admin exists
+      // Check if any super admin exists
       const { data, error } = await supabase
         .from('user_profiles')
         .select('id')
-        .in('role', ['super_admin', 'admin'])
+        .eq('role', 'super_admin')
         .limit(1);
 
       if (error) throw error;
 
-      // If no admin exists at all, redirect to setup
-      if (!data || data.length === 0) {
-        router.push('/admin/setup');
-        return;
+      if (data && data.length > 0) {
+        setSuperAdminExists(true);
+        // Redirect to login if super admin already exists
+        router.push('/admin/login');
       }
     } catch (err) {
-      console.error('Error checking setup:', err);
+      console.error('Error checking super admin:', err);
     } finally {
       setIsChecking(false);
     }
@@ -52,34 +53,64 @@ export default function AdminLoginPage() {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
+    const fullName = formData.get('fullName') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+
+    // Validation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const supabase = createClient();
 
-      // Sign in with Supabase Auth
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // Double-check that no super admin exists
+      const { data: existingAdmin } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('role', 'super_admin')
+        .limit(1);
 
-      if (signInError) throw signInError;
-
-      // Check if user has admin or super_admin role
-      const userRole = data.user?.user_metadata?.role;
-      
-      if (userRole !== 'admin' && userRole !== 'super_admin') {
-        await supabase.auth.signOut();
-        throw new Error('Access denied. Admin credentials required.');
+      if (existingAdmin && existingAdmin.length > 0) {
+        setError('Super Admin already exists. Please login instead.');
+        setTimeout(() => router.push('/admin/login'), 2000);
+        return;
       }
 
-      // Redirect to admin dashboard
+      // Create the super admin user
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            role: 'super_admin',
+          },
+        },
+      });
+
+      if (signUpError) throw signUpError;
+
+      if (!authData.user) {
+        throw new Error('Failed to create user');
+      }
+
+      // Success - redirect to dashboard
       router.push('/admin/dashboard');
       router.refresh();
     } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.message || 'Invalid email or password. Please try again.');
+      console.error('Setup error:', err);
+      setError(err.message || 'Failed to create Super Admin. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +121,19 @@ export default function AdminLoginPage() {
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Checking system status...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (superAdminExists) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <CheckCircle className="mx-auto h-16 w-16 text-green-600 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Setup Complete</h2>
+          <p className="text-gray-600 mb-4">Super Admin already exists. Redirecting to login...</p>
         </div>
       </div>
     );
@@ -99,7 +142,7 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-primary/80 p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-600 to-purple-800 p-12 flex-col justify-between">
         <div>
           <Link href="/" className="flex items-center gap-3 text-white">
             <Image
@@ -118,20 +161,31 @@ export default function AdminLoginPage() {
 
         <div className="space-y-6">
           <h1 className="text-4xl font-bold text-white">
-            Admin Portal
+            Super Admin Setup
           </h1>
           <p className="text-xl text-white/90">
-            Manage your NGO operations, track donations, coordinate volunteers, and make a bigger impact.
+            Create the first Super Admin account to manage your NGO platform. This is a one-time setup process.
           </p>
-          <div className="flex gap-4 pt-4">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 flex-1">
-              <div className="text-3xl font-bold text-white">500+</div>
-              <div className="text-sm text-white/80">Animals Rescued</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 flex-1">
-              <div className="text-3xl font-bold text-white">200+</div>
-              <div className="text-sm text-white/80">Active Volunteers</div>
-            </div>
+          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-3">Super Admin Powers</h3>
+            <ul className="space-y-2 text-white/90">
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Invite and manage Admin users</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Full access to all platform features</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Approve or reject admin invitations</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Disable or remove admin accounts</span>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -140,7 +194,7 @@ export default function AdminLoginPage() {
         </div>
       </div>
 
-      {/* Right Side - Login Form */}
+      {/* Right Side - Setup Form */}
       <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
@@ -155,7 +209,7 @@ export default function AdminLoginPage() {
               />
               <div className="text-left">
                 <div className="text-2xl font-bold text-gray-900">SARWA</div>
-                <div className="text-sm text-gray-600">Admin Portal</div>
+                <div className="text-sm text-gray-600">Super Admin Setup</div>
               </div>
             </Link>
           </div>
@@ -163,12 +217,12 @@ export default function AdminLoginPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <Shield className="h-6 w-6 text-primary" />
+                <div className="p-3 bg-purple-100 rounded-xl">
+                  <Shield className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Admin Login</h2>
-                  <p className="text-sm text-gray-600">Access your admin dashboard</p>
+                  <h2 className="text-2xl font-bold text-gray-900">Create Super Admin</h2>
+                  <p className="text-sm text-gray-600">One-time setup - Choose credentials carefully</p>
                 </div>
               </div>
             </div>
@@ -181,6 +235,22 @@ export default function AdminLoginPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <Label htmlFor="fullName" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Full Name
+                </Label>
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  placeholder="John Doe"
+                  required
+                  disabled={isLoading}
+                  className="mt-2"
+                  autoComplete="name"
+                />
+              </div>
+
               <div>
                 <Label htmlFor="email" className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
@@ -208,10 +278,11 @@ export default function AdminLoginPage() {
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
+                    placeholder="Minimum 8 characters"
                     required
                     disabled={isLoading}
-                    autoComplete="current-password"
+                    autoComplete="new-password"
+                    minLength={8}
                   />
                   <button
                     type="button"
@@ -228,49 +299,49 @@ export default function AdminLoginPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="rounded border-gray-300 text-primary focus:ring-primary"
-                  />
-                  <span className="text-sm text-gray-600">Remember me</span>
-                </label>
-                <Link
-                  href="/admin/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
+              <div>
+                <Label htmlFor="confirmPassword" className="flex items-center gap-2">
+                  <Lock className="h-4 w-4" />
+                  Confirm Password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Re-enter password"
+                  required
+                  disabled={isLoading}
+                  className="mt-2"
+                  autoComplete="new-password"
+                  minLength={8}
+                />
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>Important:</strong> This is a one-time setup. After creating the Super Admin account, 
+                  this page will be permanently disabled. Future admins must be invited by the Super Admin.
+                </p>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-primary hover:bg-primary/90 py-6 text-lg"
+                className="w-full bg-purple-600 hover:bg-purple-700 py-6 text-lg"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Signing in...
+                    Creating Super Admin...
                   </>
                 ) : (
                   <>
                     <Shield className="mr-2 h-5 w-5" />
-                    Sign In as Admin
+                    Create Super Admin Account
                   </>
                 )}
               </Button>
             </form>
-
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <p className="text-center text-sm text-gray-600">
-                Are you a volunteer?{' '}
-                <Link href="/volunteer/login" className="text-primary hover:underline font-medium">
-                  Login here
-                </Link>
-              </p>
-            </div>
 
             <div className="mt-6 text-center">
               <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
@@ -280,7 +351,7 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="mt-6 text-center text-sm text-gray-500">
-            <p>Secure login powered by Supabase</p>
+            <p>Secure setup powered by Supabase</p>
           </div>
         </div>
       </div>

@@ -60,14 +60,14 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
-  // Admin routes protection
-  if (path.startsWith('/admin') && !path.startsWith('/admin/login')) {
+  // Admin routes protection (allow both admin and super_admin, but not setup page)
+  if (path.startsWith('/admin') && !path.startsWith('/admin/login') && !path.startsWith('/admin/setup')) {
     if (!user) {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
 
     const userRole = user.user_metadata?.role;
-    if (userRole !== 'admin') {
+    if (userRole !== 'admin' && userRole !== 'super_admin') {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
   }
@@ -88,12 +88,17 @@ export async function middleware(request: NextRequest) {
   if (user) {
     const userRole = user.user_metadata?.role;
 
-    if (path === '/admin/login' && userRole === 'admin') {
+    if (path === '/admin/login' && (userRole === 'admin' || userRole === 'super_admin')) {
       return NextResponse.redirect(new URL('/admin/dashboard', request.url));
     }
 
     if (path === '/volunteer/login' && userRole === 'volunteer') {
       return NextResponse.redirect(new URL('/volunteer/dashboard', request.url));
+    }
+    
+    // Redirect away from setup if super admin already exists
+    if (path === '/admin/setup' && (userRole === 'admin' || userRole === 'super_admin')) {
+      return NextResponse.redirect(new URL('/admin/dashboard', request.url));
     }
   }
 

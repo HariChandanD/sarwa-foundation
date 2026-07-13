@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { createClient } from '@/lib/supabase-client';
+import { createClient, isSuperAdmin } from '@/lib/supabase-client';
 import {
   LayoutDashboard,
   FileText,
@@ -19,10 +19,11 @@ import {
   Menu,
   X,
   ChevronDown,
+  Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const navigation = [
+const getNavigation = (isSuperAdminUser: boolean) => [
   {
     name: 'Dashboard',
     href: '/admin/dashboard',
@@ -71,6 +72,11 @@ const navigation = [
     href: '/admin/dashboard/news',
     icon: Newspaper,
   },
+  ...(isSuperAdminUser ? [{
+    name: 'Admin Management',
+    href: '/admin/dashboard/admins',
+    icon: Shield,
+  }] : []),
   {
     name: 'Settings',
     href: '/admin/dashboard/settings',
@@ -88,22 +94,27 @@ export default function AdminDashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>(['Website Content']);
   const [user, setUser] = useState<any>(null);
+  const [isSuperAdminUser, setIsSuperAdminUser] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
     
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
+      setIsSuperAdminUser(user ? isSuperAdmin(user) : false);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setIsSuperAdminUser(session?.user ? isSuperAdmin(session.user) : false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const navigation = getNavigation(isSuperAdminUser);
 
   const handleLogout = async () => {
     const supabase = createClient();

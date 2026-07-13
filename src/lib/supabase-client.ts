@@ -10,6 +10,7 @@ export const createClient = () => {
 
 // User roles
 export enum UserRole {
+  SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',
   VOLUNTEER = 'volunteer',
 }
@@ -52,6 +53,11 @@ export const isAdmin = (user: any): boolean => {
 // Helper function to check if user is volunteer
 export const isVolunteer = (user: any): boolean => {
   return hasRole(user, UserRole.VOLUNTEER);
+};
+
+// Helper function to check if user is super admin
+export const isSuperAdmin = (user: any): boolean => {
+  return hasRole(user, UserRole.SUPER_ADMIN);
 };
 
 // Made with Bob
